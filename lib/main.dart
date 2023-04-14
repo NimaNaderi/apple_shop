@@ -1,5 +1,9 @@
+import 'dart:ui';
+
 import 'package:apple_shop/constants/colors.dart';
-import 'package:apple_shop/widgets/banner_slider.dart';
+import 'package:apple_shop/screens/category_screen.dart';
+import 'package:apple_shop/screens/home_screen.dart';
+import 'package:apple_shop/screens/product_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -7,31 +11,114 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  int selectedBottomNavigationIndex = 0;
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
       designSize: const Size(428, 926),
       builder: (context, child) => MaterialApp(
         home: Scaffold(
-          backgroundColor: CustomColors.backgroundScreenColor,
-          body: SafeArea(
-            child: Center(
-              child: Directionality(
-                textDirection: TextDirection.rtl,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 44.w),
-                  child: ListView.builder(
-                    itemCount: 10,
-                    itemBuilder: (context, index) => Padding(
-                      padding: EdgeInsets.only(left: 20.w),
-                      child: CategoryHorizontalItemList(),
-                    ),
-                    scrollDirection: Axis.horizontal,
-                  ),
+          appBar: AppBar(),
+          body: IndexedStack(
+            children: getLayout(),
+            index: selectedBottomNavigationIndex,
+          ),
+          bottomNavigationBar: ClipRRect(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
+              child: BottomNavigationBar(
+                type: BottomNavigationBarType.fixed,
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                currentIndex: selectedBottomNavigationIndex,
+                onTap: (value) {
+                  setState(() {
+                    selectedBottomNavigationIndex = value;
+                  });
+                },
+                selectedLabelStyle: TextStyle(
+                    fontFamily: 'SB',
+                    fontSize: 10.sp,
+                    color: CustomColors.blue),
+                unselectedLabelStyle: TextStyle(
+                  fontFamily: 'SB',
+                  fontSize: 10.sp,
+                  color: Colors.black,
                 ),
+                items: [
+                  BottomNavigationBarItem(
+                      icon: Image.asset('assets/images/icon_profile.png'),
+                      activeIcon: Container(
+                        padding: EdgeInsets.only(bottom: 4.h),
+                        decoration: const BoxDecoration(boxShadow: [
+                          BoxShadow(
+                            color: CustomColors.blue,
+                            blurRadius: 20,
+                            spreadRadius: -7,
+                            offset: Offset(0, 12),
+                          )
+                        ]),
+                        child: Image.asset(
+                            'assets/images/icon_profile_active.png'),
+                      ),
+                      label: 'حساب کاربری'),
+                  BottomNavigationBarItem(
+                      icon: Image.asset('assets/images/icon_basket.png'),
+                      activeIcon: Container(
+                        padding: EdgeInsets.only(bottom: 4.h),
+                        decoration: const BoxDecoration(boxShadow: [
+                          BoxShadow(
+                            color: CustomColors.blue,
+                            blurRadius: 20,
+                            spreadRadius: -7,
+                            offset: Offset(0, 12),
+                          )
+                        ]),
+                        child:
+                            Image.asset('assets/images/icon_basket_active.png'),
+                      ),
+                      label: 'سبد خرید'),
+                  BottomNavigationBarItem(
+                      icon: Image.asset('assets/images/icon_category.png'),
+                      activeIcon: Container(
+                        padding: EdgeInsets.only(bottom: 4.h),
+                        decoration: const BoxDecoration(boxShadow: [
+                          BoxShadow(
+                            color: CustomColors.blue,
+                            blurRadius: 20,
+                            spreadRadius: -7,
+                            offset: Offset(0, 12),
+                          )
+                        ]),
+                        child: Image.asset(
+                            'assets/images/icon_category_active.png'),
+                      ),
+                      label: 'دسته بندی'),
+                  BottomNavigationBarItem(
+                      icon: Image.asset('assets/images/icon_home.png'),
+                      activeIcon: Container(
+                        padding: EdgeInsets.only(bottom: 4.h),
+                        decoration: const BoxDecoration(boxShadow: [
+                          BoxShadow(
+                            color: CustomColors.blue,
+                            blurRadius: 20,
+                            spreadRadius: -7,
+                            offset: Offset(0, 12),
+                          )
+                        ]),
+                        child:
+                            Image.asset('assets/images/icon_home_active.png'),
+                      ),
+                      label: 'خانه'),
+                ],
               ),
             ),
           ),
@@ -39,53 +126,11 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
-}
 
-class CategoryHorizontalItemList extends StatelessWidget {
-  const CategoryHorizontalItemList({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Stack(
-          alignment: AlignmentDirectional.center,
-          children: [
-            Container(
-              height: 56.h,
-              width: 56.w,
-              decoration: ShapeDecoration(
-                color: Colors.red,
-                shadows: const [
-                  BoxShadow(
-                    blurRadius: 25,
-                    spreadRadius: -12,
-                    offset: Offset(0, 16),
-                    color: Colors.red,
-                  )
-                ],
-                shape: ContinuousRectangleBorder(
-                  borderRadius: BorderRadius.circular(40.r),
-                ),
-              ),
-            ),
-            Icon(
-              Icons.mouse,
-              size: 32.h,
-              color: Colors.white,
-            )
-          ],
-        ),
-        SizedBox(
-          height: 10.h,
-        ),
-        Text(
-          'همه',
-          style: TextStyle(fontFamily: 'SB', fontSize: 12.sp),
-        ),
-      ],
-    );
-  }
+  List<Widget> getLayout() => <Widget>[
+        const HomeScreen(),
+        const CategoryScreen(),
+        const ProductListScreen(),
+        const CategoryScreen(),
+      ];
 }
