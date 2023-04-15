@@ -1,6 +1,8 @@
 import 'dart:ui';
 
 import 'package:apple_shop/constants/colors.dart';
+import 'package:apple_shop/data/datasource/authentication_datasource.dart';
+import 'package:apple_shop/di/di.dart';
 import 'package:apple_shop/screens/cart_screen.dart';
 import 'package:apple_shop/screens/category_screen.dart';
 import 'package:apple_shop/screens/home_screen.dart';
@@ -9,8 +11,10 @@ import 'package:apple_shop/screens/product_list_screen.dart';
 import 'package:apple_shop/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get_it/get_it.dart';
 
-void main() {
+void main() async {
+  await getItInit();
   runApp(const MyApp());
 }
 
@@ -30,10 +34,16 @@ class _MyAppState extends State<MyApp> {
       builder: (context, child) => MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Scaffold(
-          body: IndexedStack(
-            index: selectedBottomNavigationIndex,
-            children: getLayout(),
-          ),
+          body: SafeArea(
+              child: Center(
+            child: ElevatedButton(
+              onPressed: () {
+                AuthenticationRemote()
+                    .registerUser('so252d2c', '12345678', '12345678');
+              },
+              child: Text('Click to register'),
+            ),
+          )),
           bottomNavigationBar: ClipRRect(
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
