@@ -1,9 +1,12 @@
 import 'dart:ui';
 
 import 'package:apple_shop/constants/colors.dart';
+import 'package:apple_shop/screens/cart_screen.dart';
 import 'package:apple_shop/screens/category_screen.dart';
 import 'package:apple_shop/screens/home_screen.dart';
+import 'package:apple_shop/screens/product_detail_screen.dart';
 import 'package:apple_shop/screens/product_list_screen.dart';
+import 'package:apple_shop/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -25,11 +28,11 @@ class _MyAppState extends State<MyApp> {
     return ScreenUtilInit(
       designSize: const Size(428, 926),
       builder: (context, child) => MaterialApp(
+        debugShowCheckedModeBanner: false,
         home: Scaffold(
-          appBar: AppBar(),
           body: IndexedStack(
-            children: getLayout(),
             index: selectedBottomNavigationIndex,
+            children: getLayout(),
           ),
           bottomNavigationBar: ClipRRect(
             child: BackdropFilter(
@@ -55,7 +58,10 @@ class _MyAppState extends State<MyApp> {
                 ),
                 items: [
                   BottomNavigationBarItem(
-                      icon: Image.asset('assets/images/icon_profile.png'),
+                      icon: Padding(
+                        padding: EdgeInsets.only(bottom: 4.h),
+                        child: Image.asset('assets/images/icon_profile.png'),
+                      ),
                       activeIcon: Container(
                         padding: EdgeInsets.only(bottom: 4.h),
                         decoration: const BoxDecoration(boxShadow: [
@@ -71,7 +77,10 @@ class _MyAppState extends State<MyApp> {
                       ),
                       label: 'حساب کاربری'),
                   BottomNavigationBarItem(
-                      icon: Image.asset('assets/images/icon_basket.png'),
+                      icon: Padding(
+                        padding: EdgeInsets.only(bottom: 4.h),
+                        child: Image.asset('assets/images/icon_basket.png'),
+                      ),
                       activeIcon: Container(
                         padding: EdgeInsets.only(bottom: 4.h),
                         decoration: const BoxDecoration(boxShadow: [
@@ -87,7 +96,10 @@ class _MyAppState extends State<MyApp> {
                       ),
                       label: 'سبد خرید'),
                   BottomNavigationBarItem(
-                      icon: Image.asset('assets/images/icon_category.png'),
+                      icon: Padding(
+                        padding: EdgeInsets.only(bottom: 4.h),
+                        child: Image.asset('assets/images/icon_category.png'),
+                      ),
                       activeIcon: Container(
                         padding: EdgeInsets.only(bottom: 4.h),
                         decoration: const BoxDecoration(boxShadow: [
@@ -103,7 +115,10 @@ class _MyAppState extends State<MyApp> {
                       ),
                       label: 'دسته بندی'),
                   BottomNavigationBarItem(
-                      icon: Image.asset('assets/images/icon_home.png'),
+                      icon: Padding(
+                        padding: EdgeInsets.only(bottom: 4.h),
+                        child: Image.asset('assets/images/icon_home.png'),
+                      ),
                       activeIcon: Container(
                         padding: EdgeInsets.only(bottom: 4.h),
                         decoration: const BoxDecoration(boxShadow: [
@@ -128,9 +143,9 @@ class _MyAppState extends State<MyApp> {
   }
 
   List<Widget> getLayout() => <Widget>[
+        const ProfileScreen(),
+        const CartScreen(),
+        const CategoryScreen(),
         const HomeScreen(),
-        const CategoryScreen(),
-        const ProductListScreen(),
-        const CategoryScreen(),
       ];
 }

@@ -1,3 +1,4 @@
+import 'package:apple_shop/screens/product_detail_screen.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../constants/colors.dart';
 import '../widgets/banner_slider.dart';
+import '../widgets/category_icon_item_chip.dart';
 import '../widgets/product_item.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -128,7 +130,14 @@ class HomeScreen extends StatelessWidget {
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) => Padding(
                       padding: EdgeInsets.only(left: 20.w),
-                      child: const ProductItem(),
+                      child: InkResponse(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: ((context) =>
+                                  const ProductDetailScreen())));
+                        },
+                        child: const ProductItem(),
+                      ),
                     ),
                   ),
                 ),
@@ -176,12 +185,20 @@ class HomeScreen extends StatelessWidget {
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) => Padding(
                       padding: EdgeInsets.only(left: 20.w),
-                      child: const ProductItem(),
+                      child: InkResponse(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: ((context) =>
+                                  const ProductDetailScreen())));
+                        },
+                        child: const ProductItem(),
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
+            SliverPadding(padding: EdgeInsets.only(bottom: 20.h))
           ],
         ),
       ),
@@ -198,59 +215,10 @@ Widget getProductCategoryList() {
         itemCount: 10,
         itemBuilder: (context, index) => Padding(
           padding: EdgeInsets.only(left: 20.w),
-          child: CategoryHorizontalItemList(),
+          child: CategoryItemChip(),
         ),
         scrollDirection: Axis.horizontal,
       ),
     ),
   );
-}
-
-class CategoryHorizontalItemList extends StatelessWidget {
-  const CategoryHorizontalItemList({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Stack(
-          alignment: AlignmentDirectional.center,
-          children: [
-            Container(
-              height: 56.h,
-              width: 56.w,
-              decoration: ShapeDecoration(
-                color: Colors.red,
-                shadows: const [
-                  BoxShadow(
-                    blurRadius: 25,
-                    spreadRadius: -12,
-                    offset: Offset(0, 16),
-                    color: Colors.red,
-                  )
-                ],
-                shape: ContinuousRectangleBorder(
-                  borderRadius: BorderRadius.circular(40.r),
-                ),
-              ),
-            ),
-            Icon(
-              Icons.mouse,
-              size: 32.h,
-              color: Colors.white,
-            )
-          ],
-        ),
-        SizedBox(
-          height: 10.h,
-        ),
-        Text(
-          'همه',
-          style: TextStyle(fontFamily: 'SB', fontSize: 12.sp),
-        ),
-      ],
-    );
-  }
 }
