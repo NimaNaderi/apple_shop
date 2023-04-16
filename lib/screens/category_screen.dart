@@ -1,3 +1,6 @@
+import 'package:apple_shop/data/model/category.dart';
+import 'package:apple_shop/data/repository/category_repository.dart';
+import 'package:apple_shop/widgets/cached_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -5,9 +8,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../constants/colors.dart';
 
-class CategoryScreen extends StatelessWidget {
+class CategoryScreen extends StatefulWidget {
   const CategoryScreen({super.key});
 
+  @override
+  State<CategoryScreen> createState() => _CategoryScreenState();
+}
+
+class _CategoryScreenState extends State<CategoryScreen> {
+  List<Category>? categoryList;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,25 +61,49 @@ class CategoryScreen extends StatelessWidget {
                 ),
               ),
             ),
-            SliverPadding(
-              padding: EdgeInsets.symmetric(horizontal: 44.w),
-              sliver: SliverGrid(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) => Container(
-                    decoration: BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.circular(16.r),
-                    ),
-                  ),
-                ),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 20,
-                  crossAxisSpacing: 20,
-                ),
+            SliverToBoxAdapter(
+              child: ElevatedButton(
+                child: Text('get'),
+                onPressed: () async {
+                  var repository = CategoryRepository();
+                  var either = await repository.getCategories();
+                  either.fold(
+                    (l) => print(l),
+                    (r) {
+                      setState(() {
+                        categoryList = r;
+                      });
+                    },
+                  );
+                },
               ),
-            )
+            ),
+            _categoryList(categoryList: categoryList)
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _categoryList extends StatelessWidget {
+  List<Category>? categoryList;
+  _categoryList({Key? key, required this.categoryList}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverPadding(
+      padding: EdgeInsets.symmetric(horizontal: 44.w),
+      sliver: SliverGrid(
+        delegate: SliverChildBuilderDelegate(
+          (context, index) =>
+              CachedImage(imageUrl: categoryList?[index].thumbnail!),
+          childCount: categoryList?.length ?? 0,
+        ),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          mainAxisSpacing: 20,
+          crossAxisSpacing: 20,
         ),
       ),
     );

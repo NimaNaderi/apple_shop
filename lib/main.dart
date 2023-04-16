@@ -44,7 +44,12 @@ class _MyAppState extends State<MyApp> {
         home: Scaffold(
           body: BlocProvider(
             create: (context) => AuthBloc(),
-            child: LoginScreen(),
+            child: AuthManager.isLoggedIn()
+                ? IndexedStack(
+                    children: getLayout(),
+                    index: selectedBottomNavigationIndex,
+                  )
+                : LoginScreen(),
           ),
           bottomNavigationBar: ClipRRect(
             child: BackdropFilter(
