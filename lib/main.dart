@@ -10,6 +10,7 @@ import 'package:apple_shop/screens/home_screen.dart';
 import 'package:apple_shop/screens/product_detail_screen.dart';
 import 'package:apple_shop/screens/product_list_screen.dart';
 import 'package:apple_shop/screens/profile_screen.dart';
+import 'package:apple_shop/utils/auth_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
@@ -30,6 +31,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   int selectedBottomNavigationIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -38,22 +40,37 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         home: Scaffold(
           body: SafeArea(
-              child: Center(
-            child: ElevatedButton(
-              onPressed: () async{
-                final either = await AuthenticationRepository().login('NewOne', '12345678');
-                final SharedPreferences _sharedPrefs = locator.get();
-                print(_sharedPrefs.getString('access_token'));
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () async {
+                    final either = await AuthenticationRepository().login('NewOne', '12345678');
 
-                // either.fold((errorMessage) {
-                //   print(errorMessage);
-                // }, (successMessage)  {
-                //   print(successMessage);
-                // });
-              },
-              child: Text('Click to register'),
+                    // either.fold((errorMessage) {
+                    //   print(errorMessage);
+                    // }, (successMessage)  {
+                    //   print(successMessage);
+                    // });
+                  },
+                  child: Text('Login'),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    AuthManager.logout();
+                  },
+                  child: Text('Logout'),
+                ),
+                ValueListenableBuilder(valueListenable: AuthManager.authChangeNotifier, builder: (context, value, child) {
+                  if (!AuthManager.isLoggedIn()) {
+                    return Text('شما وارد نشده اید',style: TextStyle(fontSize: 20),);
+                  }else {
+                    return Text('شما وارد شده اید',style: TextStyle(fontSize: 20),);
+                  }
+                },)
+              ],
             ),
-          )),
+          ),
           bottomNavigationBar: ClipRRect(
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
