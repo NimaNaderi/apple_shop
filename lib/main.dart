@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:apple_shop/constants/colors.dart';
 import 'package:apple_shop/data/datasource/authentication_datasource.dart';
+import 'package:apple_shop/data/repository/authentication_repository.dart';
 import 'package:apple_shop/di/di.dart';
 import 'package:apple_shop/screens/cart_screen.dart';
 import 'package:apple_shop/screens/category_screen.dart';
@@ -12,8 +13,10 @@ import 'package:apple_shop/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await getItInit();
   runApp(const MyApp());
 }
@@ -37,9 +40,16 @@ class _MyAppState extends State<MyApp> {
           body: SafeArea(
               child: Center(
             child: ElevatedButton(
-              onPressed: () {
-                AuthenticationRemote()
-                    .registerUser('so252d2c', '12345678', '12345678');
+              onPressed: () async{
+                final either = await AuthenticationRepository().login('NewOne', '12345678');
+                final SharedPreferences _sharedPrefs = locator.get();
+                print(_sharedPrefs.getString('access_token'));
+
+                // either.fold((errorMessage) {
+                //   print(errorMessage);
+                // }, (successMessage)  {
+                //   print(successMessage);
+                // });
               },
               child: Text('Click to register'),
             ),
