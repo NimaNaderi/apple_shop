@@ -12,7 +12,6 @@ abstract class IAuthRepository {
 
 class AuthenticationRepository extends IAuthRepository{
   final IAuthenticationDatasource _datasource = locator.get();
-  final SharedPreferences _sharedPrefs = locator.get();
 
   @override
   Future<Either<String, String>> register(String username, String password, String passwordConfirm) async{

@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:apple_shop/bloc/authentication/auth_bloc.dart';
 import 'package:apple_shop/constants/colors.dart';
 import 'package:apple_shop/data/datasource/authentication_datasource.dart';
 import 'package:apple_shop/data/repository/authentication_repository.dart';
@@ -7,11 +8,13 @@ import 'package:apple_shop/di/di.dart';
 import 'package:apple_shop/screens/cart_screen.dart';
 import 'package:apple_shop/screens/category_screen.dart';
 import 'package:apple_shop/screens/home_screen.dart';
+import 'package:apple_shop/screens/login_screen.dart';
 import 'package:apple_shop/screens/product_detail_screen.dart';
 import 'package:apple_shop/screens/product_list_screen.dart';
 import 'package:apple_shop/screens/profile_screen.dart';
 import 'package:apple_shop/utils/auth_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -39,37 +42,9 @@ class _MyAppState extends State<MyApp> {
       builder: (context, child) => MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Scaffold(
-          body: SafeArea(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: () async {
-                    final either = await AuthenticationRepository().login('NewOne', '12345678');
-
-                    // either.fold((errorMessage) {
-                    //   print(errorMessage);
-                    // }, (successMessage)  {
-                    //   print(successMessage);
-                    // });
-                  },
-                  child: Text('Login'),
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    AuthManager.logout();
-                  },
-                  child: Text('Logout'),
-                ),
-                ValueListenableBuilder(valueListenable: AuthManager.authChangeNotifier, builder: (context, value, child) {
-                  if (!AuthManager.isLoggedIn()) {
-                    return Text('شما وارد نشده اید',style: TextStyle(fontSize: 20),);
-                  }else {
-                    return Text('شما وارد شده اید',style: TextStyle(fontSize: 20),);
-                  }
-                },)
-              ],
-            ),
+          body: BlocProvider(
+            create: (context) => AuthBloc(),
+            child: LoginScreen(),
           ),
           bottomNavigationBar: ClipRRect(
             child: BackdropFilter(
