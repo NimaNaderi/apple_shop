@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:apple_shop/bloc/authentication/auth_bloc.dart';
 import 'package:apple_shop/bloc/category/category_bloc.dart';
+import 'package:apple_shop/bloc/home/home_bloc.dart';
 import 'package:apple_shop/constants/colors.dart';
 import 'package:apple_shop/data/datasource/authentication_datasource.dart';
 import 'package:apple_shop/data/repository/authentication_repository.dart';
@@ -162,6 +163,9 @@ class _MyAppState extends State<MyApp> {
           create: (context) => CategoryBloc(),
           child: CategoryScreen(),
         ),
-        const HomeScreen(),
+        BlocProvider(
+          create: (context) => HomeBloc(),
+          child: HomeScreen(),
+        ),
       ];
 }

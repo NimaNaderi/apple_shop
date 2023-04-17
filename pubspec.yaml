@@ -45,6 +45,7 @@ dependencies:
   flutter_bloc: ^8.1.2
   bloc: ^8.1.1
   cached_network_image: ^3.2.3
+  skeletons: ^0.0.3
 
 dev_dependencies:
   flutter_test:

@@ -4,18 +4,19 @@ import 'package:apple_shop/utils/api_exception.dart';
 import 'package:dio/dio.dart';
 
 abstract class IBannerDataSource {
-  Future<List<Banner>> getBanners();
+  Future<List<BannerCampain>> getBanners();
 }
 
 class BannerRemoteDataSource extends IBannerDataSource {
   final Dio _dio = locator.get();
   @override
-  Future<List<Banner>> getBanners() async {
+  Future<List<BannerCampain>> getBanners() async {
     try {
       var banners = await _dio.get('collections/banner/records');
 
       return banners.data['items']
-          .map<Banner>((jsonObject) => Banner.fromJson(jsonObject))
+          .map<BannerCampain>(
+              (jsonObject) => BannerCampain.fromJson(jsonObject))
           .toList();
     } on DioError catch (e) {
       throw ApiException(
