@@ -1,9 +1,13 @@
+import 'package:apple_shop/bloc/category/category_bloc.dart';
+import 'package:apple_shop/bloc/category/category_event.dart';
+import 'package:apple_shop/bloc/category/category_state.dart';
 import 'package:apple_shop/data/model/category.dart';
 import 'package:apple_shop/data/repository/category_repository.dart';
 import 'package:apple_shop/widgets/cached_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../constants/colors.dart';
@@ -16,10 +20,17 @@ class CategoryScreen extends StatefulWidget {
 }
 
 class _CategoryScreenState extends State<CategoryScreen> {
-  List<Category>? categoryList;
+  @override
+  void initState() {
+    BlocProvider.of<CategoryBloc>(context).add(GetCategoryRequest());
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: CustomColors.backgroundScreenColor,
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
@@ -61,24 +72,26 @@ class _CategoryScreenState extends State<CategoryScreen> {
                 ),
               ),
             ),
-            SliverToBoxAdapter(
-              child: ElevatedButton(
-                child: Text('get'),
-                onPressed: () async {
-                  var repository = CategoryRepository();
-                  var either = await repository.getCategories();
-                  either.fold(
-                    (l) => print(l),
-                    (r) {
-                      setState(() {
-                        categoryList = r;
-                      });
-                    },
-                  );
-                },
-              ),
+            BlocBuilder<CategoryBloc, CategoryState>(
+              builder: (context, state) {
+                // if (state is CategoryLoadingState) {
+                //   return SliverToBoxAdapter(child: CircularProgressIndicator());
+                // }
+
+                if (state is CategoryResponseState) {
+                  return state.response.fold((l) {
+                    return SliverToBoxAdapter(
+                      child: Text(l),
+                    );
+                  }, (r) {
+                    return _categoryList(categoryList: r);
+                  });
+                }
+
+                return SliverToBoxAdapter(child: Text('data'));
+              },
             ),
-            _categoryList(categoryList: categoryList)
+            SliverPadding(padding: EdgeInsets.only(top: 40.h))
           ],
         ),
       ),

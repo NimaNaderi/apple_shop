@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:apple_shop/bloc/authentication/auth_bloc.dart';
+import 'package:apple_shop/bloc/category/category_bloc.dart';
 import 'package:apple_shop/constants/colors.dart';
 import 'package:apple_shop/data/datasource/authentication_datasource.dart';
 import 'package:apple_shop/data/repository/authentication_repository.dart';
@@ -42,14 +43,9 @@ class _MyAppState extends State<MyApp> {
       builder: (context, child) => MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Scaffold(
-          body: BlocProvider(
-            create: (context) => AuthBloc(),
-            child: AuthManager.isLoggedIn()
-                ? IndexedStack(
-                    children: getLayout(),
-                    index: selectedBottomNavigationIndex,
-                  )
-                : LoginScreen(),
+          body: IndexedStack(
+            children: getLayout(),
+            index: selectedBottomNavigationIndex,
           ),
           bottomNavigationBar: ClipRRect(
             child: BackdropFilter(
@@ -162,7 +158,10 @@ class _MyAppState extends State<MyApp> {
   List<Widget> getLayout() => <Widget>[
         const ProfileScreen(),
         const CartScreen(),
-        const CategoryScreen(),
+        BlocProvider(
+          create: (context) => CategoryBloc(),
+          child: CategoryScreen(),
+        ),
         const HomeScreen(),
       ];
 }
