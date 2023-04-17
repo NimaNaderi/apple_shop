@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:skeletons/skeletons.dart';
 
 class CachedImage extends StatelessWidget {
   String? imageUrl;
@@ -16,9 +17,7 @@ class CachedImage extends StatelessWidget {
       child: CachedNetworkImage(
         imageUrl: imageUrl ?? '',
         fit: BoxFit.cover,
-        placeholder: (context, url) => Container(
-          color: Colors.grey,
-        ),
+        placeholder: (context, url) => SkeletonAvatar(),
         errorWidget: (context, url, error) => Container(
           color: Colors.grey,
         ),
