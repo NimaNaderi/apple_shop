@@ -46,6 +46,7 @@ dependencies:
   bloc: ^8.1.1
   cached_network_image: ^3.2.3
   skeletons: ^0.0.3
+  davinci: ^2.0.10
 
 dev_dependencies:
   flutter_test:

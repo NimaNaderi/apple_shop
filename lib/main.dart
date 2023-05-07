@@ -1,25 +1,16 @@
 import 'dart:ui';
 
-import 'package:apple_shop/bloc/authentication/auth_bloc.dart';
 import 'package:apple_shop/bloc/category/category_bloc.dart';
 import 'package:apple_shop/bloc/home/home_bloc.dart';
 import 'package:apple_shop/constants/colors.dart';
-import 'package:apple_shop/data/datasource/authentication_datasource.dart';
-import 'package:apple_shop/data/repository/authentication_repository.dart';
 import 'package:apple_shop/di/di.dart';
 import 'package:apple_shop/screens/cart_screen.dart';
 import 'package:apple_shop/screens/category_screen.dart';
 import 'package:apple_shop/screens/home_screen.dart';
-import 'package:apple_shop/screens/login_screen.dart';
-import 'package:apple_shop/screens/product_detail_screen.dart';
-import 'package:apple_shop/screens/product_list_screen.dart';
 import 'package:apple_shop/screens/profile_screen.dart';
-import 'package:apple_shop/utils/auth_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get_it/get_it.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,7 +26,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  int selectedBottomNavigationIndex = 0;
+  int selectedBottomNavigationIndex = 3;
 
   @override
   Widget build(BuildContext context) {
@@ -163,9 +154,12 @@ class _MyAppState extends State<MyApp> {
           create: (context) => CategoryBloc(),
           child: CategoryScreen(),
         ),
-        BlocProvider(
-          create: (context) => HomeBloc(),
-          child: HomeScreen(),
+        Directionality(
+          textDirection: TextDirection.rtl,
+          child: BlocProvider(
+            create: (context) => HomeBloc(),
+            child: HomeScreen(),
+          ),
         ),
       ];
 }

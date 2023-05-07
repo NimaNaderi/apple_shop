@@ -11,19 +11,21 @@ class BannerSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final deviceSize = MediaQuery.of(context).size;
     final pageController = PageController(viewportFraction: 0.9.w);
 
     return Stack(
       alignment: Alignment.bottomCenter,
       children: [
         SizedBox(
-          height: 177.h,
+          height: deviceSize.width > 350 ? 160.h : 177.h,
           child: PageView.builder(
             controller: pageController,
             itemCount: bannerList.length,
             itemBuilder: (context, index) => Container(
               margin: EdgeInsets.symmetric(horizontal: 6.w),
               child: CachedImage(
+                fit: BoxFit.cover,
                 imageUrl: bannerList[index].thumbnail,
                 radius: 16.r,
               ),
