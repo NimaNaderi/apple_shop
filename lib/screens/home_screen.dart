@@ -7,6 +7,8 @@ import 'package:apple_shop/screens/product_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../constants/colors.dart';
 import '../data/model/product.dart';
@@ -23,6 +25,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   GlobalKey? imageKey;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -52,20 +55,27 @@ class _HomeScreenState extends State<HomeScreen> {
                 //   ),
                 // ),
                 if (state is HomeLoadingState) ...{
-                   SliverFillRemaining(
+                  SliverFillRemaining(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        SizedBox(
-                          height: 24,
-                          width: 24,
-                          child: CircularProgressIndicator(),
+                        LoadingAnimationWidget.beat(
+                            color: CustomColors.blue, size: 32),
+                        const SizedBox(
+                          height: 16,
                         ),
+                        const Text(
+                          'درحال دریافت محصولات',
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: 'SB',
+                              color: CustomColors.grey),
+                        )
                       ],
                     ),
                   ),
-                } else... {
+                } else ...{
                   const _getSearchBox(),
                   if (state is HomeRequestSuccessState) ...[
                     state.bannerList.fold((exceptionMessage) {
@@ -100,10 +110,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   const _getMostViewedTitle(),
                   if (state is HomeRequestSuccessState) ...[
                     state.hottestProductList.fold(
-                          (exceptionMessage) => SliverToBoxAdapter(
+                      (exceptionMessage) => SliverToBoxAdapter(
                         child: Text(exceptionMessage),
                       ),
-                          (mostViewedProductList) =>
+                      (mostViewedProductList) =>
                           _getMostViewedProducts(mostViewedProductList),
                     )
                   ],
@@ -117,7 +127,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   // ),
                   SliverPadding(padding: EdgeInsets.only(bottom: 20.h))
                 }
-
               ],
             );
           },
@@ -129,6 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
 class _getMostViewedProducts extends StatelessWidget {
   List<Product> productList;
+
   _getMostViewedProducts(
     this.productList, {
     Key? key,
@@ -137,22 +147,19 @@ class _getMostViewedProducts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
-      child: Padding(
-        padding: EdgeInsets.only(right: 44.w),
-        child: SizedBox(
-          height: 200,
-          child: ListView.builder(
-            itemCount: productList.length,
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (context, index) => Padding(
-              padding: EdgeInsets.only(left: 20.w),
-              child: InkResponse(
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: ((context) => const ProductDetailScreen())));
-                },
-                child: ProductItem(productList[index]),
-              ),
+      child: SizedBox(
+        height: 200,
+        child: ListView.builder(
+          itemCount: productList.length,
+          scrollDirection: Axis.horizontal,
+          itemBuilder: (context, index) => Padding(
+            padding: EdgeInsets.only(left: 20.w, right: index == 0 ? 24.w : 0),
+            child: InkResponse(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: ((context) => const ProductDetailScreen())));
+              },
+              child: ProductItem(productList[index]),
             ),
           ),
         ),
@@ -171,8 +178,8 @@ class _getMostViewedTitle extends StatelessWidget {
     return SliverToBoxAdapter(
       child: Padding(
         padding: EdgeInsets.only(
-          left: 44.w,
-          right: 44.w,
+          left: 24.w,
+          right: 24.w,
           bottom: 20.h,
           top: 32.h,
         ),
@@ -194,7 +201,7 @@ class _getMostViewedTitle extends StatelessWidget {
             SizedBox(
               width: 10.w,
             ),
-            Image.asset('assets/images/icon_left_categroy.png'),
+            SvgPicture.asset('assets/icons/arrow-left.svg'),
           ],
         ),
       ),
@@ -213,22 +220,19 @@ class _getBestSellerProducts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
-      child: Padding(
-        padding: EdgeInsets.only(right: 44.w),
-        child: SizedBox(
-          height: 200,
-          child: ListView.builder(
-            itemCount: productList.length,
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (context, index) => Padding(
-              padding: EdgeInsets.only(left: 20.w),
-              child: InkResponse(
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: ((context) => const ProductDetailScreen())));
-                },
-                child: ProductItem(productList[index]),
-              ),
+      child: SizedBox(
+        height: 200,
+        child: ListView.builder(
+          itemCount: productList.length,
+          scrollDirection: Axis.horizontal,
+          itemBuilder: (context, index) => Padding(
+            padding: EdgeInsets.only(left: 20.w, right: index == 0 ? 24.w : 0),
+            child: InkResponse(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: ((context) => const ProductDetailScreen())));
+              },
+              child: ProductItem(productList[index]),
             ),
           ),
         ),
@@ -246,7 +250,8 @@ class _getBestSellerTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
       child: Padding(
-        padding: EdgeInsets.only(left: 44.w, right: 44.w, bottom: 20.h),
+        padding:
+            EdgeInsets.only(left: 24.w, right: 24.w, bottom: 20.h, top: 32.h),
         child: Row(
           children: [
             Text(
@@ -265,7 +270,7 @@ class _getBestSellerTitle extends StatelessWidget {
             SizedBox(
               width: 10.w,
             ),
-            Image.asset('assets/images/icon_left_categroy.png'),
+            SvgPicture.asset('assets/icons/arrow-left.svg'),
           ],
         ),
       ),
@@ -275,6 +280,7 @@ class _getBestSellerTitle extends StatelessWidget {
 
 class _getCategoryList extends StatelessWidget {
   List<Category> categoryList;
+
   _getCategoryList(
     this.categoryList, {
     Key? key,
@@ -301,8 +307,7 @@ class _getCategoryListTitle extends StatelessWidget {
     return SliverToBoxAdapter(
       child: Padding(
         padding: EdgeInsets.only(
-          left: 44.w,
-          right: 44.w,
+          right: 24.w,
           bottom: 20.h,
           top: 32.h,
         ),
@@ -326,6 +331,7 @@ class _getCategoryListTitle extends StatelessWidget {
 
 class _getBanners extends StatelessWidget {
   List<BannerCampain> bannerList;
+
   _getBanners(
     this.bannerList, {
     Key? key,
@@ -352,6 +358,7 @@ class _getSearchBox extends StatelessWidget {
           left: 44.w,
           right: 44.w,
           bottom: 32.h,
+          top: 20.h,
         ),
         child: Container(
           height: 46.h,
@@ -364,7 +371,7 @@ class _getSearchBox extends StatelessWidget {
               SizedBox(
                 width: 16.w,
               ),
-              Image.asset('assets/images/icon_search.png'),
+              SvgPicture.asset('assets/icons/search.svg'),
               SizedBox(
                 width: 10.w,
               ),
@@ -379,7 +386,8 @@ class _getSearchBox extends StatelessWidget {
                   ),
                 ),
               ),
-              Image.asset('assets/images/icon_apple_blue.png'),
+              SvgPicture.asset('assets/icons/apple.svg',
+                  color: CustomColors.blue, width: 24.w),
               SizedBox(
                 width: 16.w,
               )
@@ -392,15 +400,12 @@ class _getSearchBox extends StatelessWidget {
 }
 
 Widget getProductCategoryList(List<Category> categoryList) {
-  return Padding(
-    padding: EdgeInsets.only(right: 44.w),
-    child: ListView.builder(
-      itemCount: categoryList.length,
-      itemBuilder: (context, index) => Padding(
-        padding: EdgeInsets.only(left: 20.w),
-        child: CategoryItemChip(categoryList[index]),
-      ),
-      scrollDirection: Axis.horizontal,
+  return ListView.builder(
+    itemCount: categoryList.length,
+    itemBuilder: (context, index) => Padding(
+      padding: EdgeInsets.only(left: 20.w, right: index == 0 ? 24.w : 0),
+      child: CategoryItemChip(categoryList[index]),
     ),
+    scrollDirection: Axis.horizontal,
   );
 }

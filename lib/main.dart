@@ -11,6 +11,7 @@ import 'package:apple_shop/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -65,7 +66,7 @@ class _MyAppState extends State<MyApp> {
                   BottomNavigationBarItem(
                       icon: Padding(
                         padding: EdgeInsets.only(bottom: 4.h),
-                        child: Image.asset('assets/images/icon_profile.png'),
+                        child: SvgPicture.asset('assets/icons/user.svg'),
                       ),
                       activeIcon: Container(
                         padding: EdgeInsets.only(bottom: 4.h),
@@ -77,14 +78,13 @@ class _MyAppState extends State<MyApp> {
                             offset: Offset(0, 12),
                           )
                         ]),
-                        child: Image.asset(
-                            'assets/images/icon_profile_active.png'),
+                        child: SvgPicture.asset('assets/icons/user-filled.svg'),
                       ),
                       label: 'حساب کاربری'),
                   BottomNavigationBarItem(
                       icon: Padding(
                         padding: EdgeInsets.only(bottom: 4.h),
-                        child: Image.asset('assets/images/icon_basket.png'),
+                        child: SvgPicture.asset('assets/icons/bag.svg'),
                       ),
                       activeIcon: Container(
                         padding: EdgeInsets.only(bottom: 4.h),
@@ -97,13 +97,13 @@ class _MyAppState extends State<MyApp> {
                           )
                         ]),
                         child:
-                            Image.asset('assets/images/icon_basket_active.png'),
+                        SvgPicture.asset('assets/icons/bag-filled.svg'),
                       ),
                       label: 'سبد خرید'),
                   BottomNavigationBarItem(
                       icon: Padding(
                         padding: EdgeInsets.only(bottom: 4.h),
-                        child: Image.asset('assets/images/icon_category.png'),
+                        child: SvgPicture.asset('assets/icons/category.svg'),
                       ),
                       activeIcon: Container(
                         padding: EdgeInsets.only(bottom: 4.h),
@@ -115,14 +115,13 @@ class _MyAppState extends State<MyApp> {
                             offset: Offset(0, 12),
                           )
                         ]),
-                        child: Image.asset(
-                            'assets/images/icon_category_active.png'),
+                        child: SvgPicture.asset('assets/icons/category-filled.svg'),
                       ),
                       label: 'دسته بندی'),
                   BottomNavigationBarItem(
                       icon: Padding(
                         padding: EdgeInsets.only(bottom: 4.h),
-                        child: Image.asset('assets/images/icon_home.png'),
+                        child: SvgPicture.asset('assets/icons/home.svg'),
                       ),
                       activeIcon: Container(
                         padding: EdgeInsets.only(bottom: 4.h),
@@ -135,7 +134,7 @@ class _MyAppState extends State<MyApp> {
                           )
                         ]),
                         child:
-                            Image.asset('assets/images/icon_home_active.png'),
+                            SvgPicture.asset('assets/icons/home-filled.svg'),
                       ),
                       label: 'خانه'),
                 ],

@@ -47,6 +47,8 @@ dependencies:
   cached_network_image: ^3.2.3
   skeletons: ^0.0.3
   davinci: ^2.0.10
+  loading_animation_widget: ^1.2.0+4
+  flutter_svg: ^2.0.5
 
 dev_dependencies:
   flutter_test:
@@ -72,6 +74,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
+    - assets/icons/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

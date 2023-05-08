@@ -2,6 +2,7 @@ import 'package:apple_shop/data/model/product.dart';
 import 'package:apple_shop/widgets/cached_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../constants/colors.dart';
 
@@ -42,7 +43,7 @@ class ProductItem extends StatelessWidget {
                 child: SizedBox(
                   width: 24.w,
                   height: 24.h,
-                  child: Image.asset('assets/images/active_fav_product.png'),
+                  child: SvgPicture.asset('assets/icons/like-filled.svg'),
                 ),
               ),
               Positioned(
@@ -143,8 +144,7 @@ class ProductItem extends StatelessWidget {
                       const Spacer(),
                       SizedBox(
                         width: 24.w,
-                        child: Image.asset(
-                            'assets/images/icon_right_arrow_cricle.png'),
+                        child: SvgPicture.asset('assets/icons/arrow-right-filled.svg'),
                       )
                     ],
                   ),
