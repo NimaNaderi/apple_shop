@@ -153,7 +153,7 @@ class _getMostViewedProducts extends StatelessWidget {
           itemCount: productList.length,
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) => Padding(
-            padding: EdgeInsets.only(left: 20.w, right: index == 0 ? 24.w : 0),
+            padding: EdgeInsets.only(left: index == productList.length - 1 ? 32.w : 20.w, right: index == 0 ? 32.w : 0),
             child: InkResponse(
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
@@ -178,8 +178,8 @@ class _getMostViewedTitle extends StatelessWidget {
     return SliverToBoxAdapter(
       child: Padding(
         padding: EdgeInsets.only(
-          left: 24.w,
-          right: 24.w,
+          left: 32.w,
+          right: 32.w,
           bottom: 20.h,
           top: 32.h,
         ),
@@ -226,7 +226,7 @@ class _getBestSellerProducts extends StatelessWidget {
           itemCount: productList.length,
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) => Padding(
-            padding: EdgeInsets.only(left: 20.w, right: index == 0 ? 24.w : 0),
+            padding: EdgeInsets.only(left: index == productList.length - 1 ? 32.w : 20.w, right: index == 0 ? 32.w : 0),
             child: InkResponse(
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
@@ -251,7 +251,7 @@ class _getBestSellerTitle extends StatelessWidget {
     return SliverToBoxAdapter(
       child: Padding(
         padding:
-            EdgeInsets.only(left: 24.w, right: 24.w, bottom: 20.h, top: 32.h),
+            EdgeInsets.only(left: 32.w, right: 32.w, bottom: 20.h, top: 32.h),
         child: Row(
           children: [
             Text(
@@ -307,7 +307,7 @@ class _getCategoryListTitle extends StatelessWidget {
     return SliverToBoxAdapter(
       child: Padding(
         padding: EdgeInsets.only(
-          right: 24.w,
+          right: 32.w,
           bottom: 20.h,
           top: 32.h,
         ),
@@ -355,8 +355,8 @@ class _getSearchBox extends StatelessWidget {
     return SliverToBoxAdapter(
       child: Padding(
         padding: EdgeInsets.only(
-          left: 44.w,
-          right: 44.w,
+          left: 32.w,
+          right: 32.w,
           bottom: 32.h,
           top: 20.h,
         ),
@@ -403,7 +403,7 @@ Widget getProductCategoryList(List<Category> categoryList) {
   return ListView.builder(
     itemCount: categoryList.length,
     itemBuilder: (context, index) => Padding(
-      padding: EdgeInsets.only(left: 20.w, right: index == 0 ? 24.w : 0),
+      padding: EdgeInsets.only(left: index == categoryList.length - 1 ? 32.w : 20.w, right: index == 0 ? 32.w : 0),
       child: CategoryItemChip(categoryList[index]),
     ),
     scrollDirection: Axis.horizontal,
