@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../constants/colors.dart';
+import '../data/model/product.dart';
 import '../widgets/banner_slider.dart';
 import '../widgets/category_icon_item_chip.dart';
 import '../widgets/product_item.dart';
@@ -50,51 +51,73 @@ class _HomeScreenState extends State<HomeScreen> {
                 //     },
                 //   ),
                 // ),
-                if (state is HomeLoadingState) ...[
-                  const SliverToBoxAdapter(
-                    child: Center(
-                      child: SizedBox(
-                        height: 24,
-                        width: 24,
-                        child: CircularProgressIndicator(),
-                      ),
+                if (state is HomeLoadingState) ...{
+                   SliverFillRemaining(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        SizedBox(
+                          height: 24,
+                          width: 24,
+                          child: CircularProgressIndicator(),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-                const _getSearchBox(),
-                if (state is HomeRequestSuccessState) ...[
-                  state.bannerList.fold((exceptionMessage) {
-                    return SliverToBoxAdapter(
-                      child: Text(exceptionMessage),
-                    );
-                  }, (bannerList) {
-                    return _getBanners(bannerList);
-                  })
-                ],
-                const _getCategoryListTitle(),
-                if (state is HomeRequestSuccessState) ...[
-                  state.categoryList.fold((l) {
-                    return SliverToBoxAdapter(
-                      child: Text(l),
-                    );
-                  }, (categoryList) {
-                    return _getCategoryList(categoryList);
-                  })
-                ],
+                } else... {
+                  const _getSearchBox(),
+                  if (state is HomeRequestSuccessState) ...[
+                    state.bannerList.fold((exceptionMessage) {
+                      return SliverToBoxAdapter(
+                        child: Text(exceptionMessage),
+                      );
+                    }, (bannerList) {
+                      return _getBanners(bannerList);
+                    })
+                  ],
+                  const _getCategoryListTitle(),
+                  if (state is HomeRequestSuccessState) ...[
+                    state.categoryList.fold((l) {
+                      return SliverToBoxAdapter(
+                        child: Text(l),
+                      );
+                    }, (categoryList) {
+                      return _getCategoryList(categoryList);
+                    })
+                  ],
 
-                const _getBestSellerTitle(),
-                const _getBestSellerProducts(),
-                const _getMostViewedTitle(),
-                const _getMostViewedProducts(),
-                // SliverToBoxAdapter(
-                //   child: Davinci(
-                //     builder: (key) {
-                //       imageKey = key;
-                //       return _getMostViewedProducts();
-                //     },
-                //   ),
-                // ),
-                SliverPadding(padding: EdgeInsets.only(bottom: 20.h))
+                  const _getBestSellerTitle(),
+                  if (state is HomeRequestSuccessState) ...{
+                    state.bestSellerProductList.fold((exceptionMessage) {
+                      return SliverToBoxAdapter(
+                        child: Text(exceptionMessage),
+                      );
+                    }, (productList) {
+                      return _getBestSellerProducts(productList);
+                    })
+                  },
+                  const _getMostViewedTitle(),
+                  if (state is HomeRequestSuccessState) ...[
+                    state.hottestProductList.fold(
+                          (exceptionMessage) => SliverToBoxAdapter(
+                        child: Text(exceptionMessage),
+                      ),
+                          (mostViewedProductList) =>
+                          _getMostViewedProducts(mostViewedProductList),
+                    )
+                  ],
+                  // SliverToBoxAdapter(
+                  //   child: Davinci(
+                  //     builder: (key) {
+                  //       imageKey = key;
+                  //       return _getMostViewedProducts();
+                  //     },
+                  //   ),
+                  // ),
+                  SliverPadding(padding: EdgeInsets.only(bottom: 20.h))
+                }
+
               ],
             );
           },
@@ -105,7 +128,9 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class _getMostViewedProducts extends StatelessWidget {
-  const _getMostViewedProducts({
+  List<Product> productList;
+  _getMostViewedProducts(
+    this.productList, {
     Key? key,
   }) : super(key: key);
 
@@ -117,7 +142,7 @@ class _getMostViewedProducts extends StatelessWidget {
         child: SizedBox(
           height: 200,
           child: ListView.builder(
-            itemCount: 10,
+            itemCount: productList.length,
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) => Padding(
               padding: EdgeInsets.only(left: 20.w),
@@ -126,7 +151,7 @@ class _getMostViewedProducts extends StatelessWidget {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: ((context) => const ProductDetailScreen())));
                 },
-                child: const ProductItem(),
+                child: ProductItem(productList[index]),
               ),
             ),
           ),
@@ -178,7 +203,10 @@ class _getMostViewedTitle extends StatelessWidget {
 }
 
 class _getBestSellerProducts extends StatelessWidget {
-  const _getBestSellerProducts({
+  List<Product> productList;
+
+  _getBestSellerProducts(
+    this.productList, {
     Key? key,
   }) : super(key: key);
 
@@ -190,7 +218,7 @@ class _getBestSellerProducts extends StatelessWidget {
         child: SizedBox(
           height: 200,
           child: ListView.builder(
-            itemCount: 10,
+            itemCount: productList.length,
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) => Padding(
               padding: EdgeInsets.only(left: 20.w),
@@ -199,7 +227,7 @@ class _getBestSellerProducts extends StatelessWidget {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: ((context) => const ProductDetailScreen())));
                 },
-                child: const ProductItem(),
+                child: ProductItem(productList[index]),
               ),
             ),
           ),

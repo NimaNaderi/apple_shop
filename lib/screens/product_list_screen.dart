@@ -58,7 +58,7 @@ class ProductListScreen extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 44.w),
               sliver: SliverGrid(
                 delegate: SliverChildBuilderDelegate(
-                  (context, index) => ProductItem(),
+                  (context, index) => Text('data'),
                 ),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,

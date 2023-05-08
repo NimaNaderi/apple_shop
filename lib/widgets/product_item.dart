@@ -1,10 +1,14 @@
+import 'package:apple_shop/data/model/product.dart';
+import 'package:apple_shop/widgets/cached_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../constants/colors.dart';
 
 class ProductItem extends StatelessWidget {
-  const ProductItem({
+  Product product;
+  ProductItem(
+    this.product, {
     Key? key,
   }) : super(key: key);
 
@@ -27,8 +31,10 @@ class ProductItem extends StatelessWidget {
             children: [
               Expanded(child: Container()),
               SizedBox(
-                height: 104.h,
-                child: Image.asset('assets/images/iphone.png'),
+                height: 98,
+                child: CachedImage(
+                  imageUrl: product.thumbnail,
+                ),
               ),
               Positioned(
                 top: 0,
@@ -53,7 +59,7 @@ class ProductItem extends StatelessWidget {
                       vertical: 2.h,
                     ),
                     child: Text(
-                      '%۳',
+                      '${product.percent!.round().toString()} %',
                       style: TextStyle(
                         fontFamily: 'SB',
                         fontSize: 12.sp,
@@ -67,12 +73,14 @@ class ProductItem extends StatelessWidget {
           ),
           const Spacer(),
           Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
                 padding: EdgeInsets.only(right: 10.w, bottom: 10.h),
                 child: Text(
-                  'آیفون 13 پرومکس',
+                  product.name,
+                  maxLines: 1,
+                  overflow: TextOverflow.clip,
                   style: TextStyle(fontFamily: 'SM', fontSize: 14.sp),
                 ),
               ),
@@ -114,7 +122,7 @@ class ProductItem extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '۴۹.۰۰۰.۰۰۰',
+                            product.price.toString(),
                             style: TextStyle(
                               decoration: TextDecoration.lineThrough,
                               fontSize: 12.sp,
@@ -123,7 +131,7 @@ class ProductItem extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            '۴۸.۸۰۰.۰۰۰',
+                            (product.price + product.discountPrice).toString(),
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 16.sp,
