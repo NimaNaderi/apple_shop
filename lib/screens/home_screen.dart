@@ -154,13 +154,7 @@ class _getMostViewedProducts extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) => Padding(
             padding: EdgeInsets.only(left: index == productList.length - 1 ? 32.w : 20.w, right: index == 0 ? 32.w : 0),
-            child: InkResponse(
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: ((context) => const ProductDetailScreen())));
-              },
-              child: ProductItem(productList[index]),
-            ),
+            child: ProductItem(productList[index]),
           ),
         ),
       ),
@@ -227,13 +221,7 @@ class _getBestSellerProducts extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) => Padding(
             padding: EdgeInsets.only(left: index == productList.length - 1 ? 32.w : 20.w, right: index == 0 ? 32.w : 0),
-            child: InkResponse(
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: ((context) => const ProductDetailScreen())));
-              },
-              child: ProductItem(productList[index]),
-            ),
+            child: ProductItem(productList[index]),
           ),
         ),
       ),
