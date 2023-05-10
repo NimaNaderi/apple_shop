@@ -239,7 +239,7 @@ class _getBestSellerTitle extends StatelessWidget {
     return SliverToBoxAdapter(
       child: Padding(
         padding:
-            EdgeInsets.only(left: 32.w, right: 32.w, bottom: 20.h, top: 32.h),
+            EdgeInsets.only(left: 32.w, right: 32.w, bottom: 20.h, top: 28.h),
         child: Row(
           children: [
             Text(
@@ -397,3 +397,4 @@ Widget getProductCategoryList(List<Category> categoryList) {
     scrollDirection: Axis.horizontal,
   );
 }
+

@@ -29,7 +29,8 @@ class ProductDetailScreen extends StatefulWidget {
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   @override
   void initState() {
-    BlocProvider.of<ProductBloc>(context).add(ProductInitializeEvent());
+    BlocProvider.of<ProductBloc>(context)
+        .add(ProductInitializeEvent(widget.product.id));
     super.initState();
   }
 
@@ -63,14 +64,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       ],
                     ),
                   ),
-                } else ... {
+                } else ...{
                   SliverToBoxAdapter(
                     child: Padding(
                       padding: EdgeInsets.only(
                         left: 44.w,
                         right: 44.w,
                         bottom: 32.h,
-                        top: 10.h,
+                        top: 12.h,
                       ),
                       child: Container(
                         height: 46.h,
@@ -132,7 +133,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         child: Text('خطا'),
                       );
                     }, (productImageList) {
-                      return GalleryWidget(productImageList);
+                      return GalleryWidget(
+                          productImageList, widget.product.thumbnail);
                     })
                   },
                   if (state is ProductDetailResponseState) ...{
@@ -154,16 +156,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             height: 46.h,
                             decoration: BoxDecoration(
                               color: Colors.white,
-                              border:
-                              Border.all(color: CustomColors.grey, width: 1),
+                              border: Border.all(
+                                  color: CustomColors.grey, width: 1),
                               borderRadius: BorderRadius.circular(16.r),
                             ),
                             child: Padding(
                               padding: EdgeInsets.symmetric(horizontal: 10.w),
                               child: Row(
                                 children: [
-                                  Image.asset(
-                                      'assets/images/icon_left_categroy.png'),
+                                  SvgPicture.asset('assets/icons/arrow-left.svg'),
                                   SizedBox(
                                     width: 10.w,
                                   ),
@@ -201,15 +202,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           decoration: BoxDecoration(
                             color: Colors.white,
                             border:
-                            Border.all(color: CustomColors.grey, width: 1),
+                                Border.all(color: CustomColors.grey, width: 1),
                             borderRadius: BorderRadius.circular(16.r),
                           ),
                           child: Padding(
                             padding: EdgeInsets.symmetric(horizontal: 10.w),
                             child: Row(
                               children: [
-                                Image.asset(
-                                    'assets/images/icon_left_categroy.png'),
+                                SvgPicture.asset('assets/icons/arrow-left.svg'),
                                 SizedBox(
                                   width: 10.w,
                                 ),
@@ -247,8 +247,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             height: 46.h,
                             decoration: BoxDecoration(
                               color: Colors.white,
-                              border:
-                              Border.all(color: CustomColors.grey, width: 1),
+                              border: Border.all(
+                                  color: CustomColors.grey, width: 1),
                               borderRadius: BorderRadius.circular(16.r),
                             ),
                             child: Padding(
@@ -256,8 +256,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Image.asset(
-                                      'assets/images/icon_left_categroy.png'),
+                                  SvgPicture.asset('assets/icons/arrow-left.svg'),
                                   SizedBox(
                                     width: 10.w,
                                   ),
@@ -280,7 +279,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                             width: 26.w,
                                             decoration: BoxDecoration(
                                               borderRadius:
-                                              BorderRadius.circular(8.r),
+                                                  BorderRadius.circular(8.r),
                                               color: Colors.red,
                                             ),
                                           ),
@@ -292,7 +291,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                             width: 26.w,
                                             decoration: BoxDecoration(
                                               borderRadius:
-                                              BorderRadius.circular(8.r),
+                                                  BorderRadius.circular(8.r),
                                               color: Colors.yellow,
                                             ),
                                           ),
@@ -304,7 +303,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                             width: 26.w,
                                             decoration: BoxDecoration(
                                               borderRadius:
-                                              BorderRadius.circular(8.r),
+                                                  BorderRadius.circular(8.r),
                                               color: Colors.blue,
                                             ),
                                           ),
@@ -316,7 +315,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                             width: 26.w,
                                             decoration: BoxDecoration(
                                               borderRadius:
-                                              BorderRadius.circular(8.r),
+                                                  BorderRadius.circular(8.r),
                                               color: Colors.orange,
                                             ),
                                           ),
@@ -328,7 +327,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                             width: 26.w,
                                             decoration: BoxDecoration(
                                               borderRadius:
-                                              BorderRadius.circular(8.r),
+                                                  BorderRadius.circular(8.r),
                                               color: Colors.grey,
                                             ),
                                             child: Center(
@@ -370,15 +369,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     sliver: SliverToBoxAdapter(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
-                          PriceTagButton(),
-                          AddToBasketButton(),
+                        children:  [
+                          PriceTagButton(widget.product),
+                         const AddToBasketButton(),
                         ],
                       ),
                     ),
                   )
                 }
-
               ],
             ),
           );
@@ -475,7 +473,7 @@ class AddToBasketButton extends StatelessWidget {
               filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
               child: Container(
                 width: 160.w,
-                height: 54.h,
+                height: 58.h,
                 decoration: BoxDecoration(
                   color: Colors.transparent,
                   borderRadius: BorderRadius.circular(16.r),
@@ -500,7 +498,10 @@ class AddToBasketButton extends StatelessWidget {
 }
 
 class PriceTagButton extends StatelessWidget {
-  const PriceTagButton({
+  Product product;
+
+   PriceTagButton(
+    this.product, {
     Key? key,
   }) : super(key: key);
 
@@ -525,7 +526,7 @@ class PriceTagButton extends StatelessWidget {
               filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
               child: Container(
                 width: 160.w,
-                height: 54.h,
+                height: 58.h,
                 decoration: BoxDecoration(
                   color: Colors.transparent,
                   borderRadius: BorderRadius.circular(16.r),
@@ -549,7 +550,7 @@ class PriceTagButton extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            '۱۷٬۸۰۰٬۰۰۰',
+                            product.price.toString(),
                             style: TextStyle(
                               decoration: TextDecoration.lineThrough,
                               fontFamily: 'SM',
@@ -558,7 +559,7 @@ class PriceTagButton extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            '۱۶٬۹۸۹٬۰۰۰',
+                            (product.price + product.discountPrice).toString(),
                             style: TextStyle(
                               fontFamily: 'SB',
                               fontSize: 16.sp,
@@ -579,7 +580,7 @@ class PriceTagButton extends StatelessWidget {
                             vertical: 2.h,
                           ),
                           child: Text(
-                            '%۳',
+                            '% ${product.percent!.round()}',
                             style: TextStyle(
                               fontFamily: 'SB',
                               fontSize: 10.sp,
@@ -602,9 +603,11 @@ class PriceTagButton extends StatelessWidget {
 
 class GalleryWidget extends StatefulWidget {
   List<ProductImage> productImageList;
+  String? defaultProductThumbnail;
   int selectedItem = 0;
 
-  GalleryWidget(this.productImageList, {Key? key}) : super(key: key);
+  GalleryWidget(this.productImageList, this.defaultProductThumbnail, {Key? key})
+      : super(key: key);
 
   @override
   State<GalleryWidget> createState() => _GalleryWidgetState();
@@ -643,56 +646,66 @@ class _GalleryWidgetState extends State<GalleryWidget> {
                           ),
                         ],
                       ),
-                      Spacer(),
-                      Expanded(
-                        child: SizedBox(
-                          height: double.infinity,
-                          child: CachedImage(
-                            imageUrl: widget
-                                .productImageList[widget.selectedItem].imageUrl,
-                          ),
-                        ),
+                      const Spacer(),
+                      SizedBox(
+                        height: double.infinity,
+                        width: 200.w,
+                        child: widget.productImageList.isEmpty
+                            ? Column(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  CachedImage(
+                                      imageUrl: widget.defaultProductThumbnail),
+                                ],
+                              )
+                            : CachedImage(
+                                imageUrl: widget
+                                    .productImageList[widget.selectedItem]
+                                    .imageUrl),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       SvgPicture.asset('assets/icons/like.svg'),
                     ],
                   ),
                 ),
               ),
-              SizedBox(
-                height: 70.h,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 40.w),
-                  child: ListView.builder(
-                    itemCount: widget.productImageList.length,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) => GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          widget.selectedItem = index;
-                        });
-                      },
-                      child: Container(
-                        height: 70.h,
-                        width: 70.w,
-                        margin: EdgeInsets.only(left: 20.w),
-                        padding: EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            width: 1,
-                            color: CustomColors.grey,
+              if (widget.productImageList.isNotEmpty) ...{
+                SizedBox(
+                  height: 70.h,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 40.w),
+                    child: ListView.builder(
+                      itemCount: widget.productImageList.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) => GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            widget.selectedItem = index;
+                          });
+                        },
+                        child: Container(
+                          height: 70.h,
+                          width: 70.w,
+                          margin: EdgeInsets.only(left: 20.w),
+                          padding: EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              width: 1,
+                              color: CustomColors.grey,
+                            ),
+                            borderRadius: BorderRadius.circular(10.r),
                           ),
-                          borderRadius: BorderRadius.circular(10.r),
-                        ),
-                        child: CachedImage(
-                          imageUrl: widget.productImageList[index].imageUrl,
-                          radius: 10,
+                          child: CachedImage(
+                            imageUrl: widget.productImageList[index].imageUrl,
+                            radius: 10,
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
+              },
               SizedBox(
                 height: 20.h,
               )
@@ -734,8 +747,8 @@ class _ColorVariantListState extends State<ColorVariantList> {
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 300),
               margin: EdgeInsets.only(left: 10.w),
-              height: 26.h,
-              width: _selectedIndex == index ? 76.w : 26.w,
+              height: 26,
+              width: _selectedIndex == index ? 66 : 26,
               decoration: BoxDecoration(
                 color:
                     Color(int.parse('0xff${widget.variantList[index].value}')),

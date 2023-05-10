@@ -8,7 +8,7 @@ import 'package:dio/dio.dart';
 import '../../utils/api_exception.dart';
 
 abstract class IProductDetailDataSource {
-  Future<List<ProductImage>> getGallery();
+  Future<List<ProductImage>> getGallery(String productId);
 
   Future<List<VariantType>> getVariantTypes();
 
@@ -21,10 +21,10 @@ class ProductDetailRemoteDataSource extends IProductDetailDataSource {
   final Dio _dio = locator.get();
 
   @override
-  Future<List<ProductImage>> getGallery() async {
+  Future<List<ProductImage>> getGallery(String productId) async {
     try {
-      final Map<String, String> qParams = {'filter': 'product_id=""'};
-      var response = await _dio.get('collections/gallery/records');
+      final Map<String, String> qParams = {'filter': 'product_id="${productId}"'};
+      var response = await _dio.get('collections/gallery/records',queryParameters: qParams);
       return response.data['items']
           .map<ProductImage>(
             (jsonObject) => ProductImage.fromJson(jsonObject),
