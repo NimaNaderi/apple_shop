@@ -1,4 +1,6 @@
 import 'package:apple_shop/data/model/product_image.dart';
+import 'package:apple_shop/data/model/product_variant.dart';
+import 'package:apple_shop/data/model/variant_type.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class ProductState {
@@ -15,5 +17,6 @@ class ProductDetailLoadingState extends ProductState {
 
 class ProductDetailResponseState extends ProductState {
   Either<String, List<ProductImage>> productImages;
-  ProductDetailResponseState(this.productImages);
+  Either<String, List<ProductVariant>> productVariants;
+  ProductDetailResponseState(this.productImages,this.productVariants);
 }

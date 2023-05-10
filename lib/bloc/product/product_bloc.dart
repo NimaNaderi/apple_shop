@@ -12,8 +12,10 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       (event, emit) async{
         emit(ProductDetailLoadingState());
         var productImages = await _productDetailRepository.getProductImage();
+        var productVariants = await _productDetailRepository.getProductVariants();
+
         await Future.delayed(Duration(seconds: 2),(){});
-        emit(ProductDetailResponseState(productImages));
+        emit(ProductDetailResponseState(productImages,productVariants));
 
       },
     );
