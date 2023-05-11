@@ -4,7 +4,7 @@ class Product {
   String thumbnail;
   String description;
   String popularity;
-  String category;
+  String categoryId;
   String name;
   int price;
   int discountPrice;
@@ -17,7 +17,7 @@ class Product {
       this.thumbnail,
       this.description,
       this.popularity,
-      this.category,
+      this.categoryId,
       this.name,
       this.price,
       this.discountPrice,
