@@ -1,8 +1,11 @@
 import 'dart:ui';
 
+import 'package:apple_shop/bloc/basket/basket_bloc.dart';
+import 'package:apple_shop/bloc/basket/basket_event.dart';
 import 'package:apple_shop/bloc/category/category_bloc.dart';
 import 'package:apple_shop/bloc/home/home_bloc.dart';
 import 'package:apple_shop/constants/colors.dart';
+import 'package:apple_shop/data/model/basket_item.dart';
 import 'package:apple_shop/di/di.dart';
 import 'package:apple_shop/screens/cart_screen.dart';
 import 'package:apple_shop/screens/category_screen.dart';
@@ -12,10 +15,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hive_flutter/adapters.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+
+  await Hive.initFlutter();
+  Hive.registerAdapter(BasketItemAdapter());
+  await Hive.openBox<BasketItem>('basketBox');
   await getItInit();
+
   runApp(const MyApp());
 }
 
@@ -96,8 +106,7 @@ class _MyAppState extends State<MyApp> {
                             offset: Offset(0, 12),
                           )
                         ]),
-                        child:
-                        SvgPicture.asset('assets/icons/bag-filled.svg'),
+                        child: SvgPicture.asset('assets/icons/bag-filled.svg'),
                       ),
                       label: 'سبد خرید'),
                   BottomNavigationBarItem(
@@ -115,7 +124,8 @@ class _MyAppState extends State<MyApp> {
                             offset: Offset(0, 12),
                           )
                         ]),
-                        child: SvgPicture.asset('assets/icons/category-filled.svg'),
+                        child: SvgPicture.asset(
+                            'assets/icons/category-filled.svg'),
                       ),
                       label: 'دسته بندی'),
                   BottomNavigationBarItem(
@@ -133,8 +143,7 @@ class _MyAppState extends State<MyApp> {
                             offset: Offset(0, 12),
                           )
                         ]),
-                        child:
-                            SvgPicture.asset('assets/icons/home-filled.svg'),
+                        child: SvgPicture.asset('assets/icons/home-filled.svg'),
                       ),
                       label: 'خانه'),
                 ],
@@ -148,7 +157,14 @@ class _MyAppState extends State<MyApp> {
 
   List<Widget> getLayout() => <Widget>[
         const ProfileScreen(),
-        const CartScreen(),
+        BlocProvider(
+          create: (context) {
+            var bloc = locator.get<BasketBloc>();
+            bloc.add(BasketFetchFromHiveEvent());
+            return bloc;
+          },
+          child: CartScreen(),
+        ),
         BlocProvider(
           create: (context) => CategoryBloc(),
           child: CategoryScreen(),

@@ -1,15 +1,20 @@
 import 'dart:ui';
 
+import 'package:animated_snack_bar/animated_snack_bar.dart';
+import 'package:apple_shop/bloc/basket/basket_bloc.dart';
+import 'package:apple_shop/bloc/basket/basket_event.dart';
 import 'package:apple_shop/bloc/product/product_bloc.dart';
 import 'package:apple_shop/bloc/product/product_event.dart';
 import 'package:apple_shop/bloc/product/product_state.dart';
 import 'package:apple_shop/constants/colors.dart';
+import 'package:apple_shop/data/model/basket_item.dart';
 import 'package:apple_shop/data/model/property.dart';
 import 'package:apple_shop/widgets/cached_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../data/model/product.dart';
@@ -29,11 +34,25 @@ class ProductDetailScreen extends StatefulWidget {
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   @override
-  void initState() {
-    BlocProvider.of<ProductBloc>(context).add(
-        ProductInitializeEvent(widget.product.id, widget.product.categoryId));
-    super.initState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+        create: (context) {
+          var bloc = ProductBloc();
+          bloc.add(ProductInitializeEvent(
+              widget.product.id, widget.product.categoryId));
+          return bloc;
+        },
+        child: DetailContent(parentWidget: widget));
   }
+}
+
+class DetailContent extends StatelessWidget {
+  const DetailContent({
+    super.key,
+    required this.parentWidget,
+  });
+
+  final ProductDetailScreen parentWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -130,7 +149,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     child: Padding(
                       padding: EdgeInsets.only(bottom: 20.h),
                       child: Text(
-                        widget.product.name,
+                        parentWidget.product.name,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 16.sp,
@@ -147,7 +166,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       );
                     }, (productImageList) {
                       return GalleryWidget(
-                          productImageList, widget.product.thumbnail);
+                          productImageList, parentWidget.product.thumbnail);
                     })
                   },
                   if (state is ProductDetailResponseState) ...{
@@ -166,7 +185,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         (productPropertyList) =>
                             ProductProperties(productPropertyList))
                   },
-                  ProductDescription(widget.product.description),
+                  ProductDescription(parentWidget.product.description),
                   SliverPadding(
                     padding: EdgeInsets.only(top: 20.h, bottom: 40.h),
                     sliver: SliverToBoxAdapter(
@@ -296,8 +315,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          PriceTagButton(widget.product),
-                          const AddToBasketButton(),
+                          PriceTagButton(parentWidget.product),
+                          AddToBasketButton(parentWidget.product),
                         ],
                       ),
                     ),
@@ -314,6 +333,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
 class ProductProperties extends StatefulWidget {
   List<Property> propertyList;
+
   ProductProperties(
     this.propertyList, {
     super.key,
@@ -435,6 +455,7 @@ class ProductDescription extends StatefulWidget {
 
 class _ProductDescriptionState extends State<ProductDescription> {
   bool _isVisible = false;
+
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
@@ -575,7 +596,10 @@ class VariantChildGenerator extends StatelessWidget {
 }
 
 class AddToBasketButton extends StatelessWidget {
-  const AddToBasketButton({
+  Product product;
+
+  AddToBasketButton(
+    this.product, {
     Key? key,
   }) : super(key: key);
 
@@ -598,20 +622,50 @@ class AddToBasketButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(16.r),
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-              child: Container(
-                width: 160.w,
-                height: 58.h,
-                decoration: BoxDecoration(
-                  color: Colors.transparent,
-                  borderRadius: BorderRadius.circular(16.r),
-                ),
-                child: Center(
-                  child: Text(
-                    'افزودن به سبد خرید',
-                    style: TextStyle(
-                      fontFamily: 'SB',
-                      fontSize: 16.sp,
-                      color: Colors.white,
+              child: GestureDetector(
+                onTap: () {
+                  context
+                      .read<ProductBloc>()
+                      .add(ProductAddedToBasket(product));
+                  context.read<BasketBloc>().add(BasketFetchFromHiveEvent());
+                  AnimatedSnackBar(
+                    mobileSnackBarPosition: MobileSnackBarPosition.bottom,
+                    duration: const Duration(seconds: 5),
+                    builder: ((context) {
+                      return Container(
+                        decoration: BoxDecoration(
+                            color: CustomColors.green,
+                            borderRadius: BorderRadius.circular(20.r)),
+                        height: 50.h,
+                        child: Center(
+                          child: Text(
+                            'محصول با موفقیت به سبد خرید افزوده شد.',
+                            style: TextStyle(
+                              fontFamily: 'SB',
+                              fontSize: 16.sp,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
+                  ).show(context);
+                },
+                child: Container(
+                  width: 160.w,
+                  height: 58.h,
+                  decoration: BoxDecoration(
+                    color: Colors.transparent,
+                    borderRadius: BorderRadius.circular(16.r),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'افزودن به سبد خرید',
+                      style: TextStyle(
+                        fontFamily: 'SB',
+                        fontSize: 16.sp,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),

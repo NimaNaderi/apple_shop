@@ -1,7 +1,12 @@
+import 'package:apple_shop/bloc/basket/basket_bloc.dart';
+import 'package:apple_shop/bloc/basket/basket_state.dart';
 import 'package:apple_shop/constants/colors.dart';
+import 'package:apple_shop/data/model/basket_item.dart';
 import 'package:apple_shop/utils/extensions/string_extensions.dart';
+import 'package:apple_shop/widgets/cached_image.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -13,83 +18,93 @@ class CartScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: CustomColors.backgroundScreenColor,
       body: SafeArea(
-        child: Stack(
-          alignment: AlignmentDirectional.bottomCenter,
-          children: [
-            CustomScrollView(
-              slivers: [
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      left: 44.w,
-                      right: 44.w,
-                      bottom: 32.h,
-                      top: 20.h,
-                    ),
-                    child: Container(
-                      height: 46.h,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16.r),
+        child: BlocBuilder<BasketBloc, BasketState>(
+          builder: (context, state) => Stack(
+            alignment: AlignmentDirectional.bottomCenter,
+            children: [
+              CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        left: 44.w,
+                        right: 44.w,
+                        bottom: 32.h,
+                        top: 20.h,
                       ),
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            width: 16.w,
-                          ),
-                          SvgPicture.asset('assets/icons/apple.svg',
-                              color: CustomColors.blue, width: 24.w),
-                          Expanded(
-                            child: Text(
-                              'سبد خرید',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontFamily: 'SB',
-                                fontSize: 16.sp,
-                                color: CustomColors.blue,
+                      child: Container(
+                        height: 46.h,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16.r),
+                        ),
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: 16.w,
+                            ),
+                            SvgPicture.asset('assets/icons/apple.svg',
+                                color: CustomColors.blue, width: 24.w),
+                            Expanded(
+                              child: Text(
+                                'سبد خرید',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontFamily: 'SB',
+                                  fontSize: 16.sp,
+                                  color: CustomColors.blue,
+                                ),
                               ),
                             ),
-                          ),
-                          SizedBox(
-                            width: 16.w,
-                          ),
-                        ],
+                            SizedBox(
+                              width: 16.w,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  if (state is BasketDataFetchedState) ...[
+                    state.basketItemList.fold(
+                      (l) => SliverToBoxAdapter(
+                        child: Text(l),
+                      ),
+                      (basketItemList) => SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                            (context, index) =>
+                                CartItem(basketItemList[index]),
+                            childCount: basketItemList.length),
+                      ),
+                    )
+                  ],
+                  SliverPadding(padding: EdgeInsets.only(bottom: 100.h))
+                ],
+              ),
+              Padding(
+                padding: EdgeInsets.only(right: 44.w, left: 44.w, bottom: 20.h),
+                child: SizedBox(
+                  height: 54.h,
+                  width: MediaQuery.of(context).size.width,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: CustomColors.green,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16.r),
+                      ),
+                    ),
+                    onPressed: () {},
+                    child: Text(
+                      'ادامه فرایند خرید',
+                      style: TextStyle(
+                        fontSize: 18.sp,
+                        fontFamily: 'SB',
                       ),
                     ),
                   ),
                 ),
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                      (context, index) => CartItem(),
-                      childCount: 10),
-                ),
-                SliverPadding(padding: EdgeInsets.only(bottom: 100.h))
-              ],
-            ),
-            Padding(
-              padding: EdgeInsets.only(right: 44.w, left: 44.w, bottom: 20.h),
-              child: SizedBox(
-                height: 54.h,
-                width: MediaQuery.of(context).size.width,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: CustomColors.green,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16.r),
-                    ),
-                  ),
-                  onPressed: () {},
-                  child: Text(
-                    'ادامه فرایند خرید',
-                    style: TextStyle(
-                      fontSize: 18.sp,
-                      fontFamily: 'SB',
-                    ),
-                  ),
-                ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -97,7 +112,10 @@ class CartScreen extends StatelessWidget {
 }
 
 class CartItem extends StatelessWidget {
-  const CartItem({
+  BasketItem basketItem;
+
+  CartItem(
+    this.basketItem, {
     Key? key,
   }) : super(key: key);
 
@@ -119,13 +137,14 @@ class CartItem extends StatelessWidget {
                 Expanded(
                   child: Padding(
                     padding:
-                        EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.w),
+                        EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          'آیفون 13 پرومکس',
+                          basketItem.name,
                           overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.right,
                           style: TextStyle(fontFamily: 'SB', fontSize: 16.sp),
                         ),
                         SizedBox(
@@ -152,7 +171,7 @@ class CartItem extends StatelessWidget {
                                   vertical: 2.h,
                                 ),
                                 child: Text(
-                                  '%۳',
+                                  '% 2',
                                   style: TextStyle(
                                     fontFamily: 'SB',
                                     fontSize: 12.sp,
@@ -230,9 +249,10 @@ class CartItem extends StatelessWidget {
                 ),
                 SizedBox(
                   height: 104.h,
+                  // width: 80.w,
                   child: Padding(
                     padding: EdgeInsets.only(right: 10.w),
-                    child: Image.asset('assets/images/iphone.png'),
+                    child: CachedImage(imageUrl: basketItem.thumbnail),
                   ),
                 )
               ],
@@ -261,7 +281,7 @@ class CartItem extends StatelessWidget {
                   width: 6.w,
                 ),
                 Text(
-                  '59.000.000',
+                  '${basketItem.price + basketItem.discountPrice}',
                   style: TextStyle(fontFamily: 'SB', fontSize: 16.sp),
                 ),
               ],
@@ -303,8 +323,7 @@ class OptionChip extends StatelessWidget {
                 height: 12.h,
                 width: 12.w,
                 decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: color.parseToColor()),
+                    shape: BoxShape.circle, color: color.parseToColor()),
               )
             },
             SizedBox(
@@ -321,4 +340,3 @@ class OptionChip extends StatelessWidget {
     );
   }
 }
-
