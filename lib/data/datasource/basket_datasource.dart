@@ -3,7 +3,10 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 abstract class IBasketDataSource {
   Future<void> addProduct(BasketItem item);
+
   Future<List<BasketItem>> getAllBasketItems();
+
+  Future<int> getFinalBasketPrice();
 }
 
 class BasketLocalDataSource extends IBasketDataSource {
@@ -15,7 +18,17 @@ class BasketLocalDataSource extends IBasketDataSource {
   }
 
   @override
-  Future<List<BasketItem>> getAllBasketItems() async{
+  Future<List<BasketItem>> getAllBasketItems() async {
     return box.values.toList();
+  }
+
+  @override
+  Future<int> getFinalBasketPrice() async {
+    var basketList = box.values.toList();
+    final finalPrice = basketList.fold(
+        0,
+        (previousValue, basketItem) =>
+            previousValue + basketItem.discountPrice);
+    return finalPrice;
   }
 }

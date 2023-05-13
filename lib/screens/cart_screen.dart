@@ -71,8 +71,7 @@ class CartScreen extends StatelessWidget {
                       ),
                       (basketItemList) => SliverList(
                         delegate: SliverChildBuilderDelegate(
-                            (context, index) =>
-                                CartItem(basketItemList[index]),
+                            (context, index) => CartItem(basketItemList[index]),
                             childCount: basketItemList.length),
                       ),
                     )
@@ -80,29 +79,34 @@ class CartScreen extends StatelessWidget {
                   SliverPadding(padding: EdgeInsets.only(bottom: 100.h))
                 ],
               ),
-              Padding(
-                padding: EdgeInsets.only(right: 44.w, left: 44.w, bottom: 20.h),
-                child: SizedBox(
-                  height: 54.h,
-                  width: MediaQuery.of(context).size.width,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: CustomColors.green,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16.r),
+              if (state is BasketDataFetchedState) ...[
+                Padding(
+                  padding:
+                      EdgeInsets.only(right: 44.w, left: 44.w, bottom: 20.h),
+                  child: SizedBox(
+                    height: 54.h,
+                    width: MediaQuery.of(context).size.width,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: CustomColors.green,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16.r),
+                        ),
                       ),
-                    ),
-                    onPressed: () {},
-                    child: Text(
-                      'ادامه فرایند خرید',
-                      style: TextStyle(
-                        fontSize: 18.sp,
-                        fontFamily: 'SB',
+                      onPressed: () {},
+                      child: Text(
+                        state.finalBasketPrice == 0
+                            ? 'سبد خرید شما خالی میباشد'
+                            : state.finalBasketPrice.toString(),
+                        style: TextStyle(
+                          fontSize: 18.sp,
+                          fontFamily: 'SB',
+                        ),
                       ),
                     ),
                   ),
-                ),
-              )
+                )
+              ]
             ],
           ),
         ),
@@ -192,7 +196,7 @@ class CartItem extends StatelessWidget {
                               width: 4.w,
                             ),
                             Text(
-                              '۴۸.۸۰۰.۰۰۰',
+                              basketItem.price.toString(),
                               style:
                                   TextStyle(fontFamily: 'SM', fontSize: 12.sp),
                             )
@@ -281,7 +285,7 @@ class CartItem extends StatelessWidget {
                   width: 6.w,
                 ),
                 Text(
-                  '${basketItem.price + basketItem.discountPrice}',
+                  '${basketItem.discountPrice}',
                   style: TextStyle(fontFamily: 'SB', fontSize: 16.sp),
                 ),
               ],

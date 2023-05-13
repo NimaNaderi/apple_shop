@@ -4,11 +4,11 @@ import '../../data/model/basket_item.dart';
 
 abstract class BasketState {}
 
-class BasketInitState extends BasketState {
-
-}
+class BasketInitState extends BasketState {}
 
 class BasketDataFetchedState extends BasketState {
-  Either<String,List<BasketItem>> basketItemList;
-  BasketDataFetchedState(this.basketItemList);
+  Either<String, List<BasketItem>> basketItemList;
+  int finalBasketPrice;
+
+  BasketDataFetchedState(this.basketItemList, this.finalBasketPrice);
 }
