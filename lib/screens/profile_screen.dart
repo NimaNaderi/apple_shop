@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../constants/colors.dart';
 
@@ -21,6 +22,7 @@ class ProfileScreen extends StatelessWidget {
                 left: 44.w,
                 right: 44.w,
                 bottom: 32.h,
+                top: 20.h,
               ),
               child: Container(
                 height: 46.h,
@@ -33,7 +35,8 @@ class ProfileScreen extends StatelessWidget {
                     SizedBox(
                       width: 16.w,
                     ),
-                    Image.asset('assets/images/icon_apple_blue.png'),
+                    SvgPicture.asset('assets/icons/apple.svg',
+                        color: CustomColors.blue, width: 24.w),
                     Expanded(
                       child: Text(
                         'حساب کاربری',

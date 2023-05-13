@@ -356,7 +356,7 @@ class _ProductPropertiesState extends State<ProductProperties> {
                         width: 10.w,
                       ),
                       Text(
-                        'مشاهده',
+                        _isVisible ? 'بستن' : 'مشاهده',
                         style: TextStyle(
                           color: CustomColors.blue,
                           fontSize: 12.sp,
@@ -463,7 +463,7 @@ class _ProductDescriptionState extends State<ProductDescription> {
                       width: 10.w,
                     ),
                     Text(
-                      'مشاهده',
+                      _isVisible ? 'بستن' : 'مشاهده',
                       style: TextStyle(
                         color: CustomColors.blue,
                         fontSize: 12.sp,
@@ -563,6 +563,9 @@ class VariantChildGenerator extends StatelessWidget {
             ColorVariantList(productVariant.variantList)
           },
           if (productVariant.variantType.type == VariantTypeEnum.STORAGTE) ...{
+            StorageVariantList(productVariant.variantList)
+          },
+          if (productVariant.variantType.type == VariantTypeEnum.VOLTAGE) ...{
             StorageVariantList(productVariant.variantList)
           }
         ],
@@ -771,22 +774,26 @@ class _GalleryWidgetState extends State<GalleryWidget> {
                         ],
                       ),
                       const Spacer(),
-                      SizedBox(
-                        height: double.infinity,
-                        width: 200.w,
-                        child: widget.productImageList.isEmpty
-                            ? Column(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  CachedImage(
-                                      imageUrl: widget.defaultProductThumbnail),
-                                ],
-                              )
-                            : CachedImage(
-                                imageUrl: widget
-                                    .productImageList[widget.selectedItem]
-                                    .imageUrl),
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 4.h),
+                        child: SizedBox(
+                          height: double.infinity,
+                          width: 200.w,
+                          child: widget.productImageList.isEmpty
+                              ? Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    CachedImage(
+                                        imageUrl:
+                                            widget.defaultProductThumbnail),
+                                  ],
+                                )
+                              : CachedImage(
+                                  imageUrl: widget
+                                      .productImageList[widget.selectedItem]
+                                      .imageUrl),
+                        ),
                       ),
                       const Spacer(),
                       SvgPicture.asset('assets/icons/like.svg'),

@@ -1,14 +1,17 @@
 import 'package:apple_shop/bloc/category/category_bloc.dart';
 import 'package:apple_shop/bloc/category/category_event.dart';
 import 'package:apple_shop/bloc/category/category_state.dart';
+import 'package:apple_shop/bloc/categoryProduct/category_product_bloc.dart';
 import 'package:apple_shop/data/model/category.dart';
 import 'package:apple_shop/data/repository/category_repository.dart';
+import 'package:apple_shop/screens/product_list_screen.dart';
 import 'package:apple_shop/widgets/cached_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../constants/colors.dart';
 
@@ -40,6 +43,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   left: 44.w,
                   right: 44.w,
                   bottom: 32.h,
+                  top: 20.h,
                 ),
                 child: Container(
                   height: 46.h,
@@ -52,7 +56,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
                       SizedBox(
                         width: 16.w,
                       ),
-                      Image.asset('assets/images/icon_apple_blue.png'),
+                      SvgPicture.asset('assets/icons/apple.svg',
+                          color: CustomColors.blue, width: 24.w),
                       Expanded(
                         child: Text(
                           'جستجوی محصولات',
@@ -91,7 +96,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                 return SliverToBoxAdapter(child: Text('data'));
               },
             ),
-            SliverPadding(padding: EdgeInsets.only(top: 40.h))
+            SliverPadding(padding: EdgeInsets.only(top: 20.h))
           ],
         ),
       ),
@@ -101,6 +106,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
 class _categoryList extends StatelessWidget {
   List<Category>? categoryList;
+
   _categoryList({Key? key, required this.categoryList}) : super(key: key);
 
   @override
@@ -109,8 +115,16 @@ class _categoryList extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 44.w),
       sliver: SliverGrid(
         delegate: SliverChildBuilderDelegate(
-          (context, index) =>
-              CachedImage(imageUrl: categoryList?[index].thumbnail!),
+          (context, index) => GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => BlocProvider(
+                    create: (context) => CategoryProductBloc(),
+                    child: ProductListScreen(categoryList![index]),
+                  ),
+                ));
+              },
+              child: CachedImage(imageUrl: categoryList?[index].thumbnail!)),
           childCount: categoryList?.length ?? 0,
         ),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

@@ -1,9 +1,11 @@
+import 'package:apple_shop/bloc/categoryProduct/category_product_bloc.dart';
 import 'package:apple_shop/bloc/home/home_bloc.dart';
 import 'package:apple_shop/bloc/home/home_event.dart';
 import 'package:apple_shop/bloc/home/home_state.dart';
 import 'package:apple_shop/data/model/banner.dart';
 import 'package:apple_shop/data/model/category.dart';
 import 'package:apple_shop/screens/product_detail_screen.dart';
+import 'package:apple_shop/screens/product_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -25,10 +27,10 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   GlobalKey? imageKey;
+  List<Product>? allProducts;
 
   @override
   void initState() {
-    // TODO: implement initState
     BlocProvider.of<HomeBloc>(context).add(HomeGetInitializeData());
     super.initState();
   }
@@ -83,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Text(exceptionMessage),
                       );
                     }, (bannerList) {
-                      return _getBanners(bannerList);
+                      return _getBanners(state.productList,bannerList);
                     })
                   ],
                   const _getCategoryListTitle(),
@@ -153,7 +155,9 @@ class _getMostViewedProducts extends StatelessWidget {
           itemCount: productList.length,
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) => Padding(
-            padding: EdgeInsets.only(left: index == productList.length - 1 ? 32.w : 20.w, right: index == 0 ? 32.w : 0),
+            padding: EdgeInsets.only(
+                left: index == productList.length - 1 ? 32.w : 20.w,
+                right: index == 0 ? 32.w : 0),
             child: ProductItem(productList[index]),
           ),
         ),
@@ -220,7 +224,9 @@ class _getBestSellerProducts extends StatelessWidget {
           itemCount: productList.length,
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) => Padding(
-            padding: EdgeInsets.only(left: index == productList.length - 1 ? 32.w : 20.w, right: index == 0 ? 32.w : 0),
+            padding: EdgeInsets.only(
+                left: index == productList.length - 1 ? 32.w : 20.w,
+                right: index == 0 ? 32.w : 0),
             child: ProductItem(productList[index]),
           ),
         ),
@@ -319,8 +325,9 @@ class _getCategoryListTitle extends StatelessWidget {
 
 class _getBanners extends StatelessWidget {
   List<BannerCampain> bannerList;
+  List<Product> productList;
 
-  _getBanners(
+  _getBanners(this.productList,
     this.bannerList, {
     Key? key,
   }) : super(key: key);
@@ -328,7 +335,7 @@ class _getBanners extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
-      child: BannerSlider(bannerList),
+      child: BannerSlider(bannerList,productList),
     );
   }
 }
@@ -391,10 +398,11 @@ Widget getProductCategoryList(List<Category> categoryList) {
   return ListView.builder(
     itemCount: categoryList.length,
     itemBuilder: (context, index) => Padding(
-      padding: EdgeInsets.only(left: index == categoryList.length - 1 ? 32.w : 20.w, right: index == 0 ? 32.w : 0),
+      padding: EdgeInsets.only(
+          left: index == categoryList.length - 1 ? 32.w : 20.w,
+          right: index == 0 ? 32.w : 0),
       child: CategoryItemChip(categoryList[index]),
     ),
     scrollDirection: Axis.horizontal,
   );
 }
-

@@ -12,7 +12,7 @@ class HomeLoadingState extends HomeState {}
 class HomeRequestSuccessState extends HomeState {
   Either<String, List<BannerCampain>> bannerList;
   Either<String, List<Category>> categoryList;
-  Either<String, List<Product>> productList;
+  List<Product> productList;
   Either<String, List<Product>> bestSellerProductList;
   Either<String, List<Product>> hottestProductList;
 

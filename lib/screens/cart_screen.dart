@@ -1,9 +1,9 @@
 import 'package:apple_shop/constants/colors.dart';
+import 'package:apple_shop/utils/extensions/string_extensions.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({super.key});
@@ -24,6 +24,7 @@ class CartScreen extends StatelessWidget {
                       left: 44.w,
                       right: 44.w,
                       bottom: 32.h,
+                      top: 20.h,
                     ),
                     child: Container(
                       height: 46.h,
@@ -36,7 +37,8 @@ class CartScreen extends StatelessWidget {
                           SizedBox(
                             width: 16.w,
                           ),
-                          Image.asset('assets/images/icon_apple_blue.png'),
+                          SvgPicture.asset('assets/icons/apple.svg',
+                              color: CustomColors.blue, width: 24.w),
                           Expanded(
                             child: Text(
                               'سبد خرید',
@@ -121,8 +123,21 @@ class CartItem extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Text('1'),
-                        Text('1'),
+                        Text(
+                          'آیفون 13 پرومکس',
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(fontFamily: 'SB', fontSize: 16.sp),
+                        ),
+                        SizedBox(
+                          height: 6.h,
+                        ),
+                        Text(
+                          'گارانتی سلطان 18 ماهه',
+                          style: TextStyle(fontFamily: 'SM', fontSize: 12.sp),
+                        ),
+                        SizedBox(
+                          height: 6.h,
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
@@ -146,13 +161,67 @@ class CartItem extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            Text('تومان'),
-                            Text('۴۸.۸۰۰.۰۰۰')
+                            SizedBox(
+                              width: 4.w,
+                            ),
+                            Text(
+                              'تومان',
+                              style:
+                                  TextStyle(fontFamily: 'SM', fontSize: 12.sp),
+                            ),
+                            SizedBox(
+                              width: 4.w,
+                            ),
+                            Text(
+                              '۴۸.۸۰۰.۰۰۰',
+                              style:
+                                  TextStyle(fontFamily: 'SM', fontSize: 12.sp),
+                            )
                           ],
                         ),
+                        SizedBox(
+                          height: 12.h,
+                        ),
                         Wrap(
+                          spacing: 8.w,
                           children: [
-                            OptionChip(),
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: CustomColors.red,
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(10.r),
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 8.w, vertical: 2.h),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    SizedBox(
+                                      width: 8.w,
+                                    ),
+                                    Text(
+                                      'حذف',
+                                      textDirection: TextDirection.rtl,
+                                      style: TextStyle(
+                                          fontFamily: 'SM',
+                                          fontSize: 12.sp,
+                                          color: CustomColors.red),
+                                    ),
+                                    SizedBox(
+                                      width: 4.w,
+                                    ),
+                                    SvgPicture.asset('assets/icons/trash.svg'),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            OptionChip(
+                              'آبی',
+                              color: '4287f5',
+                            ),
                           ],
                         )
                       ],
@@ -184,11 +253,17 @@ class CartItem extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('تومان'),
+                Text(
+                  'تومان',
+                  style: TextStyle(fontFamily: 'SB', fontSize: 16.sp),
+                ),
                 SizedBox(
                   width: 6.w,
                 ),
-                Text('59.000.000'),
+                Text(
+                  '59.000.000',
+                  style: TextStyle(fontFamily: 'SB', fontSize: 16.sp),
+                ),
               ],
             ),
           ),
@@ -199,7 +274,12 @@ class CartItem extends StatelessWidget {
 }
 
 class OptionChip extends StatelessWidget {
-  const OptionChip({
+  String? color;
+  String title;
+
+  OptionChip(
+    this.title, {
+    this.color,
     Key? key,
   }) : super(key: key);
 
@@ -214,18 +294,31 @@ class OptionChip extends StatelessWidget {
         borderRadius: BorderRadius.circular(10.r),
       ),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
+        padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Image.asset('assets/images/icon_options.png'),
+            if (color != null) ...{
+              Container(
+                height: 12.h,
+                width: 12.w,
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: color.parseToColor()),
+              )
+            },
             SizedBox(
-              width: 10.w,
+              width: 8.w,
             ),
-            Text('1111'),
+            Text(
+              title,
+              textDirection: TextDirection.rtl,
+              style: TextStyle(fontFamily: 'SM', fontSize: 12.sp),
+            ),
           ],
         ),
       ),
     );
   }
 }
+

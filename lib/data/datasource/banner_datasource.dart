@@ -12,7 +12,7 @@ class BannerRemoteDataSource extends IBannerDataSource {
   @override
   Future<List<BannerCampain>> getBanners() async {
     try {
-      var banners = await _dio.get('collections/banner/records');
+      Response<dynamic> banners = await Dio().get('https://nima-data.pockethost.io/api/collections/banner/records');
 
       return banners.data['items']
           .map<BannerCampain>(
