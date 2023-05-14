@@ -26,6 +26,7 @@ void main() async {
   await Hive.openBox<BasketItem>('basketBox');
   await getItInit();
 
+
   runApp(const MyApp());
 }
 

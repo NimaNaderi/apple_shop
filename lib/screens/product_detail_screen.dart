@@ -9,6 +9,7 @@ import 'package:apple_shop/bloc/product/product_state.dart';
 import 'package:apple_shop/constants/colors.dart';
 import 'package:apple_shop/data/model/basket_item.dart';
 import 'package:apple_shop/data/model/property.dart';
+import 'package:apple_shop/utils/extensions/int_extensions.dart';
 import 'package:apple_shop/widgets/cached_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -731,7 +732,7 @@ class PriceTagButton extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            product.price.toString(),
+                            product.price.separateByComma(),
                             style: TextStyle(
                               decoration: TextDecoration.lineThrough,
                               fontFamily: 'SM',
@@ -740,7 +741,7 @@ class PriceTagButton extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            (product.price + product.discountPrice).toString(),
+                            (product.price + product.discountPrice).separateByComma(),
                             style: TextStyle(
                               fontFamily: 'SB',
                               fontSize: 16.sp,

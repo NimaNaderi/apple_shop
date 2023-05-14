@@ -9,6 +9,8 @@ abstract class IBasketRepository {
   Future<Either<String, List<BasketItem>>> getAllBasketItems();
 
   Future<int> getFinalBasketPrice();
+
+  Future<Either<String, List<BasketItem>>> deleteBasketItem(BasketItem basketItem);
 }
 
 class BasketRepository extends IBasketRepository {
@@ -37,5 +39,17 @@ class BasketRepository extends IBasketRepository {
   @override
   Future<int> getFinalBasketPrice() async {
     return await _dataSource.getFinalBasketPrice();
+  }
+
+  @override
+  Future<Either<String, List<BasketItem>>> deleteBasketItem(BasketItem basketItem) async{
+    try {
+      await _dataSource.deleteProduct(basketItem);
+      var basketItemList = await _dataSource.getAllBasketItems();
+      return right(basketItemList);
+    } catch (e) {
+      return left('خطا در نمایش محصولات !');
+    }
+
   }
 }

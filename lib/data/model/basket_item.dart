@@ -4,7 +4,7 @@ import 'package:hive/hive.dart';
 part 'basket_item.g.dart';
 
 @HiveType(typeId: 0)
-class BasketItem {
+class BasketItem extends HiveObject{
   @HiveField(0)
   String id;
   @HiveField(1)
@@ -30,7 +30,7 @@ class BasketItem {
       this.name,
       this.price,
       this.discountPrice) {
-    percent = ((price - (price + discountPrice)) / price) * 100;
+    percent = ((price - (discountPrice)) / price) * 100;
     // thumbnail =         'http://startflutter.ir/api/files/${jsonObject['collectionId']}/${jsonObject['id']}/${jsonObject['thumbnail']}';
 
   }

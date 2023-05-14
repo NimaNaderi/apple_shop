@@ -1,7 +1,9 @@
 import 'package:apple_shop/bloc/basket/basket_bloc.dart';
+import 'package:apple_shop/bloc/basket/basket_event.dart';
 import 'package:apple_shop/bloc/basket/basket_state.dart';
 import 'package:apple_shop/constants/colors.dart';
 import 'package:apple_shop/data/model/basket_item.dart';
+import 'package:apple_shop/utils/extensions/int_extensions.dart';
 import 'package:apple_shop/utils/extensions/string_extensions.dart';
 import 'package:apple_shop/widgets/cached_image.dart';
 import 'package:dotted_line/dotted_line.dart';
@@ -97,10 +99,12 @@ class CartScreen extends StatelessWidget {
                       child: Text(
                         state.finalBasketPrice == 0
                             ? 'سبد خرید شما خالی میباشد'
-                            : state.finalBasketPrice.toString(),
+                            : '${state.finalBasketPrice.separateByComma()} تومان ',
+                        textDirection: TextDirection.rtl,
                         style: TextStyle(
                           fontSize: 18.sp,
                           fontFamily: 'SB',
+
                         ),
                       ),
                     ),
@@ -175,7 +179,7 @@ class CartItem extends StatelessWidget {
                                   vertical: 2.h,
                                 ),
                                 child: Text(
-                                  '% 2',
+                                  '% ${basketItem.percent!.round()}',
                                   style: TextStyle(
                                     fontFamily: 'SB',
                                     fontSize: 12.sp,
@@ -196,7 +200,7 @@ class CartItem extends StatelessWidget {
                               width: 4.w,
                             ),
                             Text(
-                              basketItem.price.toString(),
+                              basketItem.price.separateByComma(),
                               style:
                                   TextStyle(fontFamily: 'SM', fontSize: 12.sp),
                             )
@@ -208,36 +212,44 @@ class CartItem extends StatelessWidget {
                         Wrap(
                           spacing: 8.w,
                           children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: CustomColors.red,
-                                  width: 1,
+                            GestureDetector(
+                              onTap: () {
+                                context
+                                    .read<BasketBloc>()
+                                    .add(BasketItemDeleted(basketItem));
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: CustomColors.red,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(10.r),
                                 ),
-                                borderRadius: BorderRadius.circular(10.r),
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 8.w, vertical: 2.h),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    SizedBox(
-                                      width: 8.w,
-                                    ),
-                                    Text(
-                                      'حذف',
-                                      textDirection: TextDirection.rtl,
-                                      style: TextStyle(
-                                          fontFamily: 'SM',
-                                          fontSize: 12.sp,
-                                          color: CustomColors.red),
-                                    ),
-                                    SizedBox(
-                                      width: 4.w,
-                                    ),
-                                    SvgPicture.asset('assets/icons/trash.svg'),
-                                  ],
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 8.w, vertical: 2.h),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      SizedBox(
+                                        width: 8.w,
+                                      ),
+                                      Text(
+                                        'حذف',
+                                        textDirection: TextDirection.rtl,
+                                        style: TextStyle(
+                                            fontFamily: 'SM',
+                                            fontSize: 12.sp,
+                                            color: CustomColors.red),
+                                      ),
+                                      SizedBox(
+                                        width: 4.w,
+                                      ),
+                                      SvgPicture.asset(
+                                          'assets/icons/trash.svg'),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -285,7 +297,7 @@ class CartItem extends StatelessWidget {
                   width: 6.w,
                 ),
                 Text(
-                  '${basketItem.discountPrice}',
+                  basketItem.discountPrice.separateByComma(),
                   style: TextStyle(fontFamily: 'SB', fontSize: 16.sp),
                 ),
               ],

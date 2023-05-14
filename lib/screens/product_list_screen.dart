@@ -13,6 +13,7 @@ import '../constants/colors.dart';
 
 class ProductListScreen extends StatefulWidget {
   Category category;
+
   ProductListScreen(this.category, {super.key});
 
   @override
@@ -121,8 +122,8 @@ class _ProductListScreenState extends State<ProductListScreen> {
                               ),
                             ),
                           )),
+                  SliverPadding(padding: EdgeInsets.only(top: 16.h)),
                 },
-                SliverPadding(padding: EdgeInsets.only(top: 16.h)),
               ],
             );
           },

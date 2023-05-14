@@ -2,6 +2,7 @@ import 'package:apple_shop/bloc/basket/basket_bloc.dart';
 import 'package:apple_shop/bloc/product/product_bloc.dart';
 import 'package:apple_shop/data/model/product.dart';
 import 'package:apple_shop/di/di.dart';
+import 'package:apple_shop/utils/extensions/int_extensions.dart';
 import 'package:apple_shop/widgets/cached_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -49,7 +50,7 @@ class ProductItem extends StatelessWidget {
               Stack(
                 alignment: AlignmentDirectional.center,
                 children: [
-                  Expanded(child: Container()),
+                 const SizedBox(width: double.infinity,),
                   SizedBox(
                     height: 98,
                     child: CachedImage(
@@ -142,7 +143,7 @@ class ProductItem extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                product.price.toString(),
+                                product.price.separateByComma(),
                                 style: TextStyle(
                                   decoration: TextDecoration.lineThrough,
                                   fontSize: 12.sp,
@@ -152,7 +153,7 @@ class ProductItem extends StatelessWidget {
                               ),
                               Text(
                                 (product.price + product.discountPrice)
-                                    .toString(),
+                                    .separateByComma(),
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 16.sp,
