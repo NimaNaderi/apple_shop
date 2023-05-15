@@ -12,6 +12,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../constants/colors.dart';
 
@@ -34,71 +35,85 @@ class _CategoryScreenState extends State<CategoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: CustomColors.backgroundScreenColor,
-      body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.only(
-                  left: 44.w,
-                  right: 44.w,
-                  bottom: 32.h,
-                  top: 20.h,
-                ),
-                child: Container(
-                  height: 46.h,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16.r),
-                  ),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        width: 16.w,
+      body: BlocBuilder<CategoryBloc, CategoryState>(
+        builder: (context, state) {
+          return SafeArea(
+            child: CustomScrollView(
+              slivers: [
+                if (state is CategoryLoadingState) ...[
+                  _loadingWidget(),
+                ],
+                if (state is CategoryResponseState) ...[
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        left: 44.w,
+                        right: 44.w,
+                        bottom: 32.h,
+                        top: 20.h,
                       ),
-                      SvgPicture.asset('assets/icons/apple.svg',
-                          color: CustomColors.blue, width: 24.w),
-                      Expanded(
-                        child: Text(
-                          'جستجوی محصولات',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontFamily: 'SB',
-                            fontSize: 16.sp,
-                            color: CustomColors.blue,
-                          ),
+                      child: Container(
+                        height: 46.h,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16.r),
+                        ),
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: 16.w,
+                            ),
+                            SvgPicture.asset('assets/icons/apple.svg',
+                                color: CustomColors.blue, width: 24.w),
+                            Expanded(
+                              child: Text(
+                                'جستجوی محصولات',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontFamily: 'SB',
+                                  fontSize: 16.sp,
+                                  color: CustomColors.blue,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 16.w,
+                            ),
+                          ],
                         ),
                       ),
-                      SizedBox(
-                        width: 16.w,
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
+                  state.response.fold(
+                      (l) => SliverToBoxAdapter(
+                            child: Text(l),
+                          ),
+                      (r) => _categoryList(categoryList: r))
+                ],
+              ],
             ),
-            BlocBuilder<CategoryBloc, CategoryState>(
-              builder: (context, state) {
-                // if (state is CategoryLoadingState) {
-                //   return SliverToBoxAdapter(child: CircularProgressIndicator());
-                // }
+          );
+        },
+      ),
+    );
+  }
 
-                if (state is CategoryResponseState) {
-                  return state.response.fold((l) {
-                    return SliverToBoxAdapter(
-                      child: Text(l),
-                    );
-                  }, (r) {
-                    return _categoryList(categoryList: r);
-                  });
-                }
-
-                return SliverToBoxAdapter(child: Text('data'));
-              },
-            ),
-            SliverPadding(padding: EdgeInsets.only(top: 20.h))
-          ],
-        ),
+  SliverFillRemaining _loadingWidget() {
+    return SliverFillRemaining(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          LoadingAnimationWidget.beat(color: CustomColors.blue, size: 32),
+          const SizedBox(
+            height: 16,
+          ),
+          const Text(
+            'درحال دریافت لیست دسته بندی',
+            style: TextStyle(
+                fontSize: 14, fontFamily: 'SB', color: CustomColors.grey),
+          )
+        ],
       ),
     );
   }
@@ -124,7 +139,10 @@ class _categoryList extends StatelessWidget {
                   ),
                 ));
               },
-              child: CachedImage(imageUrl: categoryList?[index].thumbnail!)),
+              child: CachedImage(
+                imageUrl: categoryList?[index].thumbnail!,
+                radius: 16.r,
+              )),
           childCount: categoryList?.length ?? 0,
         ),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

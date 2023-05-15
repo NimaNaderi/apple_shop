@@ -14,8 +14,8 @@ class CategoryRemoteDataSource extends ICategoryDataSource {
   @override
   Future<List<Category>> getCategories() async {
     try {
-      var response = await _dio.get('collections/category/records');
-      return response.data['items']
+      Response<dynamic> banners = await Dio().get('https://nima-data.pockethost.io/api/collections/category/records');
+      return banners.data['items']
           .map<Category>(
             (jsonObject) => Category.fromMapJson(jsonObject),
           )

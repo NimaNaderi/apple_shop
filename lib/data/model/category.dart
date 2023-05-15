@@ -13,10 +13,12 @@ class Category {
     return Category(
       jsonObject['collectionId'],
       jsonObject['id'],
-      'http://startflutter.ir/api/files/${jsonObject['collectionId']}/${jsonObject['id']}/${jsonObject['thumbnail']}',
+      // 'http://startflutter.ir/api/files/${jsonObject['collectionId']}/${jsonObject['id']}/${jsonObject['thumbnail']}',
+      'https://nima-data.pockethost.io/api/files/${jsonObject['collectionId']}/${jsonObject['id']}/${jsonObject['thumbnail']}',
       jsonObject['title'],
       jsonObject['color'],
-      'http://startflutter.ir/api/files/${jsonObject['collectionId']}/${jsonObject['id']}/${jsonObject['icon']}',
+      // 'http://startflutter.ir/api/files/${jsonObject['collectionId']}/${jsonObject['id']}/${jsonObject['icon']}',
+      'https://nima-data.pockethost.io/api/files/${jsonObject['collectionId']}/${jsonObject['id']}/${jsonObject['icon']}',
     );
   }
 }
