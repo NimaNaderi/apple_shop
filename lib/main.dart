@@ -109,33 +109,38 @@ class _MyAppState extends State<MyApp> {
                               padding: EdgeInsets.only(bottom: 4.h),
                               child: SizedBox(
                                 width: 50.w,
-                                child: Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    SvgPicture.asset('assets/icons/bag.svg'),
-                                    Positioned(
-                                      top: 0,
-                                      right: 0,
-                                      child: Container(
-                                        width: 15,
-                                        height: 15,
-                                        decoration: const BoxDecoration(
-                                            color: CustomColors.red,
-                                            shape: BoxShape.circle),
-                                        child: Center(
-                                          child: Text(
-                                            basketItemListLength.toString(),
-                                            style: TextStyle(
-                                              fontSize: 12.sp,
-                                              fontFamily: 'SB',
-                                              color: Colors.white,
+                                child: basketItemListLength > 0
+                                    ? Stack(
+                                        alignment: Alignment.center,
+                                        children: [
+                                          SvgPicture.asset(
+                                              'assets/icons/bag-filled.svg'),
+                                          Positioned(
+                                            top: 0,
+                                            right: 0,
+                                            child: Container(
+                                              width: 15,
+                                              height: 15,
+                                              decoration: const BoxDecoration(
+                                                  color: CustomColors.red,
+                                                  shape: BoxShape.circle),
+                                              child: Center(
+                                                child: Text(
+                                                  basketItemListLength
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                    fontSize: 12.sp,
+                                                    fontFamily: 'SB',
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              ),
                                             ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                          )
+                                        ],
+                                      )
+                                    : SvgPicture.asset(
+                                        'assets/icons/bag.svg'),
                               ),
                             ),
                             activeIcon: Container(
@@ -149,33 +154,37 @@ class _MyAppState extends State<MyApp> {
                                   offset: Offset(0, 12),
                                 )
                               ]),
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  SvgPicture.asset('assets/icons/bag-filled.svg'),
-                                  Positioned(
-                                    top: 0,
-                                    right: 0,
-                                    child: Container(
-                                      width: 15,
-                                      height: 15,
-                                      decoration: const BoxDecoration(
-                                          color: CustomColors.red,
-                                          shape: BoxShape.circle),
-                                      child: Center(
-                                        child: Text(
-                                          basketItemListLength.toString(),
-                                          style: TextStyle(
-                                            fontSize: 12.sp,
-                                            fontFamily: 'SB',
-                                            color: Colors.white,
+                              child: basketItemListLength > 0
+                                  ? Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        SvgPicture.asset(
+                                            'assets/icons/bag-filled.svg'),
+                                        Positioned(
+                                          top: 0,
+                                          right: 0,
+                                          child: Container(
+                                            width: 15,
+                                            height: 15,
+                                            decoration: const BoxDecoration(
+                                                color: CustomColors.red,
+                                                shape: BoxShape.circle),
+                                            child: Center(
+                                              child: Text(
+                                                basketItemListLength.toString(),
+                                                style: TextStyle(
+                                                  fontSize: 12.sp,
+                                                  fontFamily: 'SB',
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
                                           ),
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
+                                        )
+                                      ],
+                                    )
+                                  : SvgPicture.asset(
+                                      'assets/icons/bag-filled.svg'),
                             ),
                             label: 'سبد خرید'),
                         BottomNavigationBarItem(
