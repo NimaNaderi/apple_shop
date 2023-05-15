@@ -117,17 +117,19 @@ class _MyAppState extends State<MyApp> {
                                       top: 0,
                                       right: 0,
                                       child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 6.w),
+                                        width: 15,
+                                        height: 15,
                                         decoration: const BoxDecoration(
                                             color: CustomColors.red,
                                             shape: BoxShape.circle),
-                                        child: Text(
-                                          basketItemListLength.toString(),
-                                          style: TextStyle(
-                                            fontSize: 12.sp,
-                                            fontFamily: 'SB',
-                                            color: Colors.white,
+                                        child: Center(
+                                          child: Text(
+                                            basketItemListLength.toString(),
+                                            style: TextStyle(
+                                              fontSize: 12.sp,
+                                              fontFamily: 'SB',
+                                              color: Colors.white,
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -155,19 +157,19 @@ class _MyAppState extends State<MyApp> {
                                     top: 0,
                                     right: 0,
                                     child: Container(
-                                      width: 14,
-                                      height: 14,
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 6.w),
+                                      width: 15,
+                                      height: 15,
                                       decoration: const BoxDecoration(
                                           color: CustomColors.red,
                                           shape: BoxShape.circle),
-                                      child: Text(
-                                        basketItemListLength.toString(),
-                                        style: TextStyle(
-                                          fontSize: 12.sp,
-                                          fontFamily: 'SB',
-                                          color: Colors.white,
+                                      child: Center(
+                                        child: Text(
+                                          basketItemListLength.toString(),
+                                          style: TextStyle(
+                                            fontSize: 12.sp,
+                                            fontFamily: 'SB',
+                                            color: Colors.white,
+                                          ),
                                         ),
                                       ),
                                     ),
