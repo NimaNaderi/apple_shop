@@ -13,6 +13,7 @@ import 'package:apple_shop/screens/cart_screen.dart';
 import 'package:apple_shop/screens/category_screen.dart';
 import 'package:apple_shop/screens/home_screen.dart';
 import 'package:apple_shop/screens/profile_screen.dart';
+import 'package:apple_shop/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -54,10 +55,7 @@ class _MyAppState extends State<MyApp> {
             return bloc;
           },
           child: Scaffold(
-            body: IndexedStack(
-              children: getLayout(),
-              index: selectedBottomNavigationIndex,
-            ),
+            body: WelcomeScreen(),
             bottomNavigationBar: ClipRRect(
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
