@@ -28,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    BlocProvider.of<HomeBloc>(context).add(HomeGetInitializeData());
+    // BlocProvider.of<HomeBloc>(context).add(HomeGetInitializeData());
     super.initState();
   }
 

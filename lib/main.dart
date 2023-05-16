@@ -5,6 +5,7 @@ import 'package:apple_shop/bloc/basket/basket_event.dart';
 import 'package:apple_shop/bloc/basket/basket_state.dart';
 import 'package:apple_shop/bloc/category/category_bloc.dart';
 import 'package:apple_shop/bloc/home/home_bloc.dart';
+import 'package:apple_shop/bloc/home/home_event.dart';
 import 'package:apple_shop/constants/colors.dart';
 import 'package:apple_shop/data/model/basket_item.dart';
 import 'package:apple_shop/di/di.dart';
@@ -46,69 +47,121 @@ class _MyAppState extends State<MyApp> {
       designSize: const Size(428, 926),
       builder: (context, child) => MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: Scaffold(
-          body: IndexedStack(
-            children: getLayout(),
-            index: selectedBottomNavigationIndex,
-          ),
-          bottomNavigationBar: ClipRRect(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
-              child: BlocProvider<BasketBloc>.value(
-                value: locator.get<BasketBloc>(),
-                child: BlocConsumer<BasketBloc, BasketState>(
-                  listener: (context, state) {
-                    if (state is BasketDataFetchedState) {
-                      state.basketItemList.fold((l) => '', (r) {
-                        basketItemListLength = r.length;
-                      });
-                    }
-                  },
-                  builder: (context, state) {
-                    return BottomNavigationBar(
-                      type: BottomNavigationBarType.fixed,
-                      backgroundColor: Colors.transparent,
-                      elevation: 0,
-                      currentIndex: selectedBottomNavigationIndex,
-                      onTap: (value) {
-                        setState(() {
-                          selectedBottomNavigationIndex = value;
+        home: BlocProvider(
+          create: (context) {
+            var bloc = HomeBloc();
+            bloc.add(HomeGetInitializeData());
+            return bloc;
+          },
+          child: Scaffold(
+            body: IndexedStack(
+              children: getLayout(),
+              index: selectedBottomNavigationIndex,
+            ),
+            bottomNavigationBar: ClipRRect(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
+                child: BlocProvider<BasketBloc>.value(
+                  value: locator.get<BasketBloc>(),
+                  child: BlocConsumer<BasketBloc, BasketState>(
+                    listener: (context, state) {
+                      if (state is BasketDataFetchedState) {
+                        state.basketItemList.fold((l) => '', (r) {
+                          basketItemListLength = r.length;
                         });
-                      },
-                      selectedLabelStyle: TextStyle(
+                      }
+                    },
+                    builder: (context, state) {
+                      return BottomNavigationBar(
+                        type: BottomNavigationBarType.fixed,
+                        backgroundColor: Colors.transparent,
+                        elevation: 0,
+                        currentIndex: selectedBottomNavigationIndex,
+                        onTap: (value) {
+                          setState(() {
+                            selectedBottomNavigationIndex = value;
+                          });
+                        },
+                        selectedLabelStyle: TextStyle(
+                            fontFamily: 'SB',
+                            fontSize: 10.sp,
+                            color: CustomColors.blue),
+                        unselectedLabelStyle: TextStyle(
                           fontFamily: 'SB',
                           fontSize: 10.sp,
-                          color: CustomColors.blue),
-                      unselectedLabelStyle: TextStyle(
-                        fontFamily: 'SB',
-                        fontSize: 10.sp,
-                        color: Colors.black,
-                      ),
-                      items: [
-                        BottomNavigationBarItem(
-                            icon: Padding(
-                              padding: EdgeInsets.only(bottom: 4.h),
-                              child: SvgPicture.asset('assets/icons/user.svg'),
-                            ),
-                            activeIcon: Container(
-                              padding: EdgeInsets.only(bottom: 4.h),
-                              decoration: const BoxDecoration(boxShadow: [
-                                BoxShadow(
-                                  color: CustomColors.blue,
-                                  blurRadius: 20,
-                                  spreadRadius: -7,
-                                  offset: Offset(0, 12),
-                                )
-                              ]),
-                              child: SvgPicture.asset(
-                                  'assets/icons/user-filled.svg'),
-                            ),
-                            label: 'حساب کاربری'),
-                        BottomNavigationBarItem(
-                            icon: Padding(
-                              padding: EdgeInsets.only(bottom: 4.h),
-                              child: SizedBox(
+                          color: Colors.black,
+                        ),
+                        items: [
+                          BottomNavigationBarItem(
+                              icon: Padding(
+                                padding: EdgeInsets.only(bottom: 4.h),
+                                child:
+                                    SvgPicture.asset('assets/icons/user.svg'),
+                              ),
+                              activeIcon: Container(
+                                padding: EdgeInsets.only(bottom: 4.h),
+                                decoration: const BoxDecoration(boxShadow: [
+                                  BoxShadow(
+                                    color: CustomColors.blue,
+                                    blurRadius: 20,
+                                    spreadRadius: -7,
+                                    offset: Offset(0, 12),
+                                  )
+                                ]),
+                                child: SvgPicture.asset(
+                                    'assets/icons/user-filled.svg'),
+                              ),
+                              label: 'حساب کاربری'),
+                          BottomNavigationBarItem(
+                              icon: Padding(
+                                padding: EdgeInsets.only(bottom: 4.h),
+                                child: SizedBox(
+                                  width: 50.w,
+                                  child: basketItemListLength > 0
+                                      ? Stack(
+                                          alignment: Alignment.center,
+                                          children: [
+                                            SvgPicture.asset(
+                                                'assets/icons/bag.svg'),
+                                            Positioned(
+                                              top: 0,
+                                              right: 0,
+                                              child: Container(
+                                                width: 15,
+                                                height: 15,
+                                                decoration: const BoxDecoration(
+                                                    color: CustomColors.red,
+                                                    shape: BoxShape.circle),
+                                                child: Center(
+                                                  child: Text(
+                                                    basketItemListLength
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                      fontSize: 12.sp,
+                                                      fontFamily: 'SB',
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        )
+                                      : SvgPicture.asset(
+                                          'assets/icons/bag.svg'),
+                                ),
+                              ),
+                              activeIcon: Container(
                                 width: 50.w,
+                                padding: EdgeInsets.only(bottom: 4.h),
+                                decoration: const BoxDecoration(boxShadow: [
+                                  BoxShadow(
+                                    color: CustomColors.blue,
+                                    blurRadius: 20,
+                                    spreadRadius: -7,
+                                    offset: Offset(0, 12),
+                                  )
+                                ]),
                                 child: basketItemListLength > 0
                                     ? Stack(
                                         alignment: Alignment.center,
@@ -140,95 +193,53 @@ class _MyAppState extends State<MyApp> {
                                         ],
                                       )
                                     : SvgPicture.asset(
-                                        'assets/icons/bag.svg'),
+                                        'assets/icons/bag-filled.svg'),
                               ),
-                            ),
-                            activeIcon: Container(
-                              width: 50.w,
-                              padding: EdgeInsets.only(bottom: 4.h),
-                              decoration: const BoxDecoration(boxShadow: [
-                                BoxShadow(
-                                  color: CustomColors.blue,
-                                  blurRadius: 20,
-                                  spreadRadius: -7,
-                                  offset: Offset(0, 12),
-                                )
-                              ]),
-                              child: basketItemListLength > 0
-                                  ? Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        SvgPicture.asset(
-                                            'assets/icons/bag-filled.svg'),
-                                        Positioned(
-                                          top: 0,
-                                          right: 0,
-                                          child: Container(
-                                            width: 15,
-                                            height: 15,
-                                            decoration: const BoxDecoration(
-                                                color: CustomColors.red,
-                                                shape: BoxShape.circle),
-                                            child: Center(
-                                              child: Text(
-                                                basketItemListLength.toString(),
-                                                style: TextStyle(
-                                                  fontSize: 12.sp,
-                                                  fontFamily: 'SB',
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    )
-                                  : SvgPicture.asset(
-                                      'assets/icons/bag-filled.svg'),
-                            ),
-                            label: 'سبد خرید'),
-                        BottomNavigationBarItem(
-                            icon: Padding(
-                              padding: EdgeInsets.only(bottom: 4.h),
-                              child:
-                                  SvgPicture.asset('assets/icons/category.svg'),
-                            ),
-                            activeIcon: Container(
-                              padding: EdgeInsets.only(bottom: 4.h),
-                              decoration: const BoxDecoration(boxShadow: [
-                                BoxShadow(
-                                  color: CustomColors.blue,
-                                  blurRadius: 20,
-                                  spreadRadius: -7,
-                                  offset: Offset(0, 12),
-                                )
-                              ]),
-                              child: SvgPicture.asset(
-                                  'assets/icons/category-filled.svg'),
-                            ),
-                            label: 'دسته بندی'),
-                        BottomNavigationBarItem(
-                            icon: Padding(
-                              padding: EdgeInsets.only(bottom: 4.h),
-                              child: SvgPicture.asset('assets/icons/home.svg'),
-                            ),
-                            activeIcon: Container(
-                              padding: EdgeInsets.only(bottom: 4.h),
-                              decoration: const BoxDecoration(boxShadow: [
-                                BoxShadow(
-                                  color: CustomColors.blue,
-                                  blurRadius: 20,
-                                  spreadRadius: -7,
-                                  offset: Offset(0, 12),
-                                )
-                              ]),
-                              child: SvgPicture.asset(
-                                  'assets/icons/home-filled.svg'),
-                            ),
-                            label: 'خانه'),
-                      ],
-                    );
-                  },
+                              label: 'سبد خرید'),
+                          BottomNavigationBarItem(
+                              icon: Padding(
+                                padding: EdgeInsets.only(bottom: 4.h),
+                                child: SvgPicture.asset(
+                                    'assets/icons/category.svg'),
+                              ),
+                              activeIcon: Container(
+                                padding: EdgeInsets.only(bottom: 4.h),
+                                decoration: const BoxDecoration(boxShadow: [
+                                  BoxShadow(
+                                    color: CustomColors.blue,
+                                    blurRadius: 20,
+                                    spreadRadius: -7,
+                                    offset: Offset(0, 12),
+                                  )
+                                ]),
+                                child: SvgPicture.asset(
+                                    'assets/icons/category-filled.svg'),
+                              ),
+                              label: 'دسته بندی'),
+                          BottomNavigationBarItem(
+                              icon: Padding(
+                                padding: EdgeInsets.only(bottom: 4.h),
+                                child:
+                                    SvgPicture.asset('assets/icons/home.svg'),
+                              ),
+                              activeIcon: Container(
+                                padding: EdgeInsets.only(bottom: 4.h),
+                                decoration: const BoxDecoration(boxShadow: [
+                                  BoxShadow(
+                                    color: CustomColors.blue,
+                                    blurRadius: 20,
+                                    spreadRadius: -7,
+                                    offset: Offset(0, 12),
+                                  )
+                                ]),
+                                child: SvgPicture.asset(
+                                    'assets/icons/home-filled.svg'),
+                              ),
+                              label: 'خانه'),
+                        ],
+                      );
+                    },
+                  ),
                 ),
               ),
             ),
@@ -246,18 +257,15 @@ class _MyAppState extends State<MyApp> {
             bloc.add(BasketFetchFromHiveEvent());
             return bloc;
           },
-          child: CartScreen(),
+          child: const CartScreen(),
         ),
         BlocProvider(
           create: (context) => CategoryBloc(),
-          child: CategoryScreen(),
+          child: const CategoryScreen(),
         ),
-        Directionality(
+    const Directionality(
           textDirection: TextDirection.rtl,
-          child: BlocProvider(
-            create: (context) => HomeBloc(),
-            child: HomeScreen(),
-          ),
+          child: HomeScreen(),
         ),
       ];
 }
