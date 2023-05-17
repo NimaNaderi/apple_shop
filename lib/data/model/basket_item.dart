@@ -1,4 +1,5 @@
 
+import 'package:apple_shop/data/model/basket_item_variant.dart';
 import 'package:hive/hive.dart';
 
 part 'basket_item.g.dart';
@@ -21,6 +22,8 @@ class BasketItem extends HiveObject{
   int discountPrice;
   @HiveField(7)
   num? percent;
+  @HiveField(8)
+  List<BasketItemVariant> basketItemVariantList;
 
   BasketItem(
       this.id,
@@ -29,7 +32,7 @@ class BasketItem extends HiveObject{
       this.categoryId,
       this.name,
       this.price,
-      this.discountPrice) {
+      this.discountPrice,this.basketItemVariantList) {
     percent = ((price - (discountPrice)) / price) * 100;
     // thumbnail =         'http://startflutter.ir/api/files/${jsonObject['collectionId']}/${jsonObject['id']}/${jsonObject['thumbnail']}';
 

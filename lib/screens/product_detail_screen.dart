@@ -8,6 +8,7 @@ import 'package:apple_shop/bloc/product/product_event.dart';
 import 'package:apple_shop/bloc/product/product_state.dart';
 import 'package:apple_shop/constants/colors.dart';
 import 'package:apple_shop/data/model/basket_item.dart';
+import 'package:apple_shop/data/model/basket_item_variant.dart';
 import 'package:apple_shop/data/model/property.dart';
 import 'package:apple_shop/utils/extensions/int_extensions.dart';
 import 'package:apple_shop/widgets/cached_image.dart';
@@ -23,6 +24,7 @@ import '../data/model/product_image.dart';
 import '../data/model/product_variant.dart';
 import '../data/model/variant.dart';
 import '../data/model/variant_type.dart';
+import '../data/model/variant_type_enum.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   Product product;
@@ -48,12 +50,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 }
 
 class DetailContent extends StatelessWidget {
-  const DetailContent({
+  DetailContent({
     super.key,
     required this.parentWidget,
   });
 
   final ProductDetailScreen parentWidget;
+  List<BasketItemVariant> basketItemVariantList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -176,7 +179,8 @@ class DetailContent extends StatelessWidget {
                         child: Text('خطا'),
                       );
                     }, (productVariantList) {
-                      return VariantContainerGenerator(productVariantList);
+                      return VariantContainerGenerator(
+                          productVariantList, basketItemVariantList);
                     })
                   },
                   if (state is ProductDetailResponseState) ...{
@@ -317,7 +321,8 @@ class DetailContent extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           PriceTagButton(parentWidget.product),
-                          AddToBasketButton(parentWidget.product),
+                          AddToBasketButton(
+                              parentWidget.product, basketItemVariantList),
                         ],
                       ),
                     ),
@@ -534,9 +539,11 @@ class _ProductDescriptionState extends State<ProductDescription> {
 
 class VariantContainerGenerator extends StatelessWidget {
   List<ProductVariant> productVariantList;
+  List<BasketItemVariant> basketItemVariantList;
 
   VariantContainerGenerator(
-    this.productVariantList, {
+    this.productVariantList,
+    this.basketItemVariantList, {
     super.key,
   });
 
@@ -547,7 +554,7 @@ class VariantContainerGenerator extends StatelessWidget {
         children: [
           for (var productVariant in productVariantList) ...{
             if (productVariant.variantList.isNotEmpty) ...{
-              VariantChildGenerator(productVariant)
+              VariantChildGenerator(productVariant, basketItemVariantList)
             }
           }
         ],
@@ -558,9 +565,11 @@ class VariantContainerGenerator extends StatelessWidget {
 
 class VariantChildGenerator extends StatelessWidget {
   ProductVariant productVariant;
+  List<BasketItemVariant> basketItemVariantList;
 
   VariantChildGenerator(
-    this.productVariant, {
+    this.productVariant,
+    this.basketItemVariantList, {
     super.key,
   });
 
@@ -582,13 +591,16 @@ class VariantChildGenerator extends StatelessWidget {
             height: 10.h,
           ),
           if (productVariant.variantType.type == VariantTypeEnum.COLOR) ...{
-            ColorVariantList(productVariant.variantList)
+            ColorVariantList(productVariant.variantList,
+                productVariant.variantType, basketItemVariantList)
           },
           if (productVariant.variantType.type == VariantTypeEnum.STORAGTE) ...{
-            StorageVariantList(productVariant.variantList)
+            StorageVariantList(productVariant.variantList,
+                productVariant.variantType, basketItemVariantList)
           },
           if (productVariant.variantType.type == VariantTypeEnum.VOLTAGE) ...{
-            StorageVariantList(productVariant.variantList)
+            StorageVariantList(productVariant.variantList,
+                productVariant.variantType, basketItemVariantList)
           }
         ],
       ),
@@ -598,9 +610,11 @@ class VariantChildGenerator extends StatelessWidget {
 
 class AddToBasketButton extends StatelessWidget {
   Product product;
+  List<BasketItemVariant> basketItemVariantList;
 
   AddToBasketButton(
-    this.product, {
+    this.product,
+    this.basketItemVariantList, {
     Key? key,
   }) : super(key: key);
 
@@ -625,9 +639,12 @@ class AddToBasketButton extends StatelessWidget {
               filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
               child: GestureDetector(
                 onTap: () {
+                  product.basketItemVariantList = basketItemVariantList;
+
                   context
                       .read<ProductBloc>()
                       .add(ProductAddedToBasket(product));
+
                   context.read<BasketBloc>().add(BasketFetchFromHiveEvent());
                   AnimatedSnackBar(
                     mobileSnackBarPosition: MobileSnackBarPosition.bottom,
@@ -741,7 +758,8 @@ class PriceTagButton extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            (product.price + product.discountPrice).separateByComma(),
+                            (product.price + product.discountPrice)
+                                .separateByComma(),
                             style: TextStyle(
                               fontFamily: 'SB',
                               fontSize: 16.sp,
@@ -911,8 +929,13 @@ class _GalleryWidgetState extends State<GalleryWidget> {
 
 class ColorVariantList extends StatefulWidget {
   List<Variant> variantList;
+  VariantType variantType;
+  List<BasketItemVariant> basketItemVariantList;
 
-  ColorVariantList(this.variantList, {Key? key}) : super(key: key);
+  ColorVariantList(
+      this.variantList, this.variantType, this.basketItemVariantList,
+      {Key? key})
+      : super(key: key);
 
   @override
   State<ColorVariantList> createState() => _ColorVariantListState();
@@ -920,6 +943,17 @@ class ColorVariantList extends StatefulWidget {
 
 class _ColorVariantListState extends State<ColorVariantList> {
   int _selectedIndex = 0;
+  BasketItemVariant? basketItemColorVariant;
+
+  @override
+  void initState() {
+    basketItemColorVariant = BasketItemVariant(
+        widget.variantType, widget.variantList[_selectedIndex]);
+
+    widget.basketItemVariantList.add(basketItemColorVariant!);
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -934,6 +968,20 @@ class _ColorVariantListState extends State<ColorVariantList> {
             onTap: () {
               setState(() {
                 _selectedIndex = index;
+                basketItemColorVariant!.variant = widget.variantList[index];
+                if (widget.basketItemVariantList.any((element) =>
+                    element.variantType.type == VariantTypeEnum.COLOR)) {
+                  widget.basketItemVariantList.removeWhere((element) =>
+                      element.variantType.type == VariantTypeEnum.COLOR);
+                  widget.basketItemVariantList.add(basketItemColorVariant!);
+                } else {
+                  widget.basketItemVariantList.add(basketItemColorVariant!);
+                }
+
+                for (var item in widget.basketItemVariantList) {
+                  print(
+                      'Type Is ${item.variantType.name} , Value Is ${item.variant.name}');
+                }
               });
             },
             child: AnimatedContainer(
@@ -969,8 +1017,13 @@ class _ColorVariantListState extends State<ColorVariantList> {
 
 class StorageVariantList extends StatefulWidget {
   List<Variant> storageVariants;
+  VariantType variantType;
+  List<BasketItemVariant> basketItemVariantList;
 
-  StorageVariantList(this.storageVariants, {Key? key}) : super(key: key);
+  StorageVariantList(
+      this.storageVariants, this.variantType, this.basketItemVariantList,
+      {Key? key})
+      : super(key: key);
 
   @override
   State<StorageVariantList> createState() => _StorageVariantListState();
@@ -978,6 +1031,16 @@ class StorageVariantList extends StatefulWidget {
 
 class _StorageVariantListState extends State<StorageVariantList> {
   int _selectedIndex = 0;
+  BasketItemVariant? basketItemStorageVariant;
+
+  @override
+  void initState() {
+    basketItemStorageVariant = BasketItemVariant(
+        widget.variantType, widget.storageVariants[_selectedIndex]);
+    widget.basketItemVariantList.add(basketItemStorageVariant!);
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -992,6 +1055,22 @@ class _StorageVariantListState extends State<StorageVariantList> {
             onTap: () {
               setState(() {
                 _selectedIndex = index;
+                basketItemStorageVariant!.variant =
+                    widget.storageVariants[index];
+
+                if (widget.basketItemVariantList.any((element) =>
+                    element.variantType.type == VariantTypeEnum.STORAGTE)) {
+                  widget.basketItemVariantList.removeWhere((element) =>
+                      element.variantType.type == VariantTypeEnum.STORAGTE);
+                  widget.basketItemVariantList.add(basketItemStorageVariant!);
+                } else {
+                  widget.basketItemVariantList.add(basketItemStorageVariant!);
+                }
+
+                for (var item in widget.basketItemVariantList) {
+                  print(
+                      'Type Is ${item.variantType.name} , Value Is ${item.variant.name}');
+                }
               });
             },
             child: AnimatedContainer(

@@ -40,7 +40,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
             event.product.categoryId,
             event.product.name,
             event.product.price,
-            event.product.price + event.product.discountPrice);
+            event.product.price + event.product.discountPrice,event.product.basketItemVariantList!);
 
         _basketRepository.addProductToBasket(basketItem);
       },

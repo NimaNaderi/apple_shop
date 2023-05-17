@@ -1,7 +1,16 @@
+import 'package:apple_shop/data/model/variant_type_enum.dart';
+import 'package:hive/hive.dart';
+
+part 'variant_type.g.dart';
+@HiveType(typeId: 2)
 class VariantType {
+  @HiveField(0)
   String? id;
+  @HiveField(1)
   String? name;
+  @HiveField(2)
   String? title;
+  @HiveField(3)
   VariantTypeEnum? type;
 
   VariantType(this.id, this.name, this.title, this.type);
@@ -29,4 +38,4 @@ VariantTypeEnum _getVariantTypeEnum(String type) {
   }
 }
 
-enum VariantTypeEnum { COLOR, STORAGTE, VOLTAGE }
+

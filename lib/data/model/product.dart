@@ -1,3 +1,5 @@
+import 'basket_item_variant.dart';
+
 class Product {
   String id;
   String collectionId;
@@ -10,6 +12,7 @@ class Product {
   int discountPrice;
   int quantity;
   num? percent;
+  List<BasketItemVariant>? basketItemVariantList;
 
   Product(
       this.id,
@@ -21,7 +24,8 @@ class Product {
       this.name,
       this.price,
       this.discountPrice,
-      this.quantity) {
+      this.quantity,
+      {this.basketItemVariantList}) {
     percent = ((price - (price + discountPrice)) / price) * 100;
   }
 

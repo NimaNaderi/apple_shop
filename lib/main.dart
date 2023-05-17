@@ -8,6 +8,10 @@ import 'package:apple_shop/bloc/home/home_bloc.dart';
 import 'package:apple_shop/bloc/home/home_event.dart';
 import 'package:apple_shop/constants/colors.dart';
 import 'package:apple_shop/data/model/basket_item.dart';
+import 'package:apple_shop/data/model/basket_item_variant.dart';
+import 'package:apple_shop/data/model/variant.dart';
+import 'package:apple_shop/data/model/variant_type.dart';
+import 'package:apple_shop/data/model/variant_type_enum.dart';
 import 'package:apple_shop/di/di.dart';
 import 'package:apple_shop/screens/cart_screen.dart';
 import 'package:apple_shop/screens/category_screen.dart';
@@ -25,6 +29,10 @@ void main() async {
 
   await Hive.initFlutter();
   Hive.registerAdapter(BasketItemAdapter());
+  Hive.registerAdapter(BasketItemVariantAdapter());
+  Hive.registerAdapter(VariantAdapter());
+  Hive.registerAdapter(VariantTypeEnumAdapter());
+  Hive.registerAdapter(VariantTypeAdapter());
   await Hive.openBox<BasketItem>('basketBox');
   await getItInit();
 
@@ -55,7 +63,10 @@ class _MyAppState extends State<MyApp> {
             return bloc;
           },
           child: Scaffold(
-            body: WelcomeScreen(),
+            body: IndexedStack(
+              index: selectedBottomNavigationIndex,
+              children: getLayout(),
+            ),
             bottomNavigationBar: ClipRRect(
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),

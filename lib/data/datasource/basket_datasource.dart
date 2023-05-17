@@ -35,7 +35,7 @@ class BasketLocalDataSource extends IBasketDataSource {
   }
 
   @override
-  Future<void> deleteProduct(BasketItem basketItem) async{
+  Future<void> deleteProduct(BasketItem basketItem) async {
     basketItem.delete();
   }
 }
