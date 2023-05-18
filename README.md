@@ -8,9 +8,7 @@ Hive Database
 Rest API ( Dio )
 Dependency Injection ( Get It )
 
-<img src="preview/screenshots/11.jpg" alt="Description" width="300" height="600">
-
-<img src="preview/screenshots/22.jpg" alt="Description" width="300" height="600">
+<img src="preview/screenshots/11.jpg" alt="Description" width="300" height="600"> <img src="preview/screenshots/22.jpg" alt="Description" width="300" height="600">
 
 <img src="preview/screenshots/1.jpg" alt="Description" width="300" height="600">
 
@@ -26,3 +24,4 @@ Dependency Injection ( Get It )
 
 <img src="preview/screenshots/7.jpg" alt="Description" width="300" height="600">
 
+Repository Will Updated As Soon As New Features And Updates Added !
