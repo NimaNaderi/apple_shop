@@ -8,4 +8,4 @@ Hive Database
 Rest API ( Dio )
 Dependency Injection ( Get It )
 
-<img src="preview/screenshots/11.jpg" alt="Description" width="300" height="200">
+<img src="preview/screenshots/11.jpg" alt="Description" width="300" height="500">
