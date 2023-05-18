@@ -25,7 +25,6 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         var productProperties = await _productDetailRepository
             .getProductProperties(event.productId);
 
-        await Future.delayed(const Duration(seconds: 2), () {});
         emit(ProductDetailResponseState(productImages, productVariants,
             productCategory, productProperties));
       },

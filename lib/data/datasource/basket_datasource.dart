@@ -1,4 +1,5 @@
 import 'package:apple_shop/data/model/basket_item.dart';
+import 'package:apple_shop/data/model/basket_item_variant.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 abstract class IBasketDataSource {

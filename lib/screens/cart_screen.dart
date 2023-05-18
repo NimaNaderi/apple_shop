@@ -135,9 +135,6 @@ class CartItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    basketItem.basketItemVariantList.forEach((element) {
-      // print('cart screen ${element.variantType.name} ${element.variant.name}');
-    });
     return BlocBuilder<HomeBloc, HomeState>(
       builder: (context, state) {
         return GestureDetector(

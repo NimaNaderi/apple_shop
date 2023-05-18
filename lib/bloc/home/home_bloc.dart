@@ -27,7 +27,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         var hottestProductList = await _productRepository.getHottest();
         var bestSellerProductList = await _productRepository.getBestSeller();
 
-        await Future.delayed(Duration(seconds: 2), () {});
         emit(HomeRequestSuccessState(bannerList, categoryList, allProducts,
             hottestProductList, bestSellerProductList));
       },

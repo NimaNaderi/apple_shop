@@ -19,7 +19,6 @@ class CategoryProductBloc
       var productListByCategory = await categoryProductRepository
           .getProductsByCategoryId(event.categoryId);
 
-      await Future.delayed(const Duration(seconds: 2));
       emit(CategoryProductSuccess(productListByCategory));
     });
   }
