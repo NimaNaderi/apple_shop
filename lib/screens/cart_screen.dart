@@ -27,115 +27,108 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: CustomColors.backgroundScreenColor,
       body: SafeArea(
         child: BlocBuilder<BasketBloc, BasketState>(
-          builder: (context, state) =>
-              Stack(
-                alignment: AlignmentDirectional.bottomCenter,
-                children: [
-                  CustomScrollView(
-                    slivers: [
-                      SliverToBoxAdapter(
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                            left: 44.w,
-                            right: 44.w,
-                            bottom: 32.h,
-                            top: 20.h,
-                          ),
-                          child: Container(
-                            height: 46.h,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(16.r),
+          builder: (context, state) => Stack(
+            alignment: AlignmentDirectional.bottomCenter,
+            children: [
+              CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        left: 44.w,
+                        right: 44.w,
+                        bottom: 32.h,
+                        top: 20.h,
+                      ),
+                      child: Container(
+                        height: 46.h,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16.r),
+                        ),
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: 16.w,
                             ),
-                            child: Row(
-                              children: [
-                                SizedBox(
-                                  width: 16.w,
+                            SvgPicture.asset('assets/icons/apple.svg',
+                                color: CustomColors.blue, width: 24.w),
+                            Expanded(
+                              child: Text(
+                                'سبد خرید',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontFamily: 'SB',
+                                  fontSize: 16.sp,
+                                  color: CustomColors.blue,
                                 ),
-                                SvgPicture.asset('assets/icons/apple.svg',
-                                    color: CustomColors.blue, width: 24.w),
-                                Expanded(
-                                  child: Text(
-                                    'سبد خرید',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontFamily: 'SB',
-                                      fontSize: 16.sp,
-                                      color: CustomColors.blue,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 16.w,
-                                ),
-                              ],
+                              ),
                             ),
-                          ),
+                            SizedBox(
+                              width: 16.w,
+                            ),
+                          ],
                         ),
                       ),
-                      if (state is BasketDataFetchedState) ...[
-                        state.basketItemList.fold(
-                              (l) =>
-                              SliverToBoxAdapter(
-                                child: Text(l),
-                              ),
-                              (basketItemList) =>
-                              SliverList(
-                                delegate: SliverChildBuilderDelegate(
-                                        (context, index) =>
-                                        CartItem(basketItemList[index]),
-                                    childCount: basketItemList.length),
-                              ),
-                        ),
-                        if (state.basketSummary[0] != 0) ...{
-                          SliverToBoxAdapter(
-                            child: _OrderSummary(basketSummary: state
-                                .basketSummary),
-                          )
-                        }
-                      ],
-                      SliverPadding(padding: EdgeInsets.only(bottom: 100.h))
-                    ],
+                    ),
                   ),
                   if (state is BasketDataFetchedState) ...[
-                    Padding(
-                      padding:
-                      EdgeInsets.only(right: 44.w, left: 44.w, bottom: 20.h),
-                      child: SizedBox(
-                        height: 54.h,
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: CustomColors.green,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16.r),
-                            ),
-                          ),
-                          onPressed: () {},
-                          child: Text(
-                            'ادامه فرایند خرید',
-                            textDirection: TextDirection.rtl,
-                            style: TextStyle(
-                              fontSize: 18.sp,
-                              fontFamily: 'SB',
-                            ),
-                          ),
-                        ),
+                    state.basketItemList.fold(
+                      (l) => SliverToBoxAdapter(
+                        child: Text(l),
                       ),
-                    )
-                  ]
+                      (basketItemList) => SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                            (context, index) => CartItem(basketItemList[index]),
+                            childCount: basketItemList.length),
+                      ),
+                    ),
+                    if (state.basketSummary[0] != 0) ...{
+                      SliverToBoxAdapter(
+                        child:
+                            _OrderSummary(basketSummary: state.basketSummary),
+                      )
+                    }
+                  ],
+                  SliverPadding(padding: EdgeInsets.only(bottom: 100.h))
                 ],
               ),
+              if (state is BasketDataFetchedState &&
+                  state.basketSummary[0] != 0) ...[
+                Padding(
+                  padding:
+                      EdgeInsets.only(right: 44.w, left: 44.w, bottom: 20.h),
+                  child: SizedBox(
+                    height: 54.h,
+                    width: MediaQuery.of(context).size.width,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: CustomColors.green,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16.r),
+                        ),
+                      ),
+                      onPressed: () {},
+                      child: Text(
+                        'ادامه فرایند خرید',
+                        textDirection: TextDirection.rtl,
+                        style: TextStyle(
+                          fontSize: 18.sp,
+                          fontFamily: 'SB',
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              ]
+            ],
+          ),
         ),
       ),
     );
@@ -145,10 +138,7 @@ class _CartScreenState extends State<CartScreen> {
 class _OrderSummary extends StatelessWidget {
   List<int> basketSummary;
 
-  _OrderSummary({
-    super.key,
-    required this.basketSummary
-  });
+  _OrderSummary({super.key, required this.basketSummary});
 
   @override
   Widget build(BuildContext context) {
@@ -157,8 +147,7 @@ class _OrderSummary extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16.r),
-          border:
-          Border.all(color: CustomColors.green, width: 2),
+          border: Border.all(color: CustomColors.green, width: 2),
           color: Colors.white,
           boxShadow: const [
             BoxShadow(
@@ -167,68 +156,66 @@ class _OrderSummary extends StatelessWidget {
               spreadRadius: -23,
               offset: Offset(12, 12),
             )
-          ]
-      ),
+          ]),
       child: Directionality(
-      textDirection: TextDirection.rtl,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Row(
-            children: [
-              Text('قیمت کالا های شما',
-                  style: TextStyle(
-                      fontFamily: 'SM', fontSize: 14.sp)),
-              const Spacer(),
-              Text(
-                '${basketSummary[0].separateByComma()} تومان ',
-                style: TextStyle(
-                    fontFamily: 'SB', fontSize: 16.sp),
-              ),
-            ],
-          ),
-          SizedBox(height: 10.h,),
-          Row(
-            children: [
-              Text('سود شما از خرید ',
-                  style: TextStyle(
-                      fontFamily: 'SM',
-                      fontSize: 14.sp,
-                      color: CustomColors.red)),
-              const Spacer(),
-              Text(
-                  '(%${(((basketSummary[0] - basketSummary[2]) /
-                      basketSummary[0]) * 100).round()})  ${basketSummary[1]
-                      .separateByComma()} تومان ',
-                  style: TextStyle(
-                      fontFamily: 'SB',
-                      fontSize: 16.sp,
-                      color: CustomColors.red)),
-            ],
-          ),
-          SizedBox(height: 10.h,),
-          Row(
-            children: [
-              Text('مبلغ قابل پرداخت',
-                  style: TextStyle(
-                      fontFamily: 'SM', fontSize: 14.sp)),
-              const Spacer(),
-              Text(
-                  '${basketSummary[2].separateByComma()} تومان ',
-                  style: TextStyle(
-                      fontFamily: 'SB', fontSize: 16.sp)),
-            ],
-          ),
-        ],
+        textDirection: TextDirection.rtl,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(
+              children: [
+                Text('قیمت کالا های شما',
+                    style: TextStyle(fontFamily: 'SM', fontSize: 14.sp)),
+                const Spacer(),
+                Text(
+                  '${basketSummary[0].separateByComma()} تومان ',
+                  style: TextStyle(fontFamily: 'SB', fontSize: 16.sp),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 10.h,
+            ),
+            Row(
+              children: [
+                Text('سود شما از خرید ',
+                    style: TextStyle(
+                        fontFamily: 'SM',
+                        fontSize: 14.sp,
+                        color: CustomColors.red)),
+                const Spacer(),
+                Text(
+                    '(%${(((basketSummary[0] - basketSummary[2]) / basketSummary[0]) * 100).round()})  ${basketSummary[1].separateByComma()} تومان ',
+                    style: TextStyle(
+                        fontFamily: 'SB',
+                        fontSize: 16.sp,
+                        color: CustomColors.red)),
+              ],
+            ),
+            SizedBox(
+              height: 10.h,
+            ),
+            Row(
+              children: [
+                Text('مبلغ قابل پرداخت',
+                    style: TextStyle(fontFamily: 'SM', fontSize: 14.sp)),
+                const Spacer(),
+                Text('${basketSummary[2].separateByComma()} تومان ',
+                    style: TextStyle(fontFamily: 'SB', fontSize: 16.sp)),
+              ],
+            ),
+          ],
+        ),
       ),
-    ),);
+    );
   }
 }
 
 class CartItem extends StatelessWidget {
   BasketItem basketItem;
 
-  CartItem(this.basketItem, {
+  CartItem(
+    this.basketItem, {
     Key? key,
   }) : super(key: key);
 
@@ -242,8 +229,7 @@ class CartItem extends StatelessWidget {
               for (var product in state.productList) {
                 if (basketItem.id == product.id) {
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) =>
-                    BlocProvider<BasketBloc>.value(
+                    builder: (context) => BlocProvider<BasketBloc>.value(
                         value: locator.get<BasketBloc>(),
                         child: ProductDetailScreen(product)),
                   ));
@@ -252,21 +238,18 @@ class CartItem extends StatelessWidget {
             }
           },
           child: Container(
-            height: 250.h,
+            height: 256.h,
             margin: EdgeInsets.only(left: 44.w, right: 44.w, bottom: 20.h),
-            width: MediaQuery
-                .of(context)
-                .size
-                .width,
+            width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black,
-                    blurRadius: 22,
-                    spreadRadius: -23,
-                    offset: Offset(12, 12),
-                  )
-                ],
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.black,
+                  blurRadius: 22,
+                  spreadRadius: -23,
+                  offset: Offset(12, 12),
+                )
+              ],
               borderRadius: BorderRadius.circular(16.r),
               color: Colors.white,
             ),
@@ -362,7 +345,7 @@ class CartItem extends StatelessWidget {
                                           VariantTypeEnum.STORAGTE) ...{
                                         StorageChip('گیگابایت',
                                             storageValue:
-                                            basketItemVariant.variant.value)
+                                                basketItemVariant.variant.value)
                                       },
                                     },
                                     GestureDetector(
@@ -378,7 +361,7 @@ class CartItem extends StatelessWidget {
                                             width: 1,
                                           ),
                                           borderRadius:
-                                          BorderRadius.circular(10.r),
+                                              BorderRadius.circular(10.r),
                                         ),
                                         child: Padding(
                                           padding: EdgeInsets.symmetric(
@@ -399,7 +382,7 @@ class CartItem extends StatelessWidget {
                                               Text(
                                                 'حذف',
                                                 textDirection:
-                                                TextDirection.rtl,
+                                                    TextDirection.rtl,
                                                 style: TextStyle(
                                                     fontFamily: 'SM',
                                                     fontSize: 12.sp,
@@ -410,6 +393,7 @@ class CartItem extends StatelessWidget {
                                         ),
                                       ),
                                     ),
+                                    QuantityChip(quantity: basketItem.quantity),
                                   ],
                                 ),
                               )
@@ -470,7 +454,8 @@ class StorageChip extends StatelessWidget {
   String? storageValue;
   String title;
 
-  StorageChip(this.title, {
+  StorageChip(
+    this.title, {
     this.storageValue,
     Key? key,
   }) : super(key: key);
@@ -495,14 +480,13 @@ class StorageChip extends StatelessWidget {
               style: TextStyle(
                 fontFamily: 'SM',
                 fontSize: 12.sp,
-                color: CustomColors.grey,
               ),
             ),
             SizedBox(
               width: 4.w,
             ),
             Text(
-              title,
+              'گیگابایت',
               textDirection: TextDirection.rtl,
               style: TextStyle(fontFamily: 'SM', fontSize: 12.sp),
             ),
@@ -535,6 +519,47 @@ class ColorChip extends StatelessWidget {
             fontFamily: 'SM',
             fontSize: 12.sp,
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class QuantityChip extends StatelessWidget {
+  int quantity;
+
+  QuantityChip({Key? key, required this.quantity}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: CustomColors.grey,
+          width: 1,
+        ),
+        borderRadius: BorderRadius.circular(10.r),
+      ),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'تعداد: ',
+              style: TextStyle(
+                fontFamily: 'SM',
+                fontSize: 12.sp,
+              ),
+            ),
+            SizedBox(
+              width: 4.w,
+            ),
+            Text(
+              quantity.toString(),
+              style: TextStyle(fontFamily: 'SB', fontSize: 12.sp),
+            ),
+          ],
         ),
       ),
     );

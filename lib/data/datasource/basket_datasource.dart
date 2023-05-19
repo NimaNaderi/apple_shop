@@ -19,7 +19,20 @@ class BasketLocalDataSource extends IBasketDataSource {
 
   @override
   Future<void> addProduct(BasketItem item) async {
-    box.add(item);
+    var items = await getAllBasketItems();
+    if (items
+        .where((element) => element.isSameItem(item))
+        .toList()
+        .isNotEmpty) {
+      var newItem =
+          items.where((element) => element.isSameItem(item)).toList().first;
+      newItem.quantity = newItem.quantity + 1;
+      newItem.discountPrice = item.discountPrice * newItem.quantity;
+      newItem.price = item.price * newItem.quantity;
+      newItem.save();
+    } else {
+      box.add(item);
+    }
   }
 
   @override
@@ -31,9 +44,7 @@ class BasketLocalDataSource extends IBasketDataSource {
   Future<List<int>> getFinalBasketPrice() async {
     var basketList = box.values.toList();
     final mainPrice = basketList.fold(
-        0,
-        (previousValue, basketItem) =>
-            previousValue + basketItem.price);
+        0, (previousValue, basketItem) => previousValue + basketItem.price);
 
     final finalPrice = basketList.fold(
         0,
@@ -44,7 +55,7 @@ class BasketLocalDataSource extends IBasketDataSource {
         0,
         (previousValue, basketItem) =>
             previousValue + (basketItem.price - basketItem.discountPrice));
-    return [mainPrice,discount,finalPrice];
+    return [mainPrice, discount, finalPrice];
   }
 
   @override
