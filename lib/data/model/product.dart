@@ -12,7 +12,6 @@ class Product {
   int discountPrice;
   int quantity;
   num? percent;
-  List<BasketItemVariant>? basketItemVariantList;
 
   Product(
       this.id,
@@ -24,8 +23,7 @@ class Product {
       this.name,
       this.price,
       this.discountPrice,
-      this.quantity,
-      {this.basketItemVariantList}) {
+      this.quantity) {
     percent = ((price - (price + discountPrice)) / price) * 100;
   }
 

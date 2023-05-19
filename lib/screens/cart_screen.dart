@@ -19,8 +19,20 @@ import '../bloc/home/home_state.dart';
 import '../data/model/product.dart';
 import '../di/di.dart';
 
-class CartScreen extends StatelessWidget {
+class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
+
+  @override
+  State<CartScreen> createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> {
+  @override
+  void initState() {
+    // BlocProvider.of<BasketBloc>(context).add(BasketFetchFromHiveEvent());
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -406,6 +418,7 @@ class StorageChip extends StatelessWidget {
 class ColorChip extends StatelessWidget {
   String colorHexCode;
   String colorName;
+
   ColorChip(this.colorHexCode, this.colorName, {super.key});
 
   @override

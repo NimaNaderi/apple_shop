@@ -25,5 +25,11 @@ class BasketBloc extends Bloc<BasketEvent, BasketState> {
         emit(BasketDataFetchedState(basketItemList, finalBasketPrice));
       },
     );
+
+    on<BasketItemAdded>((event, emit) async {
+      _basketRepository.addProductToBasket(event.cartItem);
+      add(BasketFetchFromHiveEvent());
+      
+    });
   }
 }

@@ -28,6 +28,7 @@ import '../data/model/variant_type_enum.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   Product product;
+  List<BasketItemVariant> basketItemVariantList = [];
 
   ProductDetailScreen(this.product, {super.key});
 
@@ -36,6 +37,11 @@ class ProductDetailScreen extends StatefulWidget {
 }
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -56,7 +62,6 @@ class DetailContent extends StatelessWidget {
   });
 
   final ProductDetailScreen parentWidget;
-  List<BasketItemVariant> basketItemVariantList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -179,8 +184,8 @@ class DetailContent extends StatelessWidget {
                         child: Text('خطا'),
                       );
                     }, (productVariantList) {
-                      return VariantContainerGenerator(
-                          productVariantList, basketItemVariantList);
+                      return VariantContainerGenerator(productVariantList,
+                          parentWidget.basketItemVariantList);
                     })
                   },
                   if (state is ProductDetailResponseState) ...{
@@ -321,8 +326,8 @@ class DetailContent extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           PriceTagButton(parentWidget.product),
-                          AddToBasketButton(
-                              parentWidget.product, basketItemVariantList),
+                          AddToBasketButton(parentWidget.product,
+                              parentWidget.basketItemVariantList),
                         ],
                       ),
                     ),
@@ -639,13 +644,20 @@ class AddToBasketButton extends StatelessWidget {
               filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
               child: GestureDetector(
                 onTap: () {
-                  product.basketItemVariantList = basketItemVariantList;
+                  var item = BasketItem(
+                      product.id,
+                      product.collectionId,
+                      product.thumbnail,
+                      product.categoryId,
+                      product.name,
+                      product.price,
+                      (product.price + product.discountPrice),
+                      basketItemVariantList:
+                          _getBasketItemVariants(basketItemVariantList));
 
-                  context
-                      .read<ProductBloc>()
-                      .add(ProductAddedToBasket(product));
+                  BlocProvider.of<BasketBloc>(context)
+                      .add(BasketItemAdded(cartItem: item));
 
-                  context.read<BasketBloc>().add(BasketFetchFromHiveEvent());
                   AnimatedSnackBar(
                     mobileSnackBarPosition: MobileSnackBarPosition.bottom,
                     duration: const Duration(seconds: 5),
@@ -1099,4 +1111,26 @@ class _StorageVariantListState extends State<StorageVariantList> {
       ),
     );
   }
+}
+
+List<BasketItemVariant> _getBasketItemVariants(
+    List<BasketItemVariant> variantList) {
+  if (variantList.isEmpty) return [];
+
+  List<BasketItemVariant> basketItemVariantList = [];
+
+  for (var basketItemVariant in variantList) {
+    Variant finalVariant =
+        variantList[variantList.indexOf(basketItemVariant)].variant;
+    VariantType finalVariantType =
+        variantList[variantList.indexOf(basketItemVariant)].variantType;
+
+    basketItemVariantList
+        .add(BasketItemVariant(finalVariantType, finalVariant));
+  }
+
+  if (basketItemVariantList[0].variantType.type != VariantTypeEnum.COLOR) {
+    basketItemVariantList = basketItemVariantList.reversed.toList();
+  }
+  return basketItemVariantList;
 }

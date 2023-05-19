@@ -1,3 +1,5 @@
+import 'package:apple_shop/data/model/basket_item.dart';
+
 import '../../data/model/product.dart';
 
 abstract class ProductEvent {
@@ -11,6 +13,6 @@ class ProductInitializeEvent extends ProductEvent {
 }
 
 class ProductAddedToBasket extends ProductEvent {
-  Product product;
+  BasketItem product;
   ProductAddedToBasket(this.product);
 }

@@ -24,7 +24,7 @@ class BasketItemAdapter extends TypeAdapter<BasketItem> {
       fields[4] as String,
       fields[5] as int,
       fields[6] as int,
-      (fields[8] as List).cast<BasketItemVariant>(),
+      basketItemVariantList: (fields[8] as List).cast<BasketItemVariant>(),
     )..percent = fields[7] as num?;
   }
 

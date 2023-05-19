@@ -32,7 +32,7 @@ class BasketItem extends HiveObject{
       this.categoryId,
       this.name,
       this.price,
-      this.discountPrice,this.basketItemVariantList) {
+      this.discountPrice,{required this.basketItemVariantList}) {
     percent = ((price - (discountPrice)) / price) * 100;
     // thumbnail =         'http://startflutter.ir/api/files/${jsonObject['collectionId']}/${jsonObject['id']}/${jsonObject['thumbnail']}';
 

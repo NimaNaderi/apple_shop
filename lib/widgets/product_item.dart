@@ -24,14 +24,12 @@ class ProductItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: ((context) => BlocProvider<BasketBloc>.value(
-                  value: locator.get<BasketBloc>(),
-                  child: ProductDetailScreen(product),
-                )),
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => BlocProvider<BasketBloc>.value(
+            value: locator.get<BasketBloc>(),
+            child: ProductDetailScreen(product),
           ),
-        );
+        ));
       },
       child: Directionality(
         textDirection: TextDirection.rtl,
@@ -50,7 +48,9 @@ class ProductItem extends StatelessWidget {
               Stack(
                 alignment: AlignmentDirectional.center,
                 children: [
-                 const SizedBox(width: double.infinity,),
+                  const SizedBox(
+                    width: double.infinity,
+                  ),
                   SizedBox(
                     height: 98,
                     child: CachedImage(

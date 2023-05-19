@@ -32,16 +32,16 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
 
     on<ProductAddedToBasket>(
       (event, emit) async {
-        final basketItem = BasketItem(
-            event.product.id,
-            event.product.collectionId,
-            event.product.thumbnail,
-            event.product.categoryId,
-            event.product.name,
-            event.product.price,
-            event.product.price + event.product.discountPrice,event.product.basketItemVariantList!);
+        // final basketItem = BasketItem(
+        //     event.product.id,
+        //     event.product.collectionId,
+        //     event.product.thumbnail,
+        //     event.product.categoryId,
+        //     event.product.name,
+        //     event.product.price,
+        //     event.product.price + event.product.discountPrice,event.product.basketItemVariantList!);
 
-        _basketRepository.addProductToBasket(basketItem);
+        _basketRepository.addProductToBasket(event.product);
       },
     );
   }
