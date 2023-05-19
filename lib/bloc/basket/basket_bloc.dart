@@ -12,8 +12,8 @@ class BasketBloc extends Bloc<BasketEvent, BasketState> {
     on<BasketFetchFromHiveEvent>(
       (event, emit) async {
         var basketItemList = await _basketRepository.getAllBasketItems();
-        var finalBasketPrice = await _basketRepository.getFinalBasketPrice();
-        emit(BasketDataFetchedState(basketItemList, finalBasketPrice));
+        var basketSummary = await _basketRepository.getFinalBasketPrice();
+        emit(BasketDataFetchedState(basketItemList, basketSummary));
       },
     );
 
@@ -21,8 +21,8 @@ class BasketBloc extends Bloc<BasketEvent, BasketState> {
       (event, emit) async {
         var basketItemList =
             await _basketRepository.deleteBasketItem(event.basketItem);
-        var finalBasketPrice = await _basketRepository.getFinalBasketPrice();
-        emit(BasketDataFetchedState(basketItemList, finalBasketPrice));
+        var basketSummary = await _basketRepository.getFinalBasketPrice();
+        emit(BasketDataFetchedState(basketItemList, basketSummary));
       },
     );
 

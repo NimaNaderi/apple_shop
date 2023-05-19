@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:apple_shop/data/datasource/basket_datasource.dart';
 import 'package:apple_shop/data/model/basket_item.dart';
 import 'package:apple_shop/di/di.dart';
@@ -8,7 +10,7 @@ abstract class IBasketRepository {
 
   Future<Either<String, List<BasketItem>>> getAllBasketItems();
 
-  Future<int> getFinalBasketPrice();
+  Future<List<int>> getFinalBasketPrice();
 
   Future<Either<String, List<BasketItem>>> deleteBasketItem(BasketItem basketItem);
 }
@@ -37,7 +39,7 @@ class BasketRepository extends IBasketRepository {
   }
 
   @override
-  Future<int> getFinalBasketPrice() async {
+  Future<List<int>> getFinalBasketPrice() async {
     return await _dataSource.getFinalBasketPrice();
   }
 

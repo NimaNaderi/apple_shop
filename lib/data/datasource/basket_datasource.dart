@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:apple_shop/data/model/basket_item.dart';
 import 'package:apple_shop/data/model/basket_item_variant.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -7,7 +9,7 @@ abstract class IBasketDataSource {
 
   Future<List<BasketItem>> getAllBasketItems();
 
-  Future<int> getFinalBasketPrice();
+  Future<List<int>> getFinalBasketPrice();
 
   Future<void> deleteProduct(BasketItem basketItem);
 }
@@ -26,13 +28,23 @@ class BasketLocalDataSource extends IBasketDataSource {
   }
 
   @override
-  Future<int> getFinalBasketPrice() async {
+  Future<List<int>> getFinalBasketPrice() async {
     var basketList = box.values.toList();
+    final mainPrice = basketList.fold(
+        0,
+        (previousValue, basketItem) =>
+            previousValue + basketItem.price);
+
     final finalPrice = basketList.fold(
         0,
         (previousValue, basketItem) =>
             previousValue + basketItem.discountPrice);
-    return finalPrice;
+
+    final discount = basketList.fold(
+        0,
+        (previousValue, basketItem) =>
+            previousValue + (basketItem.price - basketItem.discountPrice));
+    return [mainPrice,discount,finalPrice];
   }
 
   @override

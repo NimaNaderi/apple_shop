@@ -8,7 +8,7 @@ class BasketInitState extends BasketState {}
 
 class BasketDataFetchedState extends BasketState {
   Either<String, List<BasketItem>> basketItemList;
-  int finalBasketPrice;
+  List<int> basketSummary;
 
-  BasketDataFetchedState(this.basketItemList, this.finalBasketPrice);
+  BasketDataFetchedState(this.basketItemList, this.basketSummary);
 }
