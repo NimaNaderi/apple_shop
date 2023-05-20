@@ -1,8 +1,10 @@
 import 'package:apple_shop/bloc/home/home_bloc.dart';
 import 'package:apple_shop/bloc/home/home_event.dart';
 import 'package:apple_shop/bloc/home/home_state.dart';
+import 'package:apple_shop/config/theme/app_colors.dart';
 import 'package:apple_shop/data/model/banner.dart';
 import 'package:apple_shop/data/model/category.dart';
+import 'package:apple_shop/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -27,15 +29,9 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Product>? allProducts;
 
   @override
-  void initState() {
-    // BlocProvider.of<HomeBloc>(context).add(HomeGetInitializeData());
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: CustomColors.backgroundScreenColor,
       body: SafeArea(
         child: BlocBuilder<HomeBloc, HomeState>(
           builder: (context, state) {
@@ -55,24 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 // ),
                 if (state is HomeLoadingState) ...{
                   SliverFillRemaining(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        LoadingAnimationWidget.beat(
-                            color: CustomColors.blue, size: 32),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        const Text(
-                          'درحال دریافت محصولات',
-                          style: TextStyle(
-                              fontSize: 14,
-                              fontFamily: 'SB',
-                              color: CustomColors.grey),
-                        )
-                      ],
-                    ),
+                    child: LoadingItems(title: 'درحال دریافت محصولات'),
                   ),
                 } else ...{
                   const _getSearchBox(),
@@ -170,6 +149,7 @@ class _getMostViewedTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return SliverToBoxAdapter(
       child: Padding(
         padding: EdgeInsets.only(
@@ -182,16 +162,12 @@ class _getMostViewedTitle extends StatelessWidget {
           children: [
             Text(
               'پربازدید ترین ها',
-              style: TextStyle(
-                fontFamily: 'SB',
-                fontSize: 12.sp,
-                color: CustomColors.grey,
-              ),
+              style: theme.textTheme.titleSmall,
             ),
             const Spacer(),
-            const Text(
+             Text(
               'مشاهده همه',
-              style: TextStyle(fontFamily: 'SB', color: CustomColors.blue),
+              style: theme.textTheme.titleMedium,
             ),
             SizedBox(
               width: 10.w,
@@ -239,6 +215,7 @@ class _getBestSellerTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return SliverToBoxAdapter(
       child: Padding(
         padding:
@@ -247,16 +224,12 @@ class _getBestSellerTitle extends StatelessWidget {
           children: [
             Text(
               'پرفروش ترین ها',
-              style: TextStyle(
-                fontFamily: 'SB',
-                fontSize: 12.sp,
-                color: CustomColors.grey,
-              ),
+              style: theme.textTheme.titleSmall,
             ),
             const Spacer(),
-            const Text(
+             Text(
               'مشاهده همه',
-              style: TextStyle(fontFamily: 'SB', color: CustomColors.blue),
+              style: theme.textTheme.titleMedium,
             ),
             SizedBox(
               width: 10.w,
@@ -289,12 +262,14 @@ class _getCategoryList extends StatelessWidget {
 }
 
 class _getCategoryListTitle extends StatelessWidget {
+
   const _getCategoryListTitle({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return SliverToBoxAdapter(
       child: Padding(
         padding: EdgeInsets.only(
@@ -307,11 +282,7 @@ class _getCategoryListTitle extends StatelessWidget {
           children: [
             Text(
               'دسته بندی',
-              style: TextStyle(
-                fontFamily: 'SB',
-                fontSize: 12.sp,
-                color: CustomColors.grey,
-              ),
+              style: theme.textTheme.titleSmall!.copyWith(color: AppColors.grey),
             )
           ],
         ),
@@ -344,6 +315,7 @@ class _getSearchBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return SliverToBoxAdapter(
       child: Padding(
         padding: EdgeInsets.only(
@@ -371,15 +343,11 @@ class _getSearchBox extends StatelessWidget {
                 child: Text(
                   'جستجوی محصولات',
                   textAlign: TextAlign.start,
-                  style: TextStyle(
-                    fontFamily: 'SB',
-                    fontSize: 16.sp,
-                    color: CustomColors.grey,
-                  ),
+                  style: theme.textTheme.bodyLarge,
                 ),
               ),
               SvgPicture.asset('assets/icons/apple.svg',
-                  color: CustomColors.blue, width: 24.w),
+                  color: theme.primaryColor, width: 24.w),
               SizedBox(
                 width: 16.w,
               )

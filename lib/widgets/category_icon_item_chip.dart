@@ -16,6 +16,7 @@ class CategoryItemChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     String categoryColor = 'ff${category.color}';
     int hexColor = int.parse(categoryColor, radix: 16);
     return GestureDetector(
@@ -64,7 +65,7 @@ class CategoryItemChip extends StatelessWidget {
           ),
           Text(
             category.title ?? 'محصول',
-            style: TextStyle(fontFamily: 'SB', fontSize: 12.sp),
+            style: theme.textTheme.bodySmall,
           ),
         ],
       ),

@@ -8,6 +8,7 @@ import 'package:apple_shop/screens/product_detail_screen.dart';
 import 'package:apple_shop/utils/extensions/int_extensions.dart';
 import 'package:apple_shop/utils/extensions/string_extensions.dart';
 import 'package:apple_shop/widgets/cached_image.dart';
+import 'package:apple_shop/widgets/project_appbar.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,6 +30,7 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return Scaffold(
       backgroundColor: CustomColors.backgroundScreenColor,
       body: SafeArea(
@@ -46,36 +48,7 @@ class _CartScreenState extends State<CartScreen> {
                         bottom: 32.h,
                         top: 20.h,
                       ),
-                      child: Container(
-                        height: 46.h,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(16.r),
-                        ),
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              width: 16.w,
-                            ),
-                            SvgPicture.asset('assets/icons/apple.svg',
-                                color: CustomColors.blue, width: 24.w),
-                            Expanded(
-                              child: Text(
-                                'سبد خرید',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontFamily: 'SB',
-                                  fontSize: 16.sp,
-                                  color: CustomColors.blue,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 16.w,
-                            ),
-                          ],
-                        ),
-                      ),
+                      child: ProjectAppBar(appbarTitle: 'سبد خرید',),
                     ),
                   ),
                   if (state is BasketDataFetchedState) ...[
@@ -108,12 +81,6 @@ class _CartScreenState extends State<CartScreen> {
                     height: 54.h,
                     width: MediaQuery.of(context).size.width,
                     child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: CustomColors.green,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16.r),
-                        ),
-                      ),
                       onPressed: () {},
                       child: Text(
                         'ادامه فرایند خرید',
@@ -276,7 +243,7 @@ class CartItem extends StatelessWidget {
                                 height: 6.h,
                               ),
                               Text(
-                                'گارانتی سلطان 18 ماهه',
+                                'گارانتی 18 ماه مدیا پردازش',
                                 style: TextStyle(
                                     fontFamily: 'SM', fontSize: 12.sp),
                               ),

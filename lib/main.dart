@@ -6,6 +6,7 @@ import 'package:apple_shop/bloc/basket/basket_state.dart';
 import 'package:apple_shop/bloc/category/category_bloc.dart';
 import 'package:apple_shop/bloc/home/home_bloc.dart';
 import 'package:apple_shop/bloc/home/home_event.dart';
+import 'package:apple_shop/config/theme/app_theme.dart';
 import 'package:apple_shop/constants/colors.dart';
 import 'package:apple_shop/data/model/basket_item.dart';
 import 'package:apple_shop/data/model/basket_item_variant.dart';
@@ -55,6 +56,7 @@ class _MyAppState extends State<MyApp> {
       designSize: const Size(428, 926),
       builder: (context, child) => MaterialApp(
         debugShowCheckedModeBanner: false,
+        theme: AppTheme.light,
         home: BlocProvider(
           create: (context) {
             var bloc = HomeBloc();

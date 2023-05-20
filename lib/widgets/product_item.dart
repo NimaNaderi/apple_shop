@@ -9,7 +9,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../constants/colors.dart';
 import '../screens/product_detail_screen.dart';
 
 class ProductItem extends StatelessWidget {
@@ -22,6 +21,7 @@ class ProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
@@ -31,94 +31,91 @@ class ProductItem extends StatelessWidget {
           ),
         ));
       },
-      child: Directionality(
-        textDirection: TextDirection.rtl,
-        child: Container(
-          height: 216.h,
-          width: 160.w,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16.r),
-          ),
-          child: Column(
-            children: [
-              SizedBox(
-                height: 10.h,
-              ),
-              Stack(
-                alignment: AlignmentDirectional.center,
-                children: [
-                  const SizedBox(
-                    width: double.infinity,
+      child: Container(
+        height: 216.h,
+        width: 160.w,
+        decoration: BoxDecoration(
+          color: theme.colorScheme.surface,
+          borderRadius: BorderRadius.circular(16.r),
+        ),
+        child: Column(
+          children: [
+            SizedBox(
+              height: 10.h,
+            ),
+            Stack(
+              alignment: AlignmentDirectional.center,
+              children: [
+                const SizedBox(
+                  width: double.infinity,
+                ),
+                SizedBox(
+                  height: 98,
+                  child: CachedImage(
+                    imageUrl: product.thumbnail,
                   ),
-                  SizedBox(
-                    height: 98,
-                    child: CachedImage(
-                      imageUrl: product.thumbnail,
+                ),
+                Positioned(
+                  top: 0,
+                  right: 10.w,
+                  child: SizedBox(
+                    width: 24.w,
+                    height: 24.h,
+                    child: SvgPicture.asset('assets/icons/like-filled.svg'),
+                  ),
+                ),
+                Positioned(
+                  bottom: 0,
+                  left: 5.w,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.error,
+                      borderRadius: BorderRadius.circular(16.r),
                     ),
-                  ),
-                  Positioned(
-                    top: 0,
-                    right: 10.w,
-                    child: SizedBox(
-                      width: 24.w,
-                      height: 24.h,
-                      child: SvgPicture.asset('assets/icons/like-filled.svg'),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    left: 5.w,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: CustomColors.red,
-                        borderRadius: BorderRadius.circular(16.r),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 6.w,
+                        vertical: 2.h,
                       ),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 6.w,
-                          vertical: 2.h,
-                        ),
-                        child: Text(
-                          '${product.percent!.round().toString()} %',
-                          style: TextStyle(
-                            fontFamily: 'SB',
-                            fontSize: 12.sp,
-                            color: Colors.white,
-                          ),
-                        ),
+                      child: Text(
+                        '${product.percent!.round().toString()} %',
+                        style: theme.textTheme.labelSmall,
                       ),
                     ),
-                  )
-                ],
-              ),
-              const Spacer(),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(right: 10.w, bottom: 10.h),
-                    child: Text(
-                      product.name,
-                      maxLines: 1,
-                      overflow: TextOverflow.clip,
-                      style: TextStyle(fontFamily: 'SM', fontSize: 14.sp),
-                    ),
                   ),
-                  Container(
+                )
+              ],
+            ),
+            const Spacer(),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(right: 10.w, bottom: 10.h),
+                  child: Text(
+                    product.name,
+                    maxLines: 1,
+                    overflow: TextOverflow.clip,
+                    style: theme.textTheme.bodyMedium!.copyWith(
+                        fontFamily: 'SM', color: theme.colorScheme.onSurface),
+                  ),
+                ),
+                Directionality(
+                  textDirection: TextDirection.ltr,
+                  child: Container(
                     height: 53.h,
                     decoration: BoxDecoration(
-                      color: CustomColors.blue,
+                      color: theme.colorScheme.primary,
                       borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(16.r),
                         bottomRight: Radius.circular(16.r),
                       ),
-                      boxShadow: const [
+                      boxShadow: [
                         BoxShadow(
-                          color: CustomColors.blue,
+                          color: theme.colorScheme.primary,
                           blurRadius: 25,
                           spreadRadius: -12,
-                          offset: Offset(0, 16),
+                          offset: const Offset(0, 16),
                         )
                       ],
                     ),
@@ -129,11 +126,9 @@ class ProductItem extends StatelessWidget {
                         children: [
                           Text(
                             'تومان',
-                            style: TextStyle(
-                              fontFamily: 'SM',
-                              fontSize: 12.sp,
-                              color: Colors.white,
-                            ),
+                            style: theme.textTheme.bodySmall!.copyWith(
+                                color: theme.colorScheme.onPrimary,
+                                fontFamily: 'SM'),
                           ),
                           SizedBox(
                             width: 5.w,
@@ -144,21 +139,17 @@ class ProductItem extends StatelessWidget {
                             children: [
                               Text(
                                 product.price.separateByComma(),
-                                style: TextStyle(
-                                  decoration: TextDecoration.lineThrough,
-                                  fontSize: 12.sp,
+                                style: theme.textTheme.bodySmall!.copyWith(
+                                  color: theme.colorScheme.onPrimary,
                                   fontFamily: 'SM',
-                                  color: Colors.white,
+                                  decoration: TextDecoration.lineThrough,
+                                  decorationColor: Colors.white,
                                 ),
                               ),
                               Text(
                                 (product.price + product.discountPrice)
                                     .separateByComma(),
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16.sp,
-                                  fontFamily: 'SM',
-                                ),
+                                style: theme.textTheme.bodyLarge!.copyWith(color: theme.colorScheme.onPrimary,fontFamily: 'SM'),
                               ),
                             ],
                           ),
@@ -166,16 +157,16 @@ class ProductItem extends StatelessWidget {
                           SizedBox(
                             width: 24.w,
                             child: SvgPicture.asset(
-                                'assets/icons/arrow-right-filled.svg'),
+                                'assets/icons/arrow-right-filled.svg',height: 20.h),
                           )
                         ],
                       ),
                     ),
                   ),
-                ],
-              )
-            ],
-          ),
+                ),
+              ],
+            )
+          ],
         ),
       ),
     );

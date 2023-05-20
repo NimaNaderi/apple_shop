@@ -1,4 +1,7 @@
+import 'package:apple_shop/config/theme/app_colors.dart';
 import 'package:apple_shop/widgets/category_icon_item_chip.dart';
+import 'package:apple_shop/widgets/profile_item_chip.dart';
+import 'package:apple_shop/widgets/project_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -12,6 +15,7 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return Scaffold(
       backgroundColor: CustomColors.backgroundScreenColor,
       body: SafeArea(
@@ -24,97 +28,68 @@ class ProfileScreen extends StatelessWidget {
                 bottom: 32.h,
                 top: 20.h,
               ),
-              child: Container(
-                height: 46.h,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16.r),
-                ),
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 16.w,
-                    ),
-                    SvgPicture.asset('assets/icons/apple.svg',
-                        color: CustomColors.blue, width: 24.w),
-                    Expanded(
-                      child: Text(
-                        'حساب کاربری',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontFamily: 'SB',
-                          fontSize: 16.sp,
-                          color: CustomColors.blue,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 16.w,
-                    ),
-                  ],
-                ),
-              ),
+              child: ProjectAppBar(appbarTitle: 'حساب کاربری'),
             ),
             Text(
               'نیما نادری',
-              style: TextStyle(fontFamily: 'SB', fontSize: 16.sp),
+              style: theme.textTheme.bodyLarge!.copyWith(color: theme.colorScheme.onBackground),
             ),
             Text(
               '09102937012',
-              style: TextStyle(fontFamily: 'SM', fontSize: 10.sp),
+              style: theme.textTheme.labelSmall!.copyWith(color: AppColors.grey,fontFamily: 'SM'),
             ),
             SizedBox(
               height: 30.h,
             ),
-            Directionality(
-              textDirection: TextDirection.rtl,
-              child: Wrap(
-                runSpacing: 20,
-                spacing: 20,
-                children: [
-                  // CategoryItemChip(),
-                  // CategoryItemChip(),
-                  // CategoryItemChip(),
-                  // CategoryItemChip(),
-                  // CategoryItemChip(),
-                  // CategoryItemChip(),
-                  // CategoryItemChip(),
-                  // CategoryItemChip(),
-                  // CategoryItemChip(),
-                  // CategoryItemChip(),
-                  // CategoryItemChip(),
-                  // CategoryItemChip(),
-                ],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 44),
+              child: Directionality(
+                textDirection: TextDirection.rtl,
+                child: Wrap(
+                  runSpacing: 20,
+                  spacing: 20,
+                  alignment: WrapAlignment.spaceEvenly,
+                  children: List.generate(
+                      _getProfileChipData().length,
+                      (index) => ProfileItemChip(
+                            title: _getProfileChipData()[index],
+                            index: index,
+                          )),
+                ),
               ),
             ),
             const Spacer(),
             Text(
               'اپل شاپ',
-              style: TextStyle(
-                color: CustomColors.grey,
-                fontSize: 10.sp,
-                fontFamily: 'SM',
-              ),
+              style: theme.textTheme.labelSmall!.copyWith(color: AppColors.grey,fontFamily: 'SM'),
             ),
             Text(
               'v-1.0.00',
-              style: TextStyle(
-                color: CustomColors.grey,
-                fontSize: 10.sp,
-                fontFamily: 'SM',
-              ),
+              style: theme.textTheme.labelSmall!.copyWith(color: AppColors.grey,fontFamily: 'SM'),
             ),
             Text(
               'Instagram.com/nima_n_i',
-              style: TextStyle(
-                color: CustomColors.grey,
-                fontSize: 10.sp,
-                fontFamily: 'SM',
-              ),
-            )
+              style: theme.textTheme.labelSmall!.copyWith(color: AppColors.grey,fontFamily: 'SM'),
+            ),
+            SizedBox(
+              height: 32.h,
+            ),
           ],
         ),
       ),
     );
   }
 }
+
+List<String> _getProfileChipData() => [
+      'تنظیمات',
+      'سفارشات اخیر',
+      'آدرس ها',
+      'علاقمندی ها',
+      'نقد و نظرات',
+      'تخفیف ها',
+      'سفارش درحال انجام',
+      'اطلاعیه',
+      'بلاگ',
+      'پشتیبانی',
+    ];
