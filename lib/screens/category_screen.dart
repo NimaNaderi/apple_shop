@@ -6,6 +6,7 @@ import 'package:apple_shop/data/model/category.dart';
 import 'package:apple_shop/data/repository/category_repository.dart';
 import 'package:apple_shop/screens/product_list_screen.dart';
 import 'package:apple_shop/widgets/cached_image.dart';
+import 'package:apple_shop/widgets/project_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -52,36 +53,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                         bottom: 32.h,
                         top: 20.h,
                       ),
-                      child: Container(
-                        height: 46.h,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(16.r),
-                        ),
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              width: 16.w,
-                            ),
-                            SvgPicture.asset('assets/icons/apple.svg',
-                                color: CustomColors.blue, width: 24.w),
-                            Expanded(
-                              child: Text(
-                                'جستجوی محصولات',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontFamily: 'SB',
-                                  fontSize: 16.sp,
-                                  color: CustomColors.blue,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 16.w,
-                            ),
-                          ],
-                        ),
-                      ),
+                      child: ProjectAppBar(appbarTitle: 'جستجوی محصولات'),
                     ),
                   ),
                   state.response.fold(

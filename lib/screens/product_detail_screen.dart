@@ -237,8 +237,9 @@ class DetailContent extends StatelessWidget {
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(8.r),
-                                          color: Colors.red,
                                         ),
+                                        child:  Image.asset('assets/images/comments/0.png'),
+
                                       ),
                                     ),
                                     Positioned(
@@ -249,8 +250,9 @@ class DetailContent extends StatelessWidget {
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(8.r),
-                                          color: Colors.yellow,
                                         ),
+                                        child:  Image.asset('assets/images/comments/1.png'),
+
                                       ),
                                     ),
                                     Positioned(
@@ -261,8 +263,9 @@ class DetailContent extends StatelessWidget {
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(8.r),
-                                          color: Colors.blue,
                                         ),
+                                        child:  Image.asset('assets/images/comments/2.png'),
+
                                       ),
                                     ),
                                     Positioned(
@@ -273,8 +276,8 @@ class DetailContent extends StatelessWidget {
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(8.r),
-                                          color: Colors.orange,
                                         ),
+                                        child:  Image.asset('assets/images/comments/3.png'),
                                       ),
                                     ),
                                     Positioned(
