@@ -12,6 +12,7 @@ import 'package:apple_shop/data/model/basket_item_variant.dart';
 import 'package:apple_shop/data/model/property.dart';
 import 'package:apple_shop/utils/extensions/int_extensions.dart';
 import 'package:apple_shop/widgets/cached_image.dart';
+import 'package:apple_shop/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -65,6 +66,7 @@ class DetailContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return Scaffold(
       backgroundColor: CustomColors.backgroundScreenColor,
       body: BlocBuilder<ProductBloc, ProductState>(
@@ -74,24 +76,7 @@ class DetailContent extends StatelessWidget {
               slivers: [
                 if (state is ProductDetailLoadingState) ...{
                   SliverFillRemaining(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        LoadingAnimationWidget.beat(
-                            color: CustomColors.blue, size: 32),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        const Text(
-                          'درحال دریافت اطلاعات محصول',
-                          style: TextStyle(
-                              fontSize: 14,
-                              fontFamily: 'SB',
-                              color: CustomColors.grey),
-                        )
-                      ],
-                    ),
+                    child: LoadingItems(title: 'درحال دریافت اطلاعات محصول'),
                   ),
                 } else ...{
                   if (state is ProductDetailResponseState) ...{
@@ -121,20 +106,14 @@ class DetailContent extends StatelessWidget {
                                 (exceptionMessage) => Text(
                                   'اطلاعات محصول',
                                   textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontFamily: 'SB',
-                                    fontSize: 16.sp,
-                                    color: CustomColors.blue,
-                                  ),
+                                  style: theme.textTheme.bodyLarge!.copyWith(
+                                      color: theme.colorScheme.primary),
                                 ),
                                 (productCategory) => Text(
                                   productCategory.title!,
                                   textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontFamily: 'SB',
-                                    fontSize: 16.sp,
-                                    color: CustomColors.blue,
-                                  ),
+                                  style: theme.textTheme.bodyLarge!.copyWith(
+                                      color: theme.colorScheme.primary),
                                 ),
                               )),
                               GestureDetector(
@@ -160,11 +139,8 @@ class DetailContent extends StatelessWidget {
                       child: Text(
                         parentWidget.product.name,
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          fontFamily: 'SB',
-                          color: Colors.black,
-                        ),
+                        style: theme.textTheme.bodyLarge!
+                            .copyWith(color: theme.colorScheme.onSurface),
                       ),
                     ),
                   ),
@@ -219,11 +195,8 @@ class DetailContent extends StatelessWidget {
                               ),
                               Text(
                                 'مشاهده',
-                                style: TextStyle(
-                                  color: CustomColors.blue,
-                                  fontSize: 12.sp,
-                                  fontFamily: 'SB',
-                                ),
+                                style: theme.textTheme.bodySmall!
+                                    .copyWith(color: theme.colorScheme.primary),
                               ),
                               Expanded(
                                 child: Stack(
@@ -238,8 +211,8 @@ class DetailContent extends StatelessWidget {
                                           borderRadius:
                                               BorderRadius.circular(8.r),
                                         ),
-                                        child:  Image.asset('assets/images/comments/0.png'),
-
+                                        child: Image.asset(
+                                            'assets/images/comments/0.png'),
                                       ),
                                     ),
                                     Positioned(
@@ -251,8 +224,8 @@ class DetailContent extends StatelessWidget {
                                           borderRadius:
                                               BorderRadius.circular(8.r),
                                         ),
-                                        child:  Image.asset('assets/images/comments/1.png'),
-
+                                        child: Image.asset(
+                                            'assets/images/comments/1.png'),
                                       ),
                                     ),
                                     Positioned(
@@ -264,8 +237,8 @@ class DetailContent extends StatelessWidget {
                                           borderRadius:
                                               BorderRadius.circular(8.r),
                                         ),
-                                        child:  Image.asset('assets/images/comments/2.png'),
-
+                                        child: Image.asset(
+                                            'assets/images/comments/2.png'),
                                       ),
                                     ),
                                     Positioned(
@@ -277,7 +250,8 @@ class DetailContent extends StatelessWidget {
                                           borderRadius:
                                               BorderRadius.circular(8.r),
                                         ),
-                                        child:  Image.asset('assets/images/comments/3.png'),
+                                        child: Image.asset(
+                                            'assets/images/comments/3.png'),
                                       ),
                                     ),
                                     Positioned(
@@ -293,11 +267,7 @@ class DetailContent extends StatelessWidget {
                                         child: Center(
                                           child: Text(
                                             '+10',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 10.sp,
-                                              fontFamily: 'SB',
-                                            ),
+                                            style: theme.textTheme.labelSmall,
                                           ),
                                         ),
                                       ),
@@ -310,11 +280,9 @@ class DetailContent extends StatelessWidget {
                               ),
                               Text(
                                 ':نظرات کاربران',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: 'SM',
-                                  fontSize: 14.sp,
-                                ),
+                                style: theme.textTheme.bodyMedium!.copyWith(
+                                    color: theme.colorScheme.onSurface,
+                                    fontFamily: 'SM'),
                               ),
                             ],
                           ),
@@ -362,6 +330,7 @@ class _ProductPropertiesState extends State<ProductProperties> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return SliverPadding(
       padding: EdgeInsets.symmetric(vertical: 20.h),
       sliver: SliverToBoxAdapter(
@@ -391,20 +360,15 @@ class _ProductPropertiesState extends State<ProductProperties> {
                       ),
                       Text(
                         _isVisible ? 'بستن' : 'مشاهده',
-                        style: TextStyle(
-                          color: CustomColors.blue,
-                          fontSize: 12.sp,
-                          fontFamily: 'SB',
-                        ),
+                        style: theme.textTheme.bodySmall!
+                            .copyWith(color: theme.colorScheme.primary),
                       ),
                       const Spacer(),
                       Text(
                         ':مشخصات فنی',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontFamily: 'SM',
-                          fontSize: 14.sp,
-                        ),
+                        style: theme.textTheme.bodyMedium!.copyWith(
+                            color: theme.colorScheme.onSurface,
+                            fontFamily: 'SM'),
                       ),
                     ],
                   ),
@@ -424,10 +388,12 @@ class _ProductPropertiesState extends State<ProductProperties> {
                 child: widget.propertyList.isEmpty
                     ? Text(
                         '! مشخصاتی برای این محصول یافت نشد',
-                        style: TextStyle(fontSize: 14.sp, fontFamily: 'SM'),
+                        style: theme.textTheme.bodyMedium!.copyWith(
+                            color: theme.colorScheme.onSurface,
+                            fontFamily: 'SM'),
                       )
                     : ListView.builder(
-                        physics: NeverScrollableScrollPhysics(),
+                        physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
                         itemCount: widget.propertyList.length,
                         itemBuilder: (context, index) => Row(
@@ -437,9 +403,9 @@ class _ProductPropertiesState extends State<ProductProperties> {
                               child: Text(
                                 '${widget.propertyList[index].value} : ${widget.propertyList[index].title}',
                                 textAlign: TextAlign.right,
-                                style: TextStyle(
+                                style: theme.textTheme.bodyMedium!.copyWith(
+                                    color: theme.colorScheme.onSurface,
                                     fontFamily: 'SM',
-                                    fontSize: 14.sp,
                                     height: 2),
                               ),
                             ),
@@ -472,6 +438,7 @@ class _ProductDescriptionState extends State<ProductDescription> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return SliverToBoxAdapter(
       child: Column(
         children: [
@@ -499,20 +466,14 @@ class _ProductDescriptionState extends State<ProductDescription> {
                     ),
                     Text(
                       _isVisible ? 'بستن' : 'مشاهده',
-                      style: TextStyle(
-                        color: CustomColors.blue,
-                        fontSize: 12.sp,
-                        fontFamily: 'SB',
-                      ),
+                      style: theme.textTheme.bodySmall!
+                          .copyWith(color: theme.colorScheme.primary),
                     ),
                     const Spacer(),
                     Text(
                       ':توضیحات محصول',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontFamily: 'SM',
-                        fontSize: 14.sp,
-                      ),
+                      style: theme.textTheme.bodyMedium!.copyWith(
+                          color: theme.colorScheme.onSurface, fontFamily: 'SM'),
                     ),
                   ],
                 ),
@@ -534,8 +495,10 @@ class _ProductDescriptionState extends State<ProductDescription> {
                     ? widget.productDescription
                     : '! توضیحاتی برای این محصول یافت نشد',
                 textAlign: TextAlign.right,
-                style:
-                    TextStyle(fontFamily: 'SM', fontSize: 16.sp, height: 2.h),
+                style: theme.textTheme.bodyLarge!.copyWith(
+                    color: theme.colorScheme.onSurface,
+                    fontFamily: 'SM',
+                    height: 2),
               ),
             ),
           ),
@@ -583,6 +546,7 @@ class VariantChildGenerator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return Padding(
       padding: EdgeInsets.only(
         top: 20.h,
@@ -593,7 +557,8 @@ class VariantChildGenerator extends StatelessWidget {
         children: [
           Text(
             productVariant.variantType.title!,
-            style: TextStyle(fontFamily: 'SM', fontSize: 12.sp),
+            style: theme.textTheme.bodySmall!
+                .copyWith(color: theme.colorScheme.onSurface, fontFamily: 'SM'),
           ),
           SizedBox(
             height: 10.h,
@@ -628,6 +593,7 @@ class AddToBasketButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return Stack(
       alignment: AlignmentDirectional.bottomCenter,
       clipBehavior: Clip.none,
@@ -673,11 +639,10 @@ class AddToBasketButton extends StatelessWidget {
                         child: Center(
                           child: Text(
                             'محصول با موفقیت به سبد خرید افزوده شد.',
-                            style: TextStyle(
-                              fontFamily: 'SB',
-                              fontSize: 16.sp,
-                              color: Colors.white,
-                            ),
+                            style: theme.textTheme.bodyLarge!.copyWith(
+                                color: theme.colorScheme.onSecondary,
+                                fontFamily: 'SM',
+                                height: 2),
                           ),
                         ),
                       );
@@ -694,11 +659,8 @@ class AddToBasketButton extends StatelessWidget {
                   child: Center(
                     child: Text(
                       'افزودن به سبد خرید',
-                      style: TextStyle(
-                        fontFamily: 'SB',
-                        fontSize: 16.sp,
-                        color: Colors.white,
-                      ),
+                      style: theme.textTheme.bodyLarge!
+                          .copyWith(color: theme.colorScheme.onPrimary),
                     ),
                   ),
                 ),
@@ -721,6 +683,7 @@ class PriceTagButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return Stack(
       alignment: AlignmentDirectional.bottomCenter,
       clipBehavior: Clip.none,
@@ -746,40 +709,34 @@ class PriceTagButton extends StatelessWidget {
                   borderRadius: BorderRadius.circular(16.r),
                 ),
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.w),
+                  padding: EdgeInsets.symmetric(horizontal: 8.w),
                   child: Row(
                     children: [
                       Text(
                         'تومان',
-                        style: TextStyle(
-                          fontFamily: 'SM',
-                          fontSize: 12.sp,
-                          color: Colors.white,
-                        ),
+                        style: theme.textTheme.bodySmall!.copyWith(
+                            fontFamily: 'SM',
+                            color: theme.colorScheme.onSecondary),
                       ),
                       SizedBox(
-                        width: 6.w,
+                        width: 5.w,
                       ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
                             product.price.separateByComma(),
-                            style: TextStyle(
-                              decoration: TextDecoration.lineThrough,
-                              fontFamily: 'SM',
-                              fontSize: 12.sp,
-                              color: Colors.white,
-                            ),
+                            style: theme.textTheme.bodySmall!.copyWith(
+                                fontFamily: 'SM',
+                                color: theme.colorScheme.onSecondary,
+                                decoration: TextDecoration.lineThrough,
+                                decorationColor: Colors.white),
                           ),
                           Text(
                             (product.price + product.discountPrice)
                                 .separateByComma(),
-                            style: TextStyle(
-                              fontFamily: 'SB',
-                              fontSize: 16.sp,
-                              color: Colors.white,
-                            ),
+                            style: theme.textTheme.bodyLarge!
+                                .copyWith(color: theme.colorScheme.onSecondary),
                           ),
                         ],
                       ),
@@ -795,12 +752,8 @@ class PriceTagButton extends StatelessWidget {
                             vertical: 2.h,
                           ),
                           child: Text(
-                            '% ${product.percent!.round()}',
-                            style: TextStyle(
-                              fontFamily: 'SB',
-                              fontSize: 10.sp,
-                              color: Colors.white,
-                            ),
+                            '%${product.percent!.round()}',
+                            style: theme.textTheme.labelSmall,
                           ),
                         ),
                       )
@@ -831,6 +784,7 @@ class GalleryWidget extends StatefulWidget {
 class _GalleryWidgetState extends State<GalleryWidget> {
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return SliverToBoxAdapter(
       child: Center(
         child: Container(
@@ -857,7 +811,8 @@ class _GalleryWidgetState extends State<GalleryWidget> {
                           ),
                           Text(
                             '4.6',
-                            style: TextStyle(fontSize: 12.sp, fontFamily: 'SM'),
+                            style: theme.textTheme.bodySmall!.copyWith(
+                                fontFamily: 'SM'),
                           ),
                         ],
                       ),
@@ -972,6 +927,7 @@ class _ColorVariantListState extends State<ColorVariantList> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return Directionality(
       textDirection: TextDirection.rtl,
       child: SizedBox(
@@ -993,10 +949,10 @@ class _ColorVariantListState extends State<ColorVariantList> {
                   widget.basketItemVariantList.add(basketItemColorVariant!);
                 }
 
-                for (var item in widget.basketItemVariantList) {
-                  print(
-                      'Type Is ${item.variantType.name} , Value Is ${item.variant.name}');
-                }
+                // for (var item in widget.basketItemVariantList) {
+                //   print(
+                //       'Type Is ${item.variantType.name} , Value Is ${item.variant.name}');
+                // }
               });
             },
             child: AnimatedContainer(
@@ -1014,11 +970,9 @@ class _ColorVariantListState extends State<ColorVariantList> {
                 child: Center(
                   child: Text(
                     widget.variantList[index].name!,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: 'SM',
-                      fontSize: 12.sp,
-                    ),
+                    style: theme.textTheme.bodySmall!.copyWith(
+                        fontFamily: 'SM',
+                        color: theme.colorScheme.onSecondary),
                   ),
                 ),
               ),
@@ -1059,6 +1013,7 @@ class _StorageVariantListState extends State<StorageVariantList> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return Directionality(
       textDirection: TextDirection.rtl,
       child: SizedBox(
@@ -1104,7 +1059,9 @@ class _StorageVariantListState extends State<StorageVariantList> {
                 child: Center(
                   child: Text(
                     widget.storageVariants[index].value!,
-                    style: TextStyle(fontFamily: 'SB', fontSize: 12.sp),
+                    style: theme.textTheme.bodySmall!.copyWith(
+                        fontFamily: 'SM',
+                        color: theme.colorScheme.onSurface),
                   ),
                 ),
               ),

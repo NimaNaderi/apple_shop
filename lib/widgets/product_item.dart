@@ -93,6 +93,7 @@ class ProductItem extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(right: 10.w, bottom: 10.h),
                   child: Text(
+                    textAlign: TextAlign.right,
                     product.name,
                     maxLines: 1,
                     overflow: TextOverflow.clip,
@@ -103,7 +104,7 @@ class ProductItem extends StatelessWidget {
                 Directionality(
                   textDirection: TextDirection.ltr,
                   child: Container(
-                    height: 53.h,
+                    height: 54.h,
                     decoration: BoxDecoration(
                       color: theme.colorScheme.primary,
                       borderRadius: BorderRadius.only(

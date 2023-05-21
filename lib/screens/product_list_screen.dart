@@ -106,19 +106,21 @@ class _ProductListScreenState extends State<ProductListScreen> {
                             child: Text('خطا'),
                           ),
                       (productList) => SliverPadding(
-                            padding: EdgeInsets.symmetric(horizontal: 44.w),
+                            padding: EdgeInsets.symmetric(horizontal: 40.w),
                             sliver: SliverGrid(
                               delegate: SliverChildBuilderDelegate(
                                 childCount: productList.length,
-                                (context, index) =>
-                                    ProductItem(productList[index]),
+                                (context, index) => Directionality(
+                                  textDirection: TextDirection.rtl,
+                                  child: ProductItem(productList[index]),
+                                ),
                               ),
                               gridDelegate:
                                   const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 2,
                                 mainAxisSpacing: 30,
                                 crossAxisSpacing: 20,
-                                childAspectRatio: 2 / 3,
+                                childAspectRatio: 2 / 2.6,
                               ),
                             ),
                           )),
