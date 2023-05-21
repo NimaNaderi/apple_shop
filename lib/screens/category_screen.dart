@@ -40,6 +40,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
         builder: (context, state) {
           return SafeArea(
             child: CustomScrollView(
+
               slivers: [
                 if (state is CategoryLoadingState) ...[
                   _loadingWidget(),

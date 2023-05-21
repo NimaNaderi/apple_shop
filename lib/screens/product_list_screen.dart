@@ -1,5 +1,7 @@
 import 'package:apple_shop/data/model/category.dart';
+import 'package:apple_shop/widgets/loading.dart';
 import 'package:apple_shop/widgets/product_item.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -40,32 +42,15 @@ class _ProductListScreenState extends State<ProductListScreen> {
               slivers: [
                 if (state is CategoryProductLoading) ...{
                   SliverFillRemaining(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        LoadingAnimationWidget.beat(
-                            color: CustomColors.blue, size: 32),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        const Text(
-                          'درحال دریافت محصولات',
-                          style: TextStyle(
-                              fontSize: 14,
-                              fontFamily: 'SB',
-                              color: CustomColors.grey),
-                        )
-                      ],
-                    ),
+                    child: LoadingItems(title: 'درحال دریافت محصولات'),
                   ),
                 },
                 if (state is CategoryProductSuccess) ...{
                   SliverToBoxAdapter(
                     child: Padding(
                       padding: EdgeInsets.only(
-                        left: 44.w,
-                        right: 44.w,
+                        left: 32.w,
+                        right: 32.w,
                         bottom: 32.h,
                         top: 16.h,
                       ),
@@ -106,7 +91,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                             child: Text('خطا'),
                           ),
                       (productList) => SliverPadding(
-                            padding: EdgeInsets.symmetric(horizontal: 40.w),
+                            padding: EdgeInsets.symmetric(horizontal: 32.w),
                             sliver: SliverGrid(
                               delegate: SliverChildBuilderDelegate(
                                 childCount: productList.length,
@@ -120,7 +105,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                 crossAxisCount: 2,
                                 mainAxisSpacing: 30,
                                 crossAxisSpacing: 20,
-                                childAspectRatio: 2 / 2.6,
+                                childAspectRatio: 1.9 / 2.6,
                               ),
                             ),
                           )),

@@ -42,17 +42,16 @@ class ProfileScreen extends StatelessWidget {
               height: 30.h,
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 44),
+              padding:  EdgeInsets.symmetric(horizontal: 44.w),
               child: Directionality(
                 textDirection: TextDirection.rtl,
                 child: Wrap(
-                  runSpacing: 20,
-                  spacing: 20,
-                  alignment: WrapAlignment.spaceEvenly,
+                  runSpacing: 26.h,
+                  spacing: 36.w,
                   children: List.generate(
-                      _getProfileChipData().length,
+                      11,
                       (index) => ProfileItemChip(
-                            title: _getProfileChipData()[index],
+                            title: index == 10 ? 'گیتهاب' : 'گزینه ${index+1}',
                             index: index,
                           )),
                 ),
@@ -64,7 +63,7 @@ class ProfileScreen extends StatelessWidget {
               style: theme.textTheme.labelSmall!.copyWith(color: AppColors.grey,fontFamily: 'SM'),
             ),
             Text(
-              'v-1.0.00',
+              'v-2.0.00',
               style: theme.textTheme.labelSmall!.copyWith(color: AppColors.grey,fontFamily: 'SM'),
             ),
             Text(
@@ -81,15 +80,15 @@ class ProfileScreen extends StatelessWidget {
   }
 }
 
-List<String> _getProfileChipData() => [
-      'تنظیمات',
-      'سفارشات اخیر',
-      'آدرس ها',
-      'علاقمندی ها',
-      'نقد و نظرات',
-      'تخفیف ها',
-      'سفارش درحال انجام',
-      'اطلاعیه',
-      'بلاگ',
-      'پشتیبانی',
-    ];
+// List<String> _getProfileChipData() => [
+//       'تنظیمات',
+//       'سفارشات اخیر',
+//       'آدرس ها',
+//       'علاقمندی ها',
+//       'نقد و نظرات',
+//       'تخفیف ها',
+//       'سفارش درحال انجام',
+//       'اطلاعیه',
+//       'بلاگ',
+//       'پشتیبانی',
+//     ];

@@ -1,6 +1,7 @@
 import 'package:apple_shop/bloc/basket/basket_bloc.dart';
 import 'package:apple_shop/bloc/basket/basket_event.dart';
 import 'package:apple_shop/bloc/basket/basket_state.dart';
+import 'package:apple_shop/config/theme/app_colors.dart';
 import 'package:apple_shop/constants/colors.dart';
 import 'package:apple_shop/data/model/basket_item.dart';
 import 'package:apple_shop/data/model/variant_type_enum.dart';
@@ -48,7 +49,9 @@ class _CartScreenState extends State<CartScreen> {
                         bottom: 32.h,
                         top: 20.h,
                       ),
-                      child: ProjectAppBar(appbarTitle: 'سبد خرید',),
+                      child: ProjectAppBar(
+                        appbarTitle: 'سبد خرید',
+                      ),
                     ),
                   ),
                   if (state is BasketDataFetchedState) ...[
@@ -85,10 +88,7 @@ class _CartScreenState extends State<CartScreen> {
                       child: Text(
                         'ادامه فرایند خرید',
                         textDirection: TextDirection.rtl,
-                        style: TextStyle(
-                          fontSize: 18.sp,
-                          fontFamily: 'SB',
-                        ),
+                        style: theme.textTheme.labelLarge,
                       ),
                     ),
                   ),
@@ -109,9 +109,10 @@ class _OrderSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 44.w, vertical: 22.h),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16.r),
           border: Border.all(color: CustomColors.green, width: 2),
@@ -131,12 +132,16 @@ class _OrderSummary extends StatelessWidget {
           children: [
             Row(
               children: [
-                Text('قیمت کالا های شما',
-                    style: TextStyle(fontFamily: 'SM', fontSize: 14.sp)),
+                Text(
+                  'قیمت کالا های شما',
+                  style: theme.textTheme.bodyMedium!.copyWith(
+                      fontFamily: 'SM', color: theme.colorScheme.onSurface),
+                ),
                 const Spacer(),
                 Text(
                   '${basketSummary[0].separateByComma()} تومان ',
-                  style: TextStyle(fontFamily: 'SB', fontSize: 16.sp),
+                  style: theme.textTheme.bodyLarge!
+                      .copyWith(color: theme.colorScheme.onSurface),
                 ),
               ],
             ),
@@ -146,17 +151,13 @@ class _OrderSummary extends StatelessWidget {
             Row(
               children: [
                 Text('سود شما از خرید ',
-                    style: TextStyle(
-                        fontFamily: 'SM',
-                        fontSize: 14.sp,
-                        color: CustomColors.red)),
+                    style: theme.textTheme.bodyMedium!.copyWith(
+                        fontFamily: 'SM', color: theme.colorScheme.error)),
                 const Spacer(),
                 Text(
                     '(%${(((basketSummary[0] - basketSummary[2]) / basketSummary[0]) * 100).round()})  ${basketSummary[1].separateByComma()} تومان ',
-                    style: TextStyle(
-                        fontFamily: 'SB',
-                        fontSize: 16.sp,
-                        color: CustomColors.red)),
+                    style: theme.textTheme.bodyLarge!
+                        .copyWith(color: theme.colorScheme.error)),
               ],
             ),
             SizedBox(
@@ -165,10 +166,12 @@ class _OrderSummary extends StatelessWidget {
             Row(
               children: [
                 Text('مبلغ قابل پرداخت',
-                    style: TextStyle(fontFamily: 'SM', fontSize: 14.sp)),
+                    style: theme.textTheme.bodyMedium!.copyWith(
+                        fontFamily: 'SM', color: theme.colorScheme.onSurface)),
                 const Spacer(),
                 Text('${basketSummary[2].separateByComma()} تومان ',
-                    style: TextStyle(fontFamily: 'SB', fontSize: 16.sp)),
+                    style: theme.textTheme.bodyLarge!
+                        .copyWith(color: theme.colorScheme.onSurface)),
               ],
             ),
           ],
@@ -188,6 +191,7 @@ class CartItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return BlocBuilder<HomeBloc, HomeState>(
       builder: (context, state) {
         return GestureDetector(
@@ -236,17 +240,15 @@ class CartItem extends StatelessWidget {
                                 basketItem.name,
                                 overflow: TextOverflow.ellipsis,
                                 textAlign: TextAlign.right,
-                                style: TextStyle(
-                                    fontFamily: 'SB', fontSize: 16.sp),
+                                style: theme.textTheme.bodyLarge!.copyWith(
+                                    color: theme.colorScheme.onSurface),
                               ),
                               SizedBox(
                                 height: 6.h,
                               ),
-                              Text(
-                                'گارانتی 18 ماه مدیا پردازش',
-                                style: TextStyle(
-                                    fontFamily: 'SM', fontSize: 12.sp),
-                              ),
+                              Text('گارانتی 18 ماه مدیا پردازش',
+                                  style: theme.textTheme.labelSmall!.copyWith(
+                                      color: AppColors.grey, fontFamily: 'SM')),
                               SizedBox(
                                 height: 6.h,
                               ),
@@ -264,12 +266,9 @@ class CartItem extends StatelessWidget {
                                         vertical: 2.h,
                                       ),
                                       child: Text(
-                                        '% ${basketItem.percent!.round()}',
-                                        style: TextStyle(
-                                          fontFamily: 'SB',
-                                          fontSize: 12.sp,
-                                          color: Colors.white,
-                                        ),
+                                        '%${basketItem.percent!.round()}',
+                                        style: theme.textTheme.labelSmall!
+                                            .copyWith(fontFamily: 'SM'),
                                       ),
                                     ),
                                   ),
@@ -278,16 +277,18 @@ class CartItem extends StatelessWidget {
                                   ),
                                   Text(
                                     'تومان',
-                                    style: TextStyle(
-                                        fontFamily: 'SM', fontSize: 12.sp),
+                                    style: theme.textTheme.labelSmall!.copyWith(
+                                        fontFamily: 'SM',
+                                        color: AppColors.grey),
                                   ),
                                   SizedBox(
                                     width: 4.w,
                                   ),
                                   Text(
                                     basketItem.price.separateByComma(),
-                                    style: TextStyle(
-                                        fontFamily: 'SM', fontSize: 12.sp),
+                                    style: theme.textTheme.bodySmall!.copyWith(
+                                        color: AppColors.grey,
+                                        fontFamily: 'SM'),
                                   )
                                 ],
                               ),
@@ -346,15 +347,16 @@ class CartItem extends StatelessWidget {
                                               SizedBox(
                                                 width: 6.w,
                                               ),
-                                              Text(
-                                                'حذف',
-                                                textDirection:
-                                                    TextDirection.rtl,
-                                                style: TextStyle(
-                                                    fontFamily: 'SM',
-                                                    fontSize: 12.sp,
-                                                    color: CustomColors.red),
-                                              ),
+                                              Text('حذف',
+                                                  textDirection:
+                                                      TextDirection.rtl,
+                                                  style: theme
+                                                      .textTheme.bodySmall!
+                                                      .copyWith(
+                                                          color: theme
+                                                              .colorScheme
+                                                              .error,
+                                                          fontFamily: 'SM')),
                                             ],
                                           ),
                                         ),
@@ -396,14 +398,20 @@ class CartItem extends StatelessWidget {
                     children: [
                       Text(
                         'تومان',
-                        style: TextStyle(fontFamily: 'SB', fontSize: 16.sp),
+                        style: theme.textTheme.bodyLarge!.copyWith(
+                          color: theme.colorScheme.onSurface,
+                          fontFamily: 'SM',
+                        ),
                       ),
                       SizedBox(
                         width: 6.w,
                       ),
                       Text(
                         basketItem.discountPrice.separateByComma(),
-                        style: TextStyle(fontFamily: 'SB', fontSize: 16.sp),
+                        style: theme.textTheme.bodyLarge!.copyWith(
+                          color: theme.colorScheme.onSurface,
+                          fontFamily: 'SM',
+                        ),
                       ),
                     ],
                   ),
@@ -429,6 +437,7 @@ class StorageChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return Container(
       decoration: BoxDecoration(
         border: Border.all(
@@ -444,10 +453,7 @@ class StorageChip extends StatelessWidget {
           children: [
             Text(
               storageValue!,
-              style: TextStyle(
-                fontFamily: 'SM',
-                fontSize: 12.sp,
-              ),
+              style: theme.textTheme.bodySmall!.copyWith(fontFamily: 'SM'),
             ),
             SizedBox(
               width: 4.w,
@@ -455,7 +461,7 @@ class StorageChip extends StatelessWidget {
             Text(
               'گیگابایت',
               textDirection: TextDirection.rtl,
-              style: TextStyle(fontFamily: 'SM', fontSize: 12.sp),
+              style: theme.textTheme.bodySmall!.copyWith(fontFamily: 'SM'),
             ),
           ],
         ),
@@ -472,6 +478,7 @@ class ColorChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return Container(
       decoration: BoxDecoration(
         color: colorHexCode.parseToColor(),
@@ -481,11 +488,7 @@ class ColorChip extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 3.h),
         child: Text(
           colorName,
-          style: TextStyle(
-            color: Colors.white,
-            fontFamily: 'SM',
-            fontSize: 12.sp,
-          ),
+          style: theme.textTheme.bodySmall!.copyWith(color: Colors.white,fontFamily: 'SM'),
         ),
       ),
     );
@@ -499,6 +502,8 @@ class QuantityChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+
     return Container(
       decoration: BoxDecoration(
         border: Border.all(
@@ -514,17 +519,14 @@ class QuantityChip extends StatelessWidget {
           children: [
             Text(
               'تعداد: ',
-              style: TextStyle(
-                fontFamily: 'SM',
-                fontSize: 12.sp,
-              ),
+              style: theme.textTheme.bodySmall!.copyWith(color: theme.colorScheme.onSurface,fontFamily: 'SM'),
             ),
             SizedBox(
               width: 4.w,
             ),
             Text(
               quantity.toString(),
-              style: TextStyle(fontFamily: 'SB', fontSize: 12.sp),
+                style: theme.textTheme.bodySmall!.copyWith(color: theme.colorScheme.onSurface)
             ),
           ],
         ),
