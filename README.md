@@ -9,6 +9,6 @@ Rest API ( Dio )
 Dependency Injection ( Get It )
 
 <img src="preview/screenshots/11.jpg" alt="Description" width="250" height="500"> <img src="preview/screenshots/22.jpg" alt="Description" width="250" height="500"> <img src="preview/screenshots/1.jpg" alt="Description" width="250" height="500"> <img src="preview/screenshots/2.jpg" alt="Description" width="250" height="500"> <img src="preview/screenshots/3.jpg" alt="Description" width="250" height="500"> <img src="preview/screenshots/4.jpg" alt="Description" width="250" height="500"> <img src="preview/screenshots/5.jpg" alt="Description" width="250" height="500"> <img src="preview/screenshots/6.jpg" alt="Description" width="250" height="500"> <img src="preview/screenshots/7.jpg" alt="Description" width="250" height="500">
-<img src="preview/screenshots/1.png" alt="Description" width="1690" height="1254">
+<img src="preview/screenshots/1.png" alt="Description" width="1254" height="1690">
 
 Repository Will Updated As Soon As New Features And Updates Added !
