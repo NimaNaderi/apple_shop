@@ -1,8 +1,13 @@
+import 'package:apple_shop/screens/base_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
+import '../bloc/home/home_bloc.dart';
+import '../bloc/home/home_event.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -30,7 +35,7 @@ class WelcomeScreen extends StatelessWidget {
                 height: 30.h,
               ),
               const Expanded(child: _AppleShopLogo()),
-             const Expanded(
+              const Expanded(
                 child: _BottomText(),
               ),
             ],
@@ -103,19 +108,33 @@ class _BottomText extends StatelessWidget {
           SizedBox(
             height: 22.h,
           ),
-          Container(
-            margin: EdgeInsets.only(right: 44.w),
-            padding: EdgeInsets.all(16),
-            height: 70.h,
-            width: 70.w,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: Color(0xff253DEE),
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (context) =>
+                    BlocProvider(
+                      create: (context){
+                        var bloc = HomeBloc();
+                        bloc.add(HomeGetInitializeData());
+                        return bloc;
+                      },
+                      child: const BaseScreen(),
+                    ),
+              ));
+            },
+            child: Container(
+              margin: EdgeInsets.only(right: 44.w),
+              padding: const EdgeInsets.all(16),
+              height: 70.h,
+              width: 70.w,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Color(0xff253DEE),
+              ),
+              child: SvgPicture.asset('assets/icons/arrow-welcome.svg'),
             ),
-            child:
-                SvgPicture.asset('assets/icons/arrow-welcome.svg'),
           ),
-          Spacer(),
+          const Spacer(),
           Center(
             child: Column(
               children: [

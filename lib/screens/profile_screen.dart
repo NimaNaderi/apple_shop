@@ -51,7 +51,7 @@ class ProfileScreen extends StatelessWidget {
                   children: List.generate(
                       11,
                       (index) => ProfileItemChip(
-                            title: index == 10 ? 'گیتهاب' : 'گزینه ${index+1}',
+                            title: index == 10 ? 'گیتهاب من' : 'گزینه ${index+1}',
                             index: index,
                           )),
                 ),

@@ -18,7 +18,7 @@ class ProfileItemChip extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: () async{
-            await launchUrl(Uri.parse('https://github.com/NimaNaderi'));
+            await launchUrl(Uri.parse('https://github.com/NimaNaderi'),mode: LaunchMode.externalApplication);
           },
           child: Container(
             height: 56.h,
@@ -34,7 +34,7 @@ class ProfileItemChip extends StatelessWidget {
               repeat: true,
               color: Colors.black,
               minRadius: 20,
-              ripplesCount: 6,
+              ripplesCount: 8,
               child: SvgPicture.asset(
                 'assets/images/profile/$index.svg',
                 color: theme.colorScheme.onPrimary,
