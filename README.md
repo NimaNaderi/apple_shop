@@ -1,5 +1,7 @@
 A Shopping Store Project
 
+In This Project I Focused On Logic More Than UI ! Because Of This UI Might Be A Little Simple
+
 Implemented By =>
 
 Bloc Architecture Pattern
