@@ -364,11 +364,13 @@ class _SearchBoxState extends State<SearchBox> {
           bottom: 32.h,
           top: 20.h,
         ),
-        child: Container(
+        child: AnimatedContainer(
           height: 46.h,
+          duration: const Duration(milliseconds: 500),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16.r),
+            border: textFieldFocusNode.hasFocus ? Border.all(color: AppColors.primaryColor,width: 2) : null
           ),
           child: Row(
             children: [
@@ -381,6 +383,7 @@ class _SearchBoxState extends State<SearchBox> {
               ),
               Expanded(
                 child: TextField(
+                  focusNode: textFieldFocusNode,
                   onChanged: (value) {
                     if (value.isNotEmpty) {
                       context.read<HomeBloc>().add(HomeProductSearched(value));
@@ -391,6 +394,7 @@ class _SearchBoxState extends State<SearchBox> {
                   textDirection: TextDirection.rtl,
                   textAlign: TextAlign.right,
                   decoration: InputDecoration(
+                    contentPadding: EdgeInsets.only(top: textFieldFocusNode.hasFocus ? -12.h : -8.h),
                     hintText: 'جستجوی محصولات',
                     hintStyle: theme.textTheme.bodyLarge,
                     enabledBorder: InputBorder.none,

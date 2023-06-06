@@ -23,29 +23,28 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           return;
         }
 
-
         emit(HomeLoadingState());
 
+        var hottestProductList = await _productRepository.getHottest();
+        var bestSellerProductList = await _productRepository.getBestSeller();
         var bannerList = await _bannerRepository.getBanners();
         var categoryList = await _categoryRepository.getCategories();
         var productList = await _productRepository.getProducts();
+
         productList.fold((l) => null, (r) {
           allProducts = r;
         });
 
-        var hottestProductList = await _productRepository.getHottest();
-        var bestSellerProductList = await _productRepository.getBestSeller();
-
         mainState = HomeRequestSuccessState(bannerList, categoryList,
             allProducts!, hottestProductList, bestSellerProductList);
 
-        if (searchedWord!= null && searchedWord!.isNotEmpty) {
+        if (searchedWord != null && searchedWord!.isNotEmpty) {
           emit(HomeSearchRequestSuccessState(allProducts!
               .where((element) => element.name.contains(searchedWord!))
               .toList()));
           return;
         }
-          emit(mainState!);
+        emit(mainState!);
       },
     );
 
