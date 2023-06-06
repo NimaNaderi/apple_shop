@@ -8,8 +8,8 @@ import '../bloc/categoryProduct/category_product_bloc.dart';
 import '../screens/product_list_screen.dart';
 
 class CategoryItemChip extends StatelessWidget {
-  Category category;
-  CategoryItemChip(
+  final Category category;
+  const CategoryItemChip(
     this.category, {
     Key? key,
   }) : super(key: key);

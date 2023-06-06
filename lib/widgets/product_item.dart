@@ -1,5 +1,4 @@
 import 'package:apple_shop/bloc/basket/basket_bloc.dart';
-import 'package:apple_shop/bloc/product/product_bloc.dart';
 import 'package:apple_shop/data/model/product.dart';
 import 'package:apple_shop/di/di.dart';
 import 'package:apple_shop/utils/extensions/int_extensions.dart';
@@ -12,9 +11,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../screens/product_detail_screen.dart';
 
 class ProductItem extends StatelessWidget {
-  Product product;
+  final Product product;
 
-  ProductItem(
+  const ProductItem(
     this.product, {
     Key? key,
   }) : super(key: key);

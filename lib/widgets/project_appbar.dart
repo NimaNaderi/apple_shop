@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 class ProjectAppBar extends StatelessWidget {
-  String appbarTitle;
-   ProjectAppBar({Key? key, required this.appbarTitle}) : super(key: key);
+  final String appbarTitle;
+   const ProjectAppBar({Key? key, required this.appbarTitle}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:skeletons/skeletons.dart';
 
 class CachedImage extends StatelessWidget {
-  String? imageUrl;
-  double radius;
-  BoxFit fit;
+  final String? imageUrl;
+  final double radius;
+  final BoxFit fit;
 
-  CachedImage(
+  const CachedImage(
       {super.key, this.imageUrl, this.radius = 0, this.fit = BoxFit.contain});
 
   @override

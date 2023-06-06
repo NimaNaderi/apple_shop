@@ -28,7 +28,7 @@ class _BaseScreenState extends State<BaseScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack( children: getLayout(),index: selectedBottomNavigationIndex),
+      body: IndexedStack( index: selectedBottomNavigationIndex, children: getLayout()),
       bottomNavigationBar: ClipRRect(
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),

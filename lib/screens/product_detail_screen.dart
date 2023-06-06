@@ -17,8 +17,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:hive_flutter/adapters.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../data/model/product.dart';
 import '../data/model/product_image.dart';
@@ -28,8 +26,8 @@ import '../data/model/variant_type.dart';
 import '../data/model/variant_type_enum.dart';
 
 class ProductDetailScreen extends StatefulWidget {
-  Product product;
-  List<BasketItemVariant> basketItemVariantList = [];
+  final Product product;
+  final List<BasketItemVariant> basketItemVariantList = [];
 
   ProductDetailScreen(this.product, {super.key});
 
@@ -57,7 +55,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 }
 
 class DetailContent extends StatelessWidget {
-  DetailContent({
+  const DetailContent({
     super.key,
     required this.parentWidget,
   });
@@ -166,7 +164,7 @@ class DetailContent extends StatelessWidget {
                   },
                   if (state is ProductDetailResponseState) ...{
                     state.productProperties.fold((l) {
-                      return ProductProperties([]);
+                      return const ProductProperties([]);
                     },
                         (productPropertyList) =>
                             ProductProperties(productPropertyList))
@@ -314,9 +312,9 @@ class DetailContent extends StatelessWidget {
 }
 
 class ProductProperties extends StatefulWidget {
-  List<Property> propertyList;
+ final List<Property> propertyList;
 
-  ProductProperties(
+  const ProductProperties(
     this.propertyList, {
     super.key,
   });
@@ -422,9 +420,9 @@ class _ProductPropertiesState extends State<ProductProperties> {
 }
 
 class ProductDescription extends StatefulWidget {
-  String productDescription;
+  final String productDescription;
 
-  ProductDescription(
+  const ProductDescription(
     this.productDescription, {
     super.key,
   });
@@ -509,10 +507,10 @@ class _ProductDescriptionState extends State<ProductDescription> {
 }
 
 class VariantContainerGenerator extends StatelessWidget {
-  List<ProductVariant> productVariantList;
-  List<BasketItemVariant> basketItemVariantList;
+  final List<ProductVariant> productVariantList;
+  final List<BasketItemVariant> basketItemVariantList;
 
-  VariantContainerGenerator(
+  const VariantContainerGenerator(
     this.productVariantList,
     this.basketItemVariantList, {
     super.key,
@@ -535,10 +533,10 @@ class VariantContainerGenerator extends StatelessWidget {
 }
 
 class VariantChildGenerator extends StatelessWidget {
-  ProductVariant productVariant;
-  List<BasketItemVariant> basketItemVariantList;
+  final ProductVariant productVariant;
+  final List<BasketItemVariant> basketItemVariantList;
 
-  VariantChildGenerator(
+  const VariantChildGenerator(
     this.productVariant,
     this.basketItemVariantList, {
     super.key,
@@ -582,10 +580,10 @@ class VariantChildGenerator extends StatelessWidget {
 }
 
 class AddToBasketButton extends StatelessWidget {
-  Product product;
-  List<BasketItemVariant> basketItemVariantList;
+  final Product product;
+  final List<BasketItemVariant> basketItemVariantList;
 
-  AddToBasketButton(
+  const AddToBasketButton(
     this.product,
     this.basketItemVariantList, {
     Key? key,
@@ -674,9 +672,9 @@ class AddToBasketButton extends StatelessWidget {
 }
 
 class PriceTagButton extends StatelessWidget {
-  Product product;
+  final Product product;
 
-  PriceTagButton(
+  const PriceTagButton(
     this.product, {
     Key? key,
   }) : super(key: key);
@@ -770,8 +768,8 @@ class PriceTagButton extends StatelessWidget {
 }
 
 class GalleryWidget extends StatefulWidget {
-  List<ProductImage> productImageList;
-  String? defaultProductThumbnail;
+  final List<ProductImage> productImageList;
+  final String? defaultProductThumbnail;
   int selectedItem = 0;
 
   GalleryWidget(this.productImageList, this.defaultProductThumbnail, {Key? key})
@@ -898,11 +896,11 @@ class _GalleryWidgetState extends State<GalleryWidget> {
 }
 
 class ColorVariantList extends StatefulWidget {
-  List<Variant> variantList;
-  VariantType variantType;
-  List<BasketItemVariant> basketItemVariantList;
+  final List<Variant> variantList;
+  final VariantType variantType;
+  final List<BasketItemVariant> basketItemVariantList;
 
-  ColorVariantList(
+  const ColorVariantList(
       this.variantList, this.variantType, this.basketItemVariantList,
       {Key? key})
       : super(key: key);
@@ -985,11 +983,11 @@ class _ColorVariantListState extends State<ColorVariantList> {
 }
 
 class StorageVariantList extends StatefulWidget {
-  List<Variant> storageVariants;
-  VariantType variantType;
-  List<BasketItemVariant> basketItemVariantList;
+  final List<Variant> storageVariants;
+  final VariantType variantType;
+  final List<BasketItemVariant> basketItemVariantList;
 
-  StorageVariantList(
+  const StorageVariantList(
       this.storageVariants, this.variantType, this.basketItemVariantList,
       {Key? key})
       : super(key: key);
@@ -1035,11 +1033,6 @@ class _StorageVariantListState extends State<StorageVariantList> {
                   widget.basketItemVariantList.add(basketItemStorageVariant!);
                 } else {
                   widget.basketItemVariantList.add(basketItemStorageVariant!);
-                }
-
-                for (var item in widget.basketItemVariantList) {
-                  print(
-                      'Type Is ${item.variantType.name} , Value Is ${item.variant.name}');
                 }
               });
             },

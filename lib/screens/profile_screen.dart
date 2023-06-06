@@ -1,12 +1,8 @@
 import 'package:apple_shop/config/theme/app_colors.dart';
-import 'package:apple_shop/widgets/category_icon_item_chip.dart';
 import 'package:apple_shop/widgets/profile_item_chip.dart';
 import 'package:apple_shop/widgets/project_appbar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 
 import '../constants/colors.dart';
 

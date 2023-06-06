@@ -1,4 +1,3 @@
-import 'package:apple_shop/constants/colors.dart';
 import 'package:awesome_ripple_animation/awesome_ripple_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,10 +5,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProfileItemChip extends StatelessWidget {
-  String title;
-  int index;
+  final String title;
+  final int index;
 
-  ProfileItemChip({Key? key, required this.title,required this.index}) : super(key: key);
+  const ProfileItemChip({Key? key, required this.title,required this.index}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

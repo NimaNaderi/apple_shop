@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class LoadingItems extends StatelessWidget {
-  String title;
-  LoadingItems({Key? key, required this.title}) : super(key: key);
+  final String title;
+  const LoadingItems({Key? key, required this.title}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

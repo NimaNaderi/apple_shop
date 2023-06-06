@@ -15,10 +15,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:zarinpal/zarinpal.dart';
 
 import '../bloc/home/home_bloc.dart';
 import '../bloc/home/home_state.dart';
-import '../data/model/product.dart';
 import '../di/di.dart';
 
 class CartScreen extends StatefulWidget {
@@ -29,6 +29,19 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
+  final PaymentRequest _paymentRequest = PaymentRequest();
+
+  @override
+  void initState() {
+
+    super.initState();
+
+    _paymentRequest.setIsSandBox(true);
+    _paymentRequest.setAmount(1000);
+    _paymentRequest.setDescription('Fake Apple Shop Checkout');
+    _paymentRequest.setCallbackURL('nimanaderi://shop');
+  }
+
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
@@ -68,7 +81,7 @@ class _CartScreenState extends State<CartScreen> {
                     if (state.basketSummary[0] != 0) ...{
                       SliverToBoxAdapter(
                         child:
-                            _OrderSummary(basketSummary: state.basketSummary),
+                            OrderSummary(basketSummary: state.basketSummary),
                       )
                     }
                   ],
@@ -84,7 +97,9 @@ class _CartScreenState extends State<CartScreen> {
                     height: 54.h,
                     width: MediaQuery.of(context).size.width,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+
+                      },
                       child: Text(
                         'ادامه فرایند خرید',
                         textDirection: TextDirection.rtl,
@@ -102,10 +117,10 @@ class _CartScreenState extends State<CartScreen> {
   }
 }
 
-class _OrderSummary extends StatelessWidget {
-  List<int> basketSummary;
+class OrderSummary extends StatelessWidget {
+ final List<int> basketSummary;
 
-  _OrderSummary({super.key, required this.basketSummary});
+  const OrderSummary({super.key, required this.basketSummary});
 
   @override
   Widget build(BuildContext context) {
@@ -182,9 +197,9 @@ class _OrderSummary extends StatelessWidget {
 }
 
 class CartItem extends StatelessWidget {
-  BasketItem basketItem;
+  final BasketItem basketItem;
 
-  CartItem(
+  const CartItem(
     this.basketItem, {
     Key? key,
   }) : super(key: key);
@@ -426,10 +441,10 @@ class CartItem extends StatelessWidget {
 }
 
 class StorageChip extends StatelessWidget {
-  String? storageValue;
-  String title;
+  final String? storageValue;
+  final String title;
 
-  StorageChip(
+  const StorageChip(
     this.title, {
     this.storageValue,
     Key? key,
@@ -471,10 +486,10 @@ class StorageChip extends StatelessWidget {
 }
 
 class ColorChip extends StatelessWidget {
-  String colorHexCode;
-  String colorName;
+  final String colorHexCode;
+  final String colorName;
 
-  ColorChip(this.colorHexCode, this.colorName, {super.key});
+  const ColorChip(this.colorHexCode, this.colorName, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -496,9 +511,9 @@ class ColorChip extends StatelessWidget {
 }
 
 class QuantityChip extends StatelessWidget {
-  int quantity;
+  final int quantity;
 
-  QuantityChip({Key? key, required this.quantity}) : super(key: key);
+  const QuantityChip({Key? key, required this.quantity}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

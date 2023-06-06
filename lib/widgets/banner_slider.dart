@@ -1,5 +1,4 @@
 import 'package:apple_shop/bloc/basket/basket_bloc.dart';
-import 'package:apple_shop/bloc/product/product_bloc.dart';
 import 'package:apple_shop/constants/colors.dart';
 import 'package:apple_shop/data/model/banner.dart';
 import 'package:apple_shop/data/model/product.dart';
@@ -13,97 +12,71 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class BannerSlider extends StatefulWidget {
-  List<BannerCampain> bannerList;
-  List<Product> productList;
+  final List<BannerCampain> bannerList;
+  final List<Product> productList;
 
-  BannerSlider(this.bannerList, this.productList, {super.key});
+  const BannerSlider(this.bannerList, this.productList, {super.key});
 
   @override
   State<BannerSlider> createState() => _BannerSliderState();
 }
 
 class _BannerSliderState extends State<BannerSlider> {
-  var _activeIndex = 0;
+  int _activeIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
-    // final pageController = PageController(viewportFraction: .9);
-
     return Stack(
       alignment: Alignment.bottomCenter,
       children: [
         SizedBox(
-          // height: deviceSize.height * 0.23.h,
-          // height: 177.h,
-          // child: PageView.builder(
-          //   controller: pageController,
-          //   itemCount: bannerList.length,
-          //   itemBuilder: (context, index) => GestureDetector(
-          //     onTap: () {
-          //       for (var product in productList) {
-          //         if (product.id == bannerList[index].productId) {
-          //           Navigator.of(context).push(MaterialPageRoute(
-          //             builder: (context) => BlocProvider<BasketBloc>.value(
-          //                 value: locator.get<BasketBloc>(),
-          //                 child: ProductDetailScreen(product)),
-          //           ));
-          //         }
-          //       }
-          //     },
-          //     child: Container(
-          //       margin: EdgeInsets.symmetric(horizontal: 6.w),
-          //       child: CachedImage(
-          //         fit: BoxFit.cover,
-          //         imageUrl: bannerList[index].thumbnail,
-          //         radius: 16.r,
-          //       ),
-          //     ),
-          //   ),
-          // ),
           child: CarouselSlider.builder(
-              itemCount: widget.bannerList.length,
-              itemBuilder: (context, index, realIndex) {
-                return GestureDetector(
-                    child: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 6.w),
-                      child: CachedImage(
-                        fit: BoxFit.cover,
-                        imageUrl: widget.bannerList[index].thumbnail,
-                        radius: 16.r,
-                      ),
-                    ),
-                    onTap: () {
-                      for (var product in widget.productList) {
-                        if (product.id == widget.bannerList[index].productId) {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) =>
-                                  BlocProvider<BasketBloc>.value(
-                                    value: locator.get<BasketBloc>(),
-                                    child: ProductDetailScreen(product),
-                                  )));
-                        }
-                      }
-                    });
-              },
-              options: CarouselOptions(
-                height: deviceSize.height * 0.24.h,
-                viewportFraction: .9,
-                // enlargeCenterPage: true,
-                // enlargeFactor: .2,
-                initialPage: 0,
-                enableInfiniteScroll: true,
-                reverse: false,
-                autoPlay: true,
-                autoPlayInterval: const Duration(seconds: 3),
-                autoPlayAnimationDuration: const Duration(milliseconds: 800),
-                autoPlayCurve: Curves.fastOutSlowIn,
-                scrollDirection: Axis.horizontal,
-                onPageChanged: (index, reason) {
-                  setState(() {
-                    _activeIndex = index;
-                  });
+            itemCount: widget.bannerList.length,
+            itemBuilder: (context, index, realIndex) {
+              return GestureDetector(
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 6.w),
+                  child: CachedImage(
+                    fit: BoxFit.cover,
+                    imageUrl: widget.bannerList[index].thumbnail,
+                    radius: 16.r,
+                  ),
+                ),
+                onTap: () {
+                  for (var product in widget.productList) {
+                    if (product.id == widget.bannerList[index].productId) {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => BlocProvider<BasketBloc>.value(
+                            value: locator.get<BasketBloc>(),
+                            child: ProductDetailScreen(product),
+                          ),
+                        ),
+                      );
+                    }
+                  }
                 },
-              )),
+              );
+            },
+            options: CarouselOptions(
+              height: deviceSize.height * 0.24.h,
+              viewportFraction: .9,
+              initialPage: 0,
+              enableInfiniteScroll: true,
+              reverse: false,
+              autoPlay: true,
+              autoPlayInterval: const Duration(seconds: 3),
+              autoPlayAnimationDuration: const Duration(milliseconds: 800),
+              autoPlayCurve: Curves.fastOutSlowIn,
+              scrollDirection: Axis.horizontal,
+              onPageChanged: (index, reason) {
+                setState(() {
+                  _activeIndex = index;
+                });
+              },
+            ),
+          ),
         ),
         Positioned(
           bottom: 10.h,

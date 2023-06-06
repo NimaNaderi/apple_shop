@@ -9,9 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
-
-import '../constants/colors.dart';
 import '../data/model/product.dart';
 import '../widgets/banner_slider.dart';
 import '../widgets/category_icon_item_chip.dart';
@@ -30,7 +27,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = Theme.of(context);
     return Scaffold(
       body: SafeArea(
         child: BlocBuilder<HomeBloc, HomeState>(
@@ -45,54 +41,76 @@ class _HomeScreenState extends State<HomeScreen> {
                 //           saveToDevice: true,
                 //           pixelRatio: 10,
                 //           openFilePreview: true,
-                //           fileName: 'TEETTEEE');
+                //           fileName: 'Test');
                 //     },
                 //   ),
                 // ),
+                const SearchBox(),
                 if (state is HomeLoadingState) ...{
-                  SliverFillRemaining(
+                  const SliverFillRemaining(
                     child: LoadingItems(title: 'درحال دریافت محصولات'),
                   ),
                 } else ...{
-                  const _getSearchBox(),
+                  if (state is HomeSearchRequestSuccessState) ...{
+                    SliverPadding(
+                      padding: EdgeInsets.symmetric(horizontal: 32.w),
+                      sliver: SliverGrid(
+                        delegate: SliverChildBuilderDelegate(
+                          childCount: state.productList.length,
+                          (context, index) => Directionality(
+                            textDirection: TextDirection.rtl,
+                            child: ProductItem(state.productList[index]),
+                          ),
+                        ),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 30,
+                          crossAxisSpacing: 20,
+                          childAspectRatio: 1.9 / 2.6,
+                        ),
+                      ),
+                    )
+                  },
                   if (state is HomeRequestSuccessState) ...[
                     state.bannerList.fold((exceptionMessage) {
                       return SliverToBoxAdapter(
                         child: Text(exceptionMessage),
                       );
                     }, (bannerList) {
-                      return _getBanners(state.productList,bannerList);
+                      return BannersSection(state.productList, bannerList);
                     })
                   ],
-                  const _getCategoryListTitle(),
+
                   if (state is HomeRequestSuccessState) ...[
+                    const CategoryListTitle(),
                     state.categoryList.fold((l) {
                       return SliverToBoxAdapter(
                         child: Text(l),
                       );
                     }, (categoryList) {
-                      return _getCategoryList(categoryList);
+                      return CategoryList(categoryList);
                     })
                   ],
 
-                  const _getBestSellerTitle(),
-                  if (state is HomeRequestSuccessState) ...{
+                  if (state is HomeRequestSuccessState) ...[
+                    const BestSellerTitle(),
                     state.bestSellerProductList.fold((exceptionMessage) {
                       return SliverToBoxAdapter(
                         child: Text(exceptionMessage),
                       );
                     }, (productList) {
-                      return _getBestSellerProducts(productList);
+                      return BestSellerProducts(productList);
                     })
-                  },
-                  const _getMostViewedTitle(),
+                  ],
                   if (state is HomeRequestSuccessState) ...[
+                    const MostViewedTitle(),
                     state.hottestProductList.fold(
                       (exceptionMessage) => SliverToBoxAdapter(
                         child: Text(exceptionMessage),
                       ),
                       (mostViewedProductList) =>
-                          _getMostViewedProducts(mostViewedProductList),
+                          MostViewedProducts(mostViewedProductList),
                     )
                   ],
                   // SliverToBoxAdapter(
@@ -114,10 +132,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class _getMostViewedProducts extends StatelessWidget {
-  List<Product> productList;
+class MostViewedProducts extends StatelessWidget {
+  final List<Product> productList;
 
-  _getMostViewedProducts(
+  const MostViewedProducts(
     this.productList, {
     Key? key,
   }) : super(key: key);
@@ -142,8 +160,8 @@ class _getMostViewedProducts extends StatelessWidget {
   }
 }
 
-class _getMostViewedTitle extends StatelessWidget {
-  const _getMostViewedTitle({
+class MostViewedTitle extends StatelessWidget {
+  const MostViewedTitle({
     Key? key,
   }) : super(key: key);
 
@@ -165,7 +183,7 @@ class _getMostViewedTitle extends StatelessWidget {
               style: theme.textTheme.titleSmall,
             ),
             const Spacer(),
-             Text(
+            Text(
               'مشاهده همه',
               style: theme.textTheme.titleMedium,
             ),
@@ -180,10 +198,10 @@ class _getMostViewedTitle extends StatelessWidget {
   }
 }
 
-class _getBestSellerProducts extends StatelessWidget {
-  List<Product> productList;
+class BestSellerProducts extends StatelessWidget {
+  final List<Product> productList;
 
-  _getBestSellerProducts(
+  const BestSellerProducts(
     this.productList, {
     Key? key,
   }) : super(key: key);
@@ -208,8 +226,8 @@ class _getBestSellerProducts extends StatelessWidget {
   }
 }
 
-class _getBestSellerTitle extends StatelessWidget {
-  const _getBestSellerTitle({
+class BestSellerTitle extends StatelessWidget {
+  const BestSellerTitle({
     Key? key,
   }) : super(key: key);
 
@@ -227,7 +245,7 @@ class _getBestSellerTitle extends StatelessWidget {
               style: theme.textTheme.titleSmall,
             ),
             const Spacer(),
-             Text(
+            Text(
               'مشاهده همه',
               style: theme.textTheme.titleMedium,
             ),
@@ -242,10 +260,10 @@ class _getBestSellerTitle extends StatelessWidget {
   }
 }
 
-class _getCategoryList extends StatelessWidget {
-  List<Category> categoryList;
+class CategoryList extends StatelessWidget {
+  final List<Category> categoryList;
 
-  _getCategoryList(
+  const CategoryList(
     this.categoryList, {
     Key? key,
   }) : super(key: key);
@@ -261,9 +279,8 @@ class _getCategoryList extends StatelessWidget {
   }
 }
 
-class _getCategoryListTitle extends StatelessWidget {
-
-  const _getCategoryListTitle({
+class CategoryListTitle extends StatelessWidget {
+  const CategoryListTitle({
     Key? key,
   }) : super(key: key);
 
@@ -282,7 +299,8 @@ class _getCategoryListTitle extends StatelessWidget {
           children: [
             Text(
               'دسته بندی',
-              style: theme.textTheme.titleSmall!.copyWith(color: AppColors.grey),
+              style:
+                  theme.textTheme.titleSmall!.copyWith(color: AppColors.grey),
             )
           ],
         ),
@@ -291,11 +309,12 @@ class _getCategoryListTitle extends StatelessWidget {
   }
 }
 
-class _getBanners extends StatelessWidget {
-  List<BannerCampain> bannerList;
-  List<Product> productList;
+class BannersSection extends StatelessWidget {
+  final List<BannerCampain> bannerList;
+  final List<Product> productList;
 
-  _getBanners(this.productList,
+  const BannersSection(
+    this.productList,
     this.bannerList, {
     Key? key,
   }) : super(key: key);
@@ -303,15 +322,36 @@ class _getBanners extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
-      child: BannerSlider(bannerList,productList),
+      child: BannerSlider(bannerList, productList),
     );
   }
 }
 
-class _getSearchBox extends StatelessWidget {
-  const _getSearchBox({
+class SearchBox extends StatefulWidget {
+  const SearchBox({
     Key? key,
   }) : super(key: key);
+
+  @override
+  State<SearchBox> createState() => _SearchBoxState();
+}
+
+class _SearchBoxState extends State<SearchBox> {
+  FocusNode textFieldFocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    textFieldFocusNode.addListener(focusNodeListener);
+  }
+
+  focusNodeListener() => setState(() {});
+
+  @override
+  void dispose() {
+    textFieldFocusNode.removeListener(focusNodeListener);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -340,10 +380,22 @@ class _getSearchBox extends StatelessWidget {
                 width: 10.w,
               ),
               Expanded(
-                child: Text(
-                  'جستجوی محصولات',
-                  textAlign: TextAlign.start,
-                  style: theme.textTheme.bodyLarge,
+                child: TextField(
+                  onChanged: (value) {
+                    if (value.isNotEmpty) {
+                      context.read<HomeBloc>().add(HomeProductSearched(value));
+                    } else {
+                      context.read<HomeBloc>().add(HomeGetInitializeData());
+                    }
+                  },
+                  textDirection: TextDirection.rtl,
+                  textAlign: TextAlign.right,
+                  decoration: InputDecoration(
+                    hintText: 'جستجوی محصولات',
+                    hintStyle: theme.textTheme.bodyLarge,
+                    enabledBorder: InputBorder.none,
+                    border: InputBorder.none,
+                  ),
                 ),
               ),
               SvgPicture.asset('assets/icons/apple.svg',

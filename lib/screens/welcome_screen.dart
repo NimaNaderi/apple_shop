@@ -1,6 +1,5 @@
 import 'package:apple_shop/screens/base_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -140,7 +139,7 @@ class _BottomText extends StatelessWidget {
                 Text(
                   'From',
                   style: TextStyle(
-                      color: Color(0xff86A5F8),
+                      color: const Color(0xff86A5F8),
                       fontSize: 12.sp,
                       fontFamily: 'GB'),
                 ),

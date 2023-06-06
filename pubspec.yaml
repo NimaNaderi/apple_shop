@@ -56,6 +56,9 @@ dependencies:
   carousel_slider: ^4.2.1
   awesome_ripple_animation: ^1.0.1
   url_launcher: ^6.1.11
+  zarinpal: ^1.0.5
+  uni_links: ^0.5.1
+
 
 dev_dependencies:
   flutter_test:

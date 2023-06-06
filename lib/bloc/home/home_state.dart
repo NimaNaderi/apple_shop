@@ -9,6 +9,13 @@ class HomeInitState extends HomeState {}
 
 class HomeLoadingState extends HomeState {}
 
+class HomeSearchLoading extends HomeState {}
+
+class HomeSearchRequestSuccessState extends HomeState {
+  List<Product> productList;
+  HomeSearchRequestSuccessState(this.productList);
+}
+
 class HomeRequestSuccessState extends HomeState {
   Either<String, List<BannerCampain>> bannerList;
   Either<String, List<Category>> categoryList;
@@ -19,3 +26,4 @@ class HomeRequestSuccessState extends HomeState {
   HomeRequestSuccessState(this.bannerList, this.categoryList, this.productList,
       this.hottestProductList, this.bestSellerProductList);
 }
+

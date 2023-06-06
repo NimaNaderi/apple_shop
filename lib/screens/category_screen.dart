@@ -3,16 +3,12 @@ import 'package:apple_shop/bloc/category/category_event.dart';
 import 'package:apple_shop/bloc/category/category_state.dart';
 import 'package:apple_shop/bloc/categoryProduct/category_product_bloc.dart';
 import 'package:apple_shop/data/model/category.dart';
-import 'package:apple_shop/data/repository/category_repository.dart';
 import 'package:apple_shop/screens/product_list_screen.dart';
 import 'package:apple_shop/widgets/cached_image.dart';
 import 'package:apple_shop/widgets/project_appbar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../constants/colors.dart';
@@ -61,7 +57,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                       (l) => SliverToBoxAdapter(
                             child: Text(l),
                           ),
-                      (r) => _categoryList(categoryList: r))
+                      (r) => CategoryList(categoryList: r))
                 ],
               ],
             ),
@@ -92,10 +88,10 @@ class _CategoryScreenState extends State<CategoryScreen> {
   }
 }
 
-class _categoryList extends StatelessWidget {
-  List<Category>? categoryList;
+class CategoryList extends StatelessWidget {
+  final List<Category>? categoryList;
 
-  _categoryList({Key? key, required this.categoryList}) : super(key: key);
+  const CategoryList({Key? key, required this.categoryList}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
