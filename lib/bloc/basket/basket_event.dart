@@ -16,7 +16,7 @@ class BasketItemAdded extends BasketEvent {
   BasketItemAdded({required this.cartItem});
 }
 
-class BasketPaymentInitEvent extends BasketEvent {
+class BasketPaymentResponseEvent extends BasketEvent {
 
 }
 

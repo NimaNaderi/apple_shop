@@ -12,6 +12,8 @@ abstract class IBasketDataSource {
   Future<List<int>> getFinalBasketPrice();
 
   Future<void> deleteProduct(BasketItem basketItem);
+
+  Future<void> clearBasket();
 }
 
 class BasketLocalDataSource extends IBasketDataSource {
@@ -61,5 +63,10 @@ class BasketLocalDataSource extends IBasketDataSource {
   @override
   Future<void> deleteProduct(BasketItem basketItem) async {
     basketItem.delete();
+  }
+
+  @override
+  Future<void> clearBasket() async{
+    box.clear();
   }
 }

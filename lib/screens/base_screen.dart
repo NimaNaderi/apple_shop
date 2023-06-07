@@ -36,10 +36,15 @@ class _BaseScreenState extends State<BaseScreen> {
             value: locator.get<BasketBloc>(),
             child: BlocConsumer<BasketBloc, BasketState>(
               listener: (context, state) {
-                if (state is BasketDataFetchedState) {
-                  state.basketItemList.fold((l) => '', (r) {
-                    basketItemListLength = r.length;
-                  });
+                if (state is BasketDataFetchedState || state is TransactionResponseState) {
+                  if (state is BasketDataFetchedState){
+                    state.basketItemList.fold((l) => '', (r) {
+                      basketItemListLength = r.length;
+                    });
+                  } else if (state is TransactionResponseState && state.isSuccess) {
+                    basketItemListLength = 0;
+                  }
+
                 }
               },
               builder: (context, state) {

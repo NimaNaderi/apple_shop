@@ -13,28 +13,51 @@ import '../../data/repository/basket_repository.dart';
 
 class BasketBloc extends Bloc<BasketEvent, BasketState> {
   final IBasketRepository _basketRepository = locator.get();
-  final PaymentRequest _paymentRequest = PaymentRequest();
+  int totalPrice = 0;
+  final PaymentRequest _paymentRequest = PaymentRequest()
+    ..setIsSandBox(true)
+    ..setDescription('تراکنش تستی از اپل شاپ')
+    ..setMerchantID('d645fba8-1b29-11ea-be59-000c295eb8fc')
+    ..setCallbackURL('nimanaderi://shop');
+
   Either<String, List<BasketItem>>? basketList;
   List<int>? basketValuesSummary;
 
   BasketBloc() : super(BasketInitState()) {
+    linkStream.listen((deepLink) {
+      if (deepLink!.toLowerCase().contains('authority')) {
+        String? authority = deepLink.extractValueFromQuery('Authority');
+        String? status = deepLink.extractValueFromQuery('Status');
+        ZarinPal().verificationPayment(status!, authority!, _paymentRequest,
+            (isPaymentSuccess, refID, paymentRequest) async{
+          if (isPaymentSuccess) {
+            await _basketRepository.clearBasket();
+            add(BasketPaymentResponseEvent());
+          } else {
+          }
+        });
+      }
+    });
+
     on<BasketFetchFromHiveEvent>(
       (event, emit) async {
         var basketItemList = await _basketRepository.getAllBasketItems();
         var basketSummary = await _basketRepository.getFinalBasketPrice();
 
+        totalPrice = basketSummary[2];
+        _paymentRequest.amount = totalPrice;
         basketList = basketItemList;
         basketValuesSummary = basketSummary;
-        emit(BasketDataFetchedState(basketItemList, basketSummary,false));
+        emit(BasketDataFetchedState(basketItemList, basketSummary, false));
       },
     );
 
     on<BasketItemDeleted>(
       (event, emit) async {
-        var basketItemList =
+         basketList =
             await _basketRepository.deleteBasketItem(event.basketItem);
-        var basketSummary = await _basketRepository.getFinalBasketPrice();
-        emit(BasketDataFetchedState(basketItemList, basketSummary,false));
+         basketValuesSummary = await _basketRepository.getFinalBasketPrice();
+         add(BasketFetchFromHiveEvent());
       },
     );
 
@@ -43,35 +66,17 @@ class BasketBloc extends Bloc<BasketEvent, BasketState> {
       add(BasketFetchFromHiveEvent());
     });
 
-    on<BasketPaymentInitEvent>(
+    on<BasketPaymentResponseEvent>(
       (event, emit) {
-        _paymentRequest.setIsSandBox(true);
-        _paymentRequest.setAmount(1000);
-        _paymentRequest.setDescription('تراکنش تستی از اپل شاپ');
-        _paymentRequest.setMerchantID('d645fba8-1b29-11ea-be59-000c295eb8fc');
-        _paymentRequest.setCallbackURL('nimanaderi://shop');
-
-        linkStream.listen((deepLink) {
-          if (deepLink!.toLowerCase().contains('authority')) {
-            String? authority = deepLink.extractValueFromQuery('Authority');
-            String? status = deepLink.extractValueFromQuery('Status');
-            ZarinPal().verificationPayment(status!, authority!, _paymentRequest,
-                (isPaymentSuccess, refID, paymentRequest) {
-              if (isPaymentSuccess) {
-
-              } else {
-              }
-            });
-          }
-        });
+        emit(TransactionResponseState(true));
       },
     );
 
     on<BasketPaymentRequestEvent>(
-      (event, emit) async{
-        emit(BasketDataFetchedState(basketList!,basketValuesSummary!,true));
+      (event, emit) async {
+        emit(BasketDataFetchedState(basketList!, basketValuesSummary!, true));
 
-        await Future.delayed(const Duration(seconds: 4));
+        await Future.delayed(const Duration(seconds: 3));
 
         ZarinPal().startPayment(_paymentRequest,
             (status, paymentGatewayUri) async {
@@ -80,10 +85,9 @@ class BasketBloc extends Bloc<BasketEvent, BasketState> {
 
             await launchUrl(Uri.parse(paymentGatewayUri!),
                 mode: LaunchMode.externalApplication);
-
           }
         });
-        emit(BasketDataFetchedState(basketList!,basketValuesSummary!,false));
+        emit(BasketDataFetchedState(basketList!, basketValuesSummary!, false));
       },
     );
   }

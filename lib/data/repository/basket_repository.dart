@@ -13,6 +13,7 @@ abstract class IBasketRepository {
   Future<List<int>> getFinalBasketPrice();
 
   Future<Either<String, List<BasketItem>>> deleteBasketItem(BasketItem basketItem);
+  Future<Either<String, List<BasketItem>>> clearBasket();
 }
 
 class BasketRepository extends IBasketRepository {
@@ -53,5 +54,16 @@ class BasketRepository extends IBasketRepository {
       return left('خطا در نمایش محصولات !');
     }
 
+  }
+
+  @override
+  Future<Either<String, List<BasketItem>>> clearBasket() async{
+    try {
+      await _dataSource.clearBasket();
+      var basketItemList = await _dataSource.getAllBasketItems();
+      return right(basketItemList);
+    } catch (e) {
+      return left('خطا در نمایش محصولات !');
+    }
   }
 }

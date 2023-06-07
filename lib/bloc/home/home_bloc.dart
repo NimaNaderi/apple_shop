@@ -40,7 +40,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
         if (searchedWord != null && searchedWord!.isNotEmpty) {
           emit(HomeSearchRequestSuccessState(allProducts!
-              .where((element) => element.name.contains(searchedWord!))
+              .where((element) => element.name.toLowerCase().contains(searchedWord!.toLowerCase()))
               .toList()));
           return;
         }

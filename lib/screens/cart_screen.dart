@@ -30,111 +30,107 @@ class CartScreen extends StatelessWidget {
       backgroundColor: CustomColors.backgroundScreenColor,
       body: SafeArea(
         child: BlocBuilder<BasketBloc, BasketState>(
-          builder: (context, state) =>
-              Stack(
-                alignment: AlignmentDirectional.bottomCenter,
-                children: [
-                  CustomScrollView(
-                    slivers: [
-                      SliverToBoxAdapter(
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                            left: 44.w,
-                            right: 44.w,
-                            bottom: 32.h,
-                            top: 20.h,
-                          ),
-                          child: const ProjectAppBar(
-                            appbarTitle: 'سبد خرید',
-                          ),
-                        ),
+          builder: (context, state) => Stack(
+            alignment: AlignmentDirectional.bottomCenter,
+            children: [
+              CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        left: 44.w,
+                        right: 44.w,
+                        bottom: 32.h,
+                        top: 20.h,
                       ),
-                      if (state is BasketDataFetchedState) ...[
-                        state.basketItemList.fold(
-                              (l) =>
-                              SliverToBoxAdapter(
-                                child: Text(l),
-                              ),
-                              (basketItemList) =>
-                              SliverList(
-                                delegate: SliverChildBuilderDelegate(
-                                        (context, index) =>
-                                        CartItem(basketItemList[index]),
-                                    childCount: basketItemList.length),
-                              ),
-                        ),
-                        if (state.basketSummary[0] != 0) ...{
-                          SliverToBoxAdapter(
-                            child: OrderSummary(basketSummary: state
-                                .basketSummary),
-                          )
-                        },
-                        if (state.basketSummary[0] == 0) ...{
-                          const SliverFillRemaining(
-                            child: Text('سبد خرید شما خالی است'),
-                          ),
-                        },
-                      ],
-
-                      if (state is TransactionResponseState) ... [
-                        if (state.isSuccess) ... {
-                          const SliverFillRemaining(child: Text('ممنون از خرید شما'))
-                        },
-                      ],
-                      SliverPadding(padding: EdgeInsets.only(bottom: 100.h))
-                    ],
+                      child: const ProjectAppBar(
+                        appbarTitle: 'سبد خرید',
+                      ),
+                    ),
                   ),
-                  if ((state is BasketDataFetchedState &&
-                      state.basketSummary[0] != 0)) ...[
-                    Padding(
-                      padding:
-                      EdgeInsets.only(right: 44.w, left: 44.w, bottom: 20.h),
-                      child: SizedBox(
-                        height: 54.h,
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width,
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            context.read<BasketBloc>().add(BasketPaymentInitEvent());
-                            context.read<BasketBloc>().add(BasketPaymentRequestEvent());
-                          },
-                          child: !state.isPaymentLoading
-                              ? Text(
-                            'ادامه فرایند خرید',
-                            textDirection: TextDirection.rtl,
-                            style: theme.textTheme.labelLarge,
-                          )
-                              : Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  'درحال ورود به درگاه پرداخت',
-                                  textDirection: TextDirection.rtl,
-                                  textAlign: TextAlign.center,
-                                  style: theme.textTheme.labelLarge,
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 20,
-                                width: 20,
-                                child: Center(
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 3,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                  if (state is BasketDataFetchedState) ...[
+                    state.basketItemList.fold(
+                      (l) => SliverToBoxAdapter(
+                        child: Text(l),
                       ),
-                    )
-                  ]
+                      (basketItemList) => SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                            (context, index) => CartItem(basketItemList[index]),
+                            childCount: basketItemList.length),
+                      ),
+                    ),
+                    if (state.basketSummary[0] != 0) ...{
+                      SliverToBoxAdapter(
+                        child: OrderSummary(basketSummary: state.basketSummary),
+                      )
+                    },
+                    if (state.basketSummary[0] == 0) ...{
+                      const SliverFillRemaining(
+                        child: Text('سبد خرید شما خالی است'),
+                      ),
+                    },
+                  ],
+                  if (state is TransactionResponseState) ...[
+                    if (state.isSuccess) ...{
+                      const SliverFillRemaining(
+                        hasScrollBody: false,
+                        child: Text('ممنون از خرید شما'),
+                      )
+                    },
+                  ],
+                  SliverPadding(padding: EdgeInsets.only(bottom: 100.h))
                 ],
               ),
+              if ((state is BasketDataFetchedState &&
+                  state.basketSummary[0] != 0)) ...[
+                Padding(
+                  padding:
+                      EdgeInsets.only(right: 44.w, left: 44.w, bottom: 20.h),
+                  child: SizedBox(
+                    height: 54.h,
+                    width: MediaQuery.of(context).size.width,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        // context.read<BasketBloc>().add(BasketPaymentInitEvent());
+                        context
+                            .read<BasketBloc>()
+                            .add(BasketPaymentRequestEvent());
+                      },
+                      child: !state.isPaymentLoading
+                          ? Text(
+                              'ادامه فرایند خرید',
+                              textDirection: TextDirection.rtl,
+                              style: theme.textTheme.labelLarge,
+                            )
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    'درحال ورود به درگاه پرداخت',
+                                    textDirection: TextDirection.rtl,
+                                    textAlign: TextAlign.center,
+                                    style: theme.textTheme.labelLarge,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: Center(
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 3,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                    ),
+                  ),
+                )
+              ]
+            ],
+          ),
         ),
       ),
     );
@@ -194,9 +190,7 @@ class OrderSummary extends StatelessWidget {
                         fontFamily: 'SM', color: theme.colorScheme.error)),
                 const Spacer(),
                 Text(
-                    '(%${(((basketSummary[0] - basketSummary[2]) /
-                        basketSummary[0]) * 100).round()})  ${basketSummary[1]
-                        .separateByComma()} تومان ',
+                    '(%${(((basketSummary[0] - basketSummary[2]) / basketSummary[0]) * 100).round()})  ${basketSummary[1].separateByComma()} تومان ',
                     style: theme.textTheme.bodyLarge!
                         .copyWith(color: theme.colorScheme.error)),
               ],
@@ -225,7 +219,8 @@ class OrderSummary extends StatelessWidget {
 class CartItem extends StatelessWidget {
   final BasketItem basketItem;
 
-  const CartItem(this.basketItem, {
+  const CartItem(
+    this.basketItem, {
     Key? key,
   }) : super(key: key);
 
@@ -240,8 +235,7 @@ class CartItem extends StatelessWidget {
               for (var product in state.productList) {
                 if (basketItem.id == product.id) {
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) =>
-                    BlocProvider<BasketBloc>.value(
+                    builder: (context) => BlocProvider<BasketBloc>.value(
                         value: locator.get<BasketBloc>(),
                         child: ProductDetailScreen(product)),
                   ));
@@ -252,10 +246,7 @@ class CartItem extends StatelessWidget {
           child: Container(
             height: 256.h,
             margin: EdgeInsets.only(left: 44.w, right: 44.w, bottom: 20.h),
-            width: MediaQuery
-                .of(context)
-                .size
-                .width,
+            width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
               boxShadow: const [
                 BoxShadow(
@@ -357,7 +348,7 @@ class CartItem extends StatelessWidget {
                                           VariantTypeEnum.STORAGTE) ...{
                                         StorageChip('گیگابایت',
                                             storageValue:
-                                            basketItemVariant.variant.value)
+                                                basketItemVariant.variant.value)
                                       },
                                     },
                                     GestureDetector(
@@ -373,7 +364,7 @@ class CartItem extends StatelessWidget {
                                             width: 1,
                                           ),
                                           borderRadius:
-                                          BorderRadius.circular(10.r),
+                                              BorderRadius.circular(10.r),
                                         ),
                                         child: Padding(
                                           padding: EdgeInsets.symmetric(
@@ -393,14 +384,14 @@ class CartItem extends StatelessWidget {
                                               ),
                                               Text('حذف',
                                                   textDirection:
-                                                  TextDirection.rtl,
+                                                      TextDirection.rtl,
                                                   style: theme
                                                       .textTheme.bodySmall!
                                                       .copyWith(
-                                                      color: theme
-                                                          .colorScheme
-                                                          .error,
-                                                      fontFamily: 'SM')),
+                                                          color: theme
+                                                              .colorScheme
+                                                              .error,
+                                                          fontFamily: 'SM')),
                                             ],
                                           ),
                                         ),
@@ -473,7 +464,8 @@ class StorageChip extends StatelessWidget {
   final String? storageValue;
   final String title;
 
-  const StorageChip(this.title, {
+  const StorageChip(
+    this.title, {
     this.storageValue,
     Key? key,
   }) : super(key: key);
@@ -578,4 +570,3 @@ class QuantityChip extends StatelessWidget {
     );
   }
 }
-
