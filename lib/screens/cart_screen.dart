@@ -15,32 +15,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:zarinpal/zarinpal.dart';
 
 import '../bloc/home/home_bloc.dart';
 import '../bloc/home/home_state.dart';
 import '../di/di.dart';
 
-class CartScreen extends StatefulWidget {
+class CartScreen extends StatelessWidget {
   const CartScreen({super.key});
-
-  @override
-  State<CartScreen> createState() => _CartScreenState();
-}
-
-class _CartScreenState extends State<CartScreen> {
-  final PaymentRequest _paymentRequest = PaymentRequest();
-
-  @override
-  void initState() {
-
-    super.initState();
-
-    _paymentRequest.setIsSandBox(true);
-    _paymentRequest.setAmount(1000);
-    _paymentRequest.setDescription('Fake Apple Shop Checkout');
-    _paymentRequest.setCallbackURL('nimanaderi://shop');
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,68 +30,111 @@ class _CartScreenState extends State<CartScreen> {
       backgroundColor: CustomColors.backgroundScreenColor,
       body: SafeArea(
         child: BlocBuilder<BasketBloc, BasketState>(
-          builder: (context, state) => Stack(
-            alignment: AlignmentDirectional.bottomCenter,
-            children: [
-              CustomScrollView(
-                slivers: [
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                        left: 44.w,
-                        right: 44.w,
-                        bottom: 32.h,
-                        top: 20.h,
-                      ),
-                      child: ProjectAppBar(
-                        appbarTitle: 'سبد خرید',
-                      ),
-                    ),
-                  ),
-                  if (state is BasketDataFetchedState) ...[
-                    state.basketItemList.fold(
-                      (l) => SliverToBoxAdapter(
-                        child: Text(l),
-                      ),
-                      (basketItemList) => SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                            (context, index) => CartItem(basketItemList[index]),
-                            childCount: basketItemList.length),
-                      ),
-                    ),
-                    if (state.basketSummary[0] != 0) ...{
+          builder: (context, state) =>
+              Stack(
+                alignment: AlignmentDirectional.bottomCenter,
+                children: [
+                  CustomScrollView(
+                    slivers: [
                       SliverToBoxAdapter(
-                        child:
-                            OrderSummary(basketSummary: state.basketSummary),
-                      )
-                    }
-                  ],
-                  SliverPadding(padding: EdgeInsets.only(bottom: 100.h))
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                            left: 44.w,
+                            right: 44.w,
+                            bottom: 32.h,
+                            top: 20.h,
+                          ),
+                          child: const ProjectAppBar(
+                            appbarTitle: 'سبد خرید',
+                          ),
+                        ),
+                      ),
+                      if (state is BasketDataFetchedState) ...[
+                        state.basketItemList.fold(
+                              (l) =>
+                              SliverToBoxAdapter(
+                                child: Text(l),
+                              ),
+                              (basketItemList) =>
+                              SliverList(
+                                delegate: SliverChildBuilderDelegate(
+                                        (context, index) =>
+                                        CartItem(basketItemList[index]),
+                                    childCount: basketItemList.length),
+                              ),
+                        ),
+                        if (state.basketSummary[0] != 0) ...{
+                          SliverToBoxAdapter(
+                            child: OrderSummary(basketSummary: state
+                                .basketSummary),
+                          )
+                        },
+                        if (state.basketSummary[0] == 0) ...{
+                          const SliverFillRemaining(
+                            child: Text('سبد خرید شما خالی است'),
+                          ),
+                        },
+                      ],
+
+                      if (state is TransactionResponseState) ... [
+                        if (state.isSuccess) ... {
+                          const SliverFillRemaining(child: Text('ممنون از خرید شما'))
+                        },
+                      ],
+                      SliverPadding(padding: EdgeInsets.only(bottom: 100.h))
+                    ],
+                  ),
+                  if ((state is BasketDataFetchedState &&
+                      state.basketSummary[0] != 0)) ...[
+                    Padding(
+                      padding:
+                      EdgeInsets.only(right: 44.w, left: 44.w, bottom: 20.h),
+                      child: SizedBox(
+                        height: 54.h,
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width,
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            context.read<BasketBloc>().add(BasketPaymentInitEvent());
+                            context.read<BasketBloc>().add(BasketPaymentRequestEvent());
+                          },
+                          child: !state.isPaymentLoading
+                              ? Text(
+                            'ادامه فرایند خرید',
+                            textDirection: TextDirection.rtl,
+                            style: theme.textTheme.labelLarge,
+                          )
+                              : Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'درحال ورود به درگاه پرداخت',
+                                  textDirection: TextDirection.rtl,
+                                  textAlign: TextAlign.center,
+                                  style: theme.textTheme.labelLarge,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: Center(
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 3,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
+                  ]
                 ],
               ),
-              if (state is BasketDataFetchedState &&
-                  state.basketSummary[0] != 0) ...[
-                Padding(
-                  padding:
-                      EdgeInsets.only(right: 44.w, left: 44.w, bottom: 20.h),
-                  child: SizedBox(
-                    height: 54.h,
-                    width: MediaQuery.of(context).size.width,
-                    child: ElevatedButton(
-                      onPressed: () {
-
-                      },
-                      child: Text(
-                        'ادامه فرایند خرید',
-                        textDirection: TextDirection.rtl,
-                        style: theme.textTheme.labelLarge,
-                      ),
-                    ),
-                  ),
-                )
-              ]
-            ],
-          ),
         ),
       ),
     );
@@ -118,7 +142,7 @@ class _CartScreenState extends State<CartScreen> {
 }
 
 class OrderSummary extends StatelessWidget {
- final List<int> basketSummary;
+  final List<int> basketSummary;
 
   const OrderSummary({super.key, required this.basketSummary});
 
@@ -170,7 +194,9 @@ class OrderSummary extends StatelessWidget {
                         fontFamily: 'SM', color: theme.colorScheme.error)),
                 const Spacer(),
                 Text(
-                    '(%${(((basketSummary[0] - basketSummary[2]) / basketSummary[0]) * 100).round()})  ${basketSummary[1].separateByComma()} تومان ',
+                    '(%${(((basketSummary[0] - basketSummary[2]) /
+                        basketSummary[0]) * 100).round()})  ${basketSummary[1]
+                        .separateByComma()} تومان ',
                     style: theme.textTheme.bodyLarge!
                         .copyWith(color: theme.colorScheme.error)),
               ],
@@ -199,8 +225,7 @@ class OrderSummary extends StatelessWidget {
 class CartItem extends StatelessWidget {
   final BasketItem basketItem;
 
-  const CartItem(
-    this.basketItem, {
+  const CartItem(this.basketItem, {
     Key? key,
   }) : super(key: key);
 
@@ -215,7 +240,8 @@ class CartItem extends StatelessWidget {
               for (var product in state.productList) {
                 if (basketItem.id == product.id) {
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => BlocProvider<BasketBloc>.value(
+                    builder: (context) =>
+                    BlocProvider<BasketBloc>.value(
                         value: locator.get<BasketBloc>(),
                         child: ProductDetailScreen(product)),
                   ));
@@ -226,7 +252,10 @@ class CartItem extends StatelessWidget {
           child: Container(
             height: 256.h,
             margin: EdgeInsets.only(left: 44.w, right: 44.w, bottom: 20.h),
-            width: MediaQuery.of(context).size.width,
+            width: MediaQuery
+                .of(context)
+                .size
+                .width,
             decoration: BoxDecoration(
               boxShadow: const [
                 BoxShadow(
@@ -328,7 +357,7 @@ class CartItem extends StatelessWidget {
                                           VariantTypeEnum.STORAGTE) ...{
                                         StorageChip('گیگابایت',
                                             storageValue:
-                                                basketItemVariant.variant.value)
+                                            basketItemVariant.variant.value)
                                       },
                                     },
                                     GestureDetector(
@@ -344,7 +373,7 @@ class CartItem extends StatelessWidget {
                                             width: 1,
                                           ),
                                           borderRadius:
-                                              BorderRadius.circular(10.r),
+                                          BorderRadius.circular(10.r),
                                         ),
                                         child: Padding(
                                           padding: EdgeInsets.symmetric(
@@ -364,14 +393,14 @@ class CartItem extends StatelessWidget {
                                               ),
                                               Text('حذف',
                                                   textDirection:
-                                                      TextDirection.rtl,
+                                                  TextDirection.rtl,
                                                   style: theme
                                                       .textTheme.bodySmall!
                                                       .copyWith(
-                                                          color: theme
-                                                              .colorScheme
-                                                              .error,
-                                                          fontFamily: 'SM')),
+                                                      color: theme
+                                                          .colorScheme
+                                                          .error,
+                                                      fontFamily: 'SM')),
                                             ],
                                           ),
                                         ),
@@ -444,8 +473,7 @@ class StorageChip extends StatelessWidget {
   final String? storageValue;
   final String title;
 
-  const StorageChip(
-    this.title, {
+  const StorageChip(this.title, {
     this.storageValue,
     Key? key,
   }) : super(key: key);
@@ -503,7 +531,8 @@ class ColorChip extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 3.h),
         child: Text(
           colorName,
-          style: theme.textTheme.bodySmall!.copyWith(color: Colors.white,fontFamily: 'SM'),
+          style: theme.textTheme.bodySmall!
+              .copyWith(color: Colors.white, fontFamily: 'SM'),
         ),
       ),
     );
@@ -534,18 +563,19 @@ class QuantityChip extends StatelessWidget {
           children: [
             Text(
               'تعداد: ',
-              style: theme.textTheme.bodySmall!.copyWith(color: theme.colorScheme.onSurface,fontFamily: 'SM'),
+              style: theme.textTheme.bodySmall!.copyWith(
+                  color: theme.colorScheme.onSurface, fontFamily: 'SM'),
             ),
             SizedBox(
               width: 4.w,
             ),
-            Text(
-              quantity.toString(),
-                style: theme.textTheme.bodySmall!.copyWith(color: theme.colorScheme.onSurface)
-            ),
+            Text(quantity.toString(),
+                style: theme.textTheme.bodySmall!
+                    .copyWith(color: theme.colorScheme.onSurface)),
           ],
         ),
       ),
     );
   }
 }
+

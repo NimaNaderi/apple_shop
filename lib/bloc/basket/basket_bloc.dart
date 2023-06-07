@@ -1,19 +1,31 @@
 import 'package:apple_shop/bloc/basket/basket_event.dart';
 import 'package:apple_shop/bloc/basket/basket_state.dart';
 import 'package:apple_shop/di/di.dart';
+import 'package:apple_shop/utils/extensions/string_extensions.dart';
 import 'package:bloc/bloc.dart';
+import 'package:dartz/dartz.dart';
+import 'package:uni_links/uni_links.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:zarinpal/zarinpal.dart';
 
+import '../../data/model/basket_item.dart';
 import '../../data/repository/basket_repository.dart';
 
 class BasketBloc extends Bloc<BasketEvent, BasketState> {
   final IBasketRepository _basketRepository = locator.get();
+  final PaymentRequest _paymentRequest = PaymentRequest();
+  Either<String, List<BasketItem>>? basketList;
+  List<int>? basketValuesSummary;
 
   BasketBloc() : super(BasketInitState()) {
     on<BasketFetchFromHiveEvent>(
       (event, emit) async {
         var basketItemList = await _basketRepository.getAllBasketItems();
         var basketSummary = await _basketRepository.getFinalBasketPrice();
-        emit(BasketDataFetchedState(basketItemList, basketSummary));
+
+        basketList = basketItemList;
+        basketValuesSummary = basketSummary;
+        emit(BasketDataFetchedState(basketItemList, basketSummary,false));
       },
     );
 
@@ -22,14 +34,57 @@ class BasketBloc extends Bloc<BasketEvent, BasketState> {
         var basketItemList =
             await _basketRepository.deleteBasketItem(event.basketItem);
         var basketSummary = await _basketRepository.getFinalBasketPrice();
-        emit(BasketDataFetchedState(basketItemList, basketSummary));
+        emit(BasketDataFetchedState(basketItemList, basketSummary,false));
       },
     );
 
     on<BasketItemAdded>((event, emit) async {
       _basketRepository.addProductToBasket(event.cartItem);
       add(BasketFetchFromHiveEvent());
-      
     });
+
+    on<BasketPaymentInitEvent>(
+      (event, emit) {
+        _paymentRequest.setIsSandBox(true);
+        _paymentRequest.setAmount(1000);
+        _paymentRequest.setDescription('تراکنش تستی از اپل شاپ');
+        _paymentRequest.setMerchantID('d645fba8-1b29-11ea-be59-000c295eb8fc');
+        _paymentRequest.setCallbackURL('nimanaderi://shop');
+
+        linkStream.listen((deepLink) {
+          if (deepLink!.toLowerCase().contains('authority')) {
+            String? authority = deepLink.extractValueFromQuery('Authority');
+            String? status = deepLink.extractValueFromQuery('Status');
+            ZarinPal().verificationPayment(status!, authority!, _paymentRequest,
+                (isPaymentSuccess, refID, paymentRequest) {
+              if (isPaymentSuccess) {
+
+              } else {
+              }
+            });
+          }
+        });
+      },
+    );
+
+    on<BasketPaymentRequestEvent>(
+      (event, emit) async{
+        emit(BasketDataFetchedState(basketList!,basketValuesSummary!,true));
+
+        await Future.delayed(const Duration(seconds: 4));
+
+        ZarinPal().startPayment(_paymentRequest,
+            (status, paymentGatewayUri) async {
+          if (status == 100) {
+            // if 100 => Success Request => Can Use paymentGatewayUri
+
+            await launchUrl(Uri.parse(paymentGatewayUri!),
+                mode: LaunchMode.externalApplication);
+
+          }
+        });
+        emit(BasketDataFetchedState(basketList!,basketValuesSummary!,false));
+      },
+    );
   }
 }

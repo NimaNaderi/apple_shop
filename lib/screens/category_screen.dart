@@ -36,7 +36,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
         builder: (context, state) {
           return SafeArea(
             child: CustomScrollView(
-
               slivers: [
                 if (state is CategoryLoadingState) ...[
                   _loadingWidget(),
@@ -50,7 +49,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                         bottom: 32.h,
                         top: 20.h,
                       ),
-                      child: ProjectAppBar(appbarTitle: 'جستجوی محصولات'),
+                      child: const ProjectAppBar(appbarTitle: 'جستجوی محصولات'),
                     ),
                   ),
                   state.response.fold(
