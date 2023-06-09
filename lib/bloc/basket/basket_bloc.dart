@@ -1,9 +1,13 @@
 import 'package:apple_shop/bloc/basket/basket_event.dart';
 import 'package:apple_shop/bloc/basket/basket_state.dart';
+import 'package:apple_shop/data/model/transaction.dart';
 import 'package:apple_shop/di/di.dart';
+import 'package:apple_shop/utils/extensions/int_extensions.dart';
 import 'package:apple_shop/utils/extensions/string_extensions.dart';
+import 'package:apple_shop/utils/utils.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
+import 'package:shamsi_date/shamsi_date.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:zarinpal/zarinpal.dart';
@@ -14,6 +18,8 @@ import '../../data/repository/basket_repository.dart';
 class BasketBloc extends Bloc<BasketEvent, BasketState> {
   final IBasketRepository _basketRepository = locator.get();
   int totalPrice = 0;
+  String transactionRefId = '';
+  bool? _isPaymentSuccess;
   final PaymentRequest _paymentRequest = PaymentRequest()
     ..setIsSandBox(true)
     ..setDescription('تراکنش تستی از اپل شاپ')
@@ -29,11 +35,17 @@ class BasketBloc extends Bloc<BasketEvent, BasketState> {
         String? authority = deepLink.extractValueFromQuery('Authority');
         String? status = deepLink.extractValueFromQuery('Status');
         ZarinPal().verificationPayment(status!, authority!, _paymentRequest,
-            (isPaymentSuccess, refID, paymentRequest) async{
+            (isPaymentSuccess, refID, paymentRequest) async {
+          _isPaymentSuccess = isPaymentSuccess;
+          transactionRefId = refID ?? '0';
+
           if (isPaymentSuccess) {
             await _basketRepository.clearBasket();
             add(BasketPaymentResponseEvent());
           } else {
+            add(BasketPaymentResponseEvent());
+            await Future.delayed(const Duration(seconds: 10));
+            add(BasketFetchFromHiveEvent());
           }
         });
       }
@@ -54,10 +66,9 @@ class BasketBloc extends Bloc<BasketEvent, BasketState> {
 
     on<BasketItemDeleted>(
       (event, emit) async {
-         basketList =
-            await _basketRepository.deleteBasketItem(event.basketItem);
-         basketValuesSummary = await _basketRepository.getFinalBasketPrice();
-         add(BasketFetchFromHiveEvent());
+        basketList = await _basketRepository.deleteBasketItem(event.basketItem);
+        basketValuesSummary = await _basketRepository.getFinalBasketPrice();
+        add(BasketFetchFromHiveEvent());
       },
     );
 
@@ -68,7 +79,19 @@ class BasketBloc extends Bloc<BasketEvent, BasketState> {
 
     on<BasketPaymentResponseEvent>(
       (event, emit) {
-        emit(TransactionResponseState(true));
+        emit(
+          TransactionResponseState(
+            Transaction(
+              isSuccess: _isPaymentSuccess!,
+              paymentTime: Utils.getFullCurrentDate(),
+              seller: 'اپل شاپ',
+              paymentMethod: 'درگاه پرداخت',
+              discountAmount: basketValuesSummary![1].separateByComma(),
+              refID: transactionRefId,
+              totalPrice: totalPrice.separateByComma(),
+            ),
+          ),
+        );
       },
     );
 

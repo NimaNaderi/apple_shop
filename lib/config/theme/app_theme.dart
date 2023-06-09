@@ -31,6 +31,7 @@ class AppTheme {
           TextStyle(color: AppColors.grey, fontSize: 12.sp, fontFamily: 'SB'),
       titleMedium: TextStyle(
           color: AppColors.primaryColor, fontSize: 14.sp, fontFamily: 'SB'),
+      displayLarge: TextStyle(color: Colors.black, fontSize: 20.sp, fontFamily: 'SB'),
       labelLarge:
           TextStyle(color: Colors.white, fontSize: 18.sp, fontFamily: 'SB'),
       bodyLarge:

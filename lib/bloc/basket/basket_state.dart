@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../data/model/basket_item.dart';
+import '../../data/model/transaction.dart';
 
 abstract class BasketState {}
 
@@ -15,6 +16,6 @@ class BasketDataFetchedState extends BasketState {
 }
 
 class TransactionResponseState extends BasketState {
-  bool isSuccess;
-  TransactionResponseState(this.isSuccess);
+  Transaction transaction;
+  TransactionResponseState(this.transaction);
 }

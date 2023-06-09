@@ -17,7 +17,7 @@ class ProfileItemChip extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: () async{
-            if (index == 9) {
+            if (index == 10) {
 
             await launchUrl(Uri.parse('https://github.com/NimaNaderi'),mode: LaunchMode.externalApplication);
             }

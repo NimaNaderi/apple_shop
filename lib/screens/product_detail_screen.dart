@@ -312,7 +312,7 @@ class DetailContent extends StatelessWidget {
 }
 
 class ProductProperties extends StatefulWidget {
- final List<Property> propertyList;
+  final List<Property> propertyList;
 
   const ProductProperties(
     this.propertyList, {
@@ -627,7 +627,7 @@ class AddToBasketButton extends StatelessWidget {
 
                   AnimatedSnackBar(
                     mobileSnackBarPosition: MobileSnackBarPosition.bottom,
-                    duration: const Duration(seconds: 5),
+                    duration: const Duration(seconds: 4),
                     builder: ((context) {
                       return Container(
                         decoration: BoxDecoration(
@@ -636,11 +636,12 @@ class AddToBasketButton extends StatelessWidget {
                         height: 50.h,
                         child: Center(
                           child: Text(
-                            'محصول با موفقیت به سبد خرید افزوده شد.',
+                            'محصول به سبد خرید افزوده شد.',
                             style: theme.textTheme.bodyLarge!.copyWith(
-                                color: theme.colorScheme.onSecondary,
-                                fontFamily: 'SM',
-                                height: 2),
+                              color: theme.colorScheme.onSecondary,
+                              fontFamily: 'SM',
+                              height: 2,
+                            ),
                           ),
                         ),
                       );
@@ -809,8 +810,8 @@ class _GalleryWidgetState extends State<GalleryWidget> {
                           ),
                           Text(
                             '4.6',
-                            style: theme.textTheme.bodySmall!.copyWith(
-                                fontFamily: 'SM'),
+                            style: theme.textTheme.bodySmall!
+                                .copyWith(fontFamily: 'SM'),
                           ),
                         ],
                       ),
@@ -969,8 +970,7 @@ class _ColorVariantListState extends State<ColorVariantList> {
                   child: Text(
                     widget.variantList[index].name!,
                     style: theme.textTheme.bodySmall!.copyWith(
-                        fontFamily: 'SM',
-                        color: theme.colorScheme.onSecondary),
+                        fontFamily: 'SM', color: theme.colorScheme.onSecondary),
                   ),
                 ),
               ),
@@ -1053,8 +1053,7 @@ class _StorageVariantListState extends State<StorageVariantList> {
                   child: Text(
                     widget.storageVariants[index].value!,
                     style: theme.textTheme.bodySmall!.copyWith(
-                        fontFamily: 'SM',
-                        color: theme.colorScheme.onSurface),
+                        fontFamily: 'SM', color: theme.colorScheme.onSurface),
                   ),
                 ),
               ),

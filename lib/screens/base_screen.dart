@@ -41,7 +41,7 @@ class _BaseScreenState extends State<BaseScreen> {
                     state.basketItemList.fold((l) => '', (r) {
                       basketItemListLength = r.length;
                     });
-                  } else if (state is TransactionResponseState && state.isSuccess) {
+                  } else if (state is TransactionResponseState && state.transaction.isSuccess) {
                     basketItemListLength = 0;
                   }
 
@@ -231,7 +231,7 @@ List<Widget> getLayout() => <Widget>[
       bloc.add(BasketFetchFromHiveEvent());
       return bloc;
     },
-    child: const CartScreen(),
+    child:  CartScreen(),
   ),
   BlocProvider(
     create: (context) => CategoryBloc(),

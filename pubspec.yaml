@@ -46,7 +46,7 @@ dependencies:
   bloc: ^8.1.1
   cached_network_image: ^3.2.3
   skeletons: ^0.0.3
-  davinci: ^2.0.10
+  davinci: ^2.1.1
   loading_animation_widget: ^1.2.0+4
   flutter_svg: ^2.0.5
   hive_flutter: ^1.1.0
@@ -58,6 +58,8 @@ dependencies:
   url_launcher: ^6.1.11
   zarinpal: ^1.0.5
   uni_links: ^0.5.1
+  shamsi_date: ^1.0.1
+  confetti: ^0.7.0
 
 
 dev_dependencies:
