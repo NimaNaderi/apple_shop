@@ -4,7 +4,7 @@ import 'package:apple_shop/data/model/product.dart';
 import 'package:apple_shop/data/repository/banner_repository.dart';
 import 'package:apple_shop/data/repository/category_repository.dart';
 import 'package:apple_shop/data/repository/product_repository.dart';
-import 'package:apple_shop/di/di.dart';
+import 'package:apple_shop/config/di/di.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {

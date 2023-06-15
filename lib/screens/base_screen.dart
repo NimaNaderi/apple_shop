@@ -1,20 +1,23 @@
 import 'dart:ui';
 
-import 'package:apple_shop/screens/profile_screen.dart';
+import 'package:apple_shop/bloc/home/home_event.dart';
+import 'package:apple_shop/features/auth/presentation/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../bloc/basket/basket_bloc.dart';
-import '../bloc/basket/basket_event.dart';
-import '../bloc/basket/basket_state.dart';
+import '../features/cart/presentation/bloc/basket_bloc.dart';
 import '../bloc/category/category_bloc.dart';
-import '../constants/colors.dart';
-import '../di/di.dart';
-import 'cart_screen.dart';
+import '../bloc/home/home_bloc.dart';
+import '../common/constants/colors.dart';
+import '../config/di/di.dart';
+import '../features/cart/presentation/bloc/basket_event.dart';
+import '../features/cart/presentation/bloc/basket_state.dart';
+import '../features/cart/presentation/screens/cart_screen.dart';
 import 'category_screen.dart';
 import 'home_screen.dart';
+
 class BaseScreen extends StatefulWidget {
   const BaseScreen({Key? key}) : super(key: key);
 
@@ -25,10 +28,12 @@ class BaseScreen extends StatefulWidget {
 class _BaseScreenState extends State<BaseScreen> {
   int selectedBottomNavigationIndex = 3;
   int basketItemListLength = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack( index: selectedBottomNavigationIndex, children: getLayout()),
+      body: IndexedStack(
+          index: selectedBottomNavigationIndex, children: getLayout()),
       bottomNavigationBar: ClipRRect(
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
@@ -36,15 +41,16 @@ class _BaseScreenState extends State<BaseScreen> {
             value: locator.get<BasketBloc>(),
             child: BlocConsumer<BasketBloc, BasketState>(
               listener: (context, state) {
-                if (state is BasketDataFetchedState || state is TransactionResponseState) {
-                  if (state is BasketDataFetchedState){
+                if (state is BasketDataFetchedState ||
+                    state is TransactionResponseState) {
+                  if (state is BasketDataFetchedState) {
                     state.basketItemList.fold((l) => '', (r) {
                       basketItemListLength = r.length;
                     });
-                  } else if (state is TransactionResponseState && state.transaction.isSuccess) {
+                  } else if (state is TransactionResponseState &&
+                      state.transaction.isSuccess) {
                     basketItemListLength = 0;
                   }
-
                 }
               },
               builder: (context, state) {
@@ -71,8 +77,7 @@ class _BaseScreenState extends State<BaseScreen> {
                     BottomNavigationBarItem(
                         icon: Padding(
                           padding: EdgeInsets.only(bottom: 4.h),
-                          child:
-                          SvgPicture.asset('assets/icons/user.svg'),
+                          child: SvgPicture.asset('assets/icons/user.svg'),
                         ),
                         activeIcon: Container(
                           padding: EdgeInsets.only(bottom: 4.h),
@@ -84,8 +89,8 @@ class _BaseScreenState extends State<BaseScreen> {
                               offset: Offset(0, 12),
                             )
                           ]),
-                          child: SvgPicture.asset(
-                              'assets/icons/user-filled.svg'),
+                          child:
+                          SvgPicture.asset('assets/icons/user-filled.svg'),
                         ),
                         label: 'حساب کاربری'),
                     BottomNavigationBarItem(
@@ -97,8 +102,7 @@ class _BaseScreenState extends State<BaseScreen> {
                                 ? Stack(
                               alignment: Alignment.center,
                               children: [
-                                SvgPicture.asset(
-                                    'assets/icons/bag.svg'),
+                                SvgPicture.asset('assets/icons/bag.svg'),
                                 Positioned(
                                   top: 0,
                                   right: 0,
@@ -110,8 +114,7 @@ class _BaseScreenState extends State<BaseScreen> {
                                         shape: BoxShape.circle),
                                     child: Center(
                                       child: Text(
-                                        basketItemListLength
-                                            .toString(),
+                                        basketItemListLength.toString(),
                                         style: TextStyle(
                                           fontSize: 12.sp,
                                           fontFamily: 'SB',
@@ -123,8 +126,7 @@ class _BaseScreenState extends State<BaseScreen> {
                                 )
                               ],
                             )
-                                : SvgPicture.asset(
-                                'assets/icons/bag.svg'),
+                                : SvgPicture.asset('assets/icons/bag.svg'),
                           ),
                         ),
                         activeIcon: Container(
@@ -155,8 +157,7 @@ class _BaseScreenState extends State<BaseScreen> {
                                       shape: BoxShape.circle),
                                   child: Center(
                                     child: Text(
-                                      basketItemListLength
-                                          .toString(),
+                                      basketItemListLength.toString(),
                                       style: TextStyle(
                                         fontSize: 12.sp,
                                         fontFamily: 'SB',
@@ -168,15 +169,13 @@ class _BaseScreenState extends State<BaseScreen> {
                               )
                             ],
                           )
-                              : SvgPicture.asset(
-                              'assets/icons/bag-filled.svg'),
+                              : SvgPicture.asset('assets/icons/bag-filled.svg'),
                         ),
                         label: 'سبد خرید'),
                     BottomNavigationBarItem(
                         icon: Padding(
                           padding: EdgeInsets.only(bottom: 4.h),
-                          child: SvgPicture.asset(
-                              'assets/icons/category.svg'),
+                          child: SvgPicture.asset('assets/icons/category.svg'),
                         ),
                         activeIcon: Container(
                           padding: EdgeInsets.only(bottom: 4.h),
@@ -195,8 +194,7 @@ class _BaseScreenState extends State<BaseScreen> {
                     BottomNavigationBarItem(
                         icon: Padding(
                           padding: EdgeInsets.only(bottom: 4.h),
-                          child:
-                          SvgPicture.asset('assets/icons/home.svg'),
+                          child: SvgPicture.asset('assets/icons/home.svg'),
                         ),
                         activeIcon: Container(
                           padding: EdgeInsets.only(bottom: 4.h),
@@ -208,8 +206,8 @@ class _BaseScreenState extends State<BaseScreen> {
                               offset: Offset(0, 12),
                             )
                           ]),
-                          child: SvgPicture.asset(
-                              'assets/icons/home-filled.svg'),
+                          child:
+                          SvgPicture.asset('assets/icons/home-filled.svg'),
                         ),
                         label: 'خانه'),
                   ],
@@ -223,22 +221,30 @@ class _BaseScreenState extends State<BaseScreen> {
   }
 }
 
-List<Widget> getLayout() => <Widget>[
-  const ProfileScreen(),
-  BlocProvider(
-    create: (context) {
-      var bloc = locator.get<BasketBloc>();
-      bloc.add(BasketFetchFromHiveEvent());
-      return bloc;
-    },
-    child:  CartScreen(),
-  ),
-  BlocProvider(
-    create: (context) => CategoryBloc(),
-    child: const CategoryScreen(),
-  ),
-  const Directionality(
-    textDirection: TextDirection.rtl,
-    child: HomeScreen(),
-  ),
-];
+List<Widget> getLayout() =>
+    <Widget>[
+      const ProfileScreen(),
+      BlocProvider(
+        create: (context) {
+          var bloc = locator.get<BasketBloc>();
+          bloc.add(BasketFetchFromHiveEvent());
+          return bloc;
+        },
+        child: const CartScreen(),
+      ),
+      BlocProvider(
+        create: (context) => CategoryBloc(),
+        child: const CategoryScreen(),
+      ),
+      BlocProvider(
+        create: (context) {
+          HomeBloc homeBloc = HomeBloc();
+          homeBloc.add(HomeGetInitializeData());
+          return homeBloc;
+        },
+        child: const Directionality(
+          textDirection: TextDirection.rtl,
+          child: HomeScreen(),
+        ),
+      ),
+    ];

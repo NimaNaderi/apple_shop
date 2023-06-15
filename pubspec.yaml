@@ -60,6 +60,7 @@ dependencies:
   uni_links: ^0.5.1
   shamsi_date: ^1.0.1
   confetti: ^0.7.0
+  http: ^0.13.6
 
 
 dev_dependencies:

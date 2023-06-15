@@ -1,13 +1,13 @@
 import 'package:apple_shop/data/model/category.dart';
-import 'package:apple_shop/widgets/loading.dart';
-import 'package:apple_shop/widgets/product_item.dart';
+import 'package:apple_shop/common/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../bloc/categoryProduct/category_product_bloc.dart';
-import '../constants/colors.dart';
+import '../common/constants/colors.dart';
+import '../common/widgets/product_item.dart';
 
 class ProductListScreen extends StatefulWidget {
   final Category category;

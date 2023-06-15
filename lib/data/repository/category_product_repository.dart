@@ -1,8 +1,8 @@
 import 'package:apple_shop/data/datasource/category_product_datasource.dart';
-import 'package:apple_shop/di/di.dart';
+import 'package:apple_shop/config/di/di.dart';
 import 'package:dartz/dartz.dart';
 
-import '../../utils/api_exception.dart';
+import '../../common/utils/api_exception.dart';
 import '../model/product.dart';
 
 abstract class ICategoryProductRepository {

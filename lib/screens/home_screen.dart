@@ -4,26 +4,18 @@ import 'package:apple_shop/bloc/home/home_state.dart';
 import 'package:apple_shop/config/theme/app_colors.dart';
 import 'package:apple_shop/data/model/banner.dart';
 import 'package:apple_shop/data/model/category.dart';
-import 'package:apple_shop/widgets/loading.dart';
+import 'package:apple_shop/common/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import '../common/widgets/product_item.dart';
 import '../data/model/product.dart';
-import '../widgets/banner_slider.dart';
-import '../widgets/category_icon_item_chip.dart';
-import '../widgets/product_item.dart';
+import '../common/widgets/banner_slider.dart';
+import '../common/widgets/category_icon_item_chip.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  GlobalKey? imageKey;
-  List<Product>? allProducts;
 
   @override
   Widget build(BuildContext context) {
@@ -33,18 +25,6 @@ class _HomeScreenState extends State<HomeScreen> {
           builder: (context, state) {
             return CustomScrollView(
               slivers: [
-                // SliverToBoxAdapter(
-                //   child: ElevatedButton(
-                //     child: Text('Capture'),
-                //     onPressed: () async {
-                //       await DavinciCapture.click(imageKey!,
-                //           saveToDevice: true,
-                //           pixelRatio: 10,
-                //           openFilePreview: true,
-                //           fileName: 'Test');
-                //     },
-                //   ),
-                // ),
                 const SearchBox(),
                 if (state is HomeLoadingState) ...{
                   const SliverFillRemaining(
@@ -113,14 +93,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           MostViewedProducts(mostViewedProductList),
                     )
                   ],
-                  // SliverToBoxAdapter(
-                  //   child: Davinci(
-                  //     builder: (key) {
-                  //       imageKey = key;
-                  //       return _getMostViewedProducts();
-                  //     },
-                  //   ),
-                  // ),
                   SliverPadding(padding: EdgeInsets.only(bottom: 20.h))
                 }
               ],

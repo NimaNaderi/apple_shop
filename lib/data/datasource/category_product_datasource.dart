@@ -1,8 +1,8 @@
 import 'package:apple_shop/data/model/product.dart';
-import 'package:apple_shop/di/di.dart';
+import 'package:apple_shop/config/di/di.dart';
 import 'package:dio/dio.dart';
 
-import '../../utils/api_exception.dart';
+import '../../common/utils/api_exception.dart';
 
 abstract class ICategoryProductDataSource {
   Future<List<Product>> getProductsByCategoryId(String categoryId);

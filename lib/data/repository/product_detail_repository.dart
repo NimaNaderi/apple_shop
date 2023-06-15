@@ -3,10 +3,10 @@ import 'package:apple_shop/data/model/category.dart';
 import 'package:apple_shop/data/model/product_variant.dart';
 import 'package:apple_shop/data/model/property.dart';
 import 'package:apple_shop/data/model/variant_type.dart';
-import 'package:apple_shop/di/di.dart';
+import 'package:apple_shop/config/di/di.dart';
 import 'package:dartz/dartz.dart';
 
-import '../../utils/api_exception.dart';
+import '../../common/utils/api_exception.dart';
 import '../model/product_image.dart';
 
 abstract class IProductDetailRepository {

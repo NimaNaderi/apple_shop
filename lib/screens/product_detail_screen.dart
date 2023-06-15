@@ -1,18 +1,17 @@
 import 'dart:ui';
 
 import 'package:animated_snack_bar/animated_snack_bar.dart';
-import 'package:apple_shop/bloc/basket/basket_bloc.dart';
-import 'package:apple_shop/bloc/basket/basket_event.dart';
+import 'package:apple_shop/features/cart/presentation/bloc/basket_bloc.dart';
 import 'package:apple_shop/bloc/product/product_bloc.dart';
 import 'package:apple_shop/bloc/product/product_event.dart';
 import 'package:apple_shop/bloc/product/product_state.dart';
-import 'package:apple_shop/constants/colors.dart';
+import 'package:apple_shop/common/constants/colors.dart';
+import 'package:apple_shop/common/utils/extensions/int_extensions.dart';
 import 'package:apple_shop/data/model/basket_item.dart';
 import 'package:apple_shop/data/model/basket_item_variant.dart';
 import 'package:apple_shop/data/model/property.dart';
-import 'package:apple_shop/utils/extensions/int_extensions.dart';
-import 'package:apple_shop/widgets/cached_image.dart';
-import 'package:apple_shop/widgets/loading.dart';
+import 'package:apple_shop/common/widgets/cached_image.dart';
+import 'package:apple_shop/common/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -24,6 +23,7 @@ import '../data/model/product_variant.dart';
 import '../data/model/variant.dart';
 import '../data/model/variant_type.dart';
 import '../data/model/variant_type_enum.dart';
+import '../features/cart/presentation/bloc/basket_event.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   final Product product;

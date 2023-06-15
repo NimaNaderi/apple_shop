@@ -1,7 +1,7 @@
 import 'package:apple_shop/data/datasource/category_datasource.dart';
 import 'package:apple_shop/data/model/category.dart';
-import 'package:apple_shop/di/di.dart';
-import 'package:apple_shop/utils/api_exception.dart';
+import 'package:apple_shop/config/di/di.dart';
+import 'package:apple_shop/common/utils/api_exception.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class ICategoryRepository {
